@@ -15,6 +15,7 @@ GEM
       async-io
       websocket-driver (~> 0.7.0)
     concurrent-ruby (1.1.4)
+    dotenv (2.5.0)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.12.2)
@@ -49,6 +50,7 @@ PLATFORMS
 
 DEPENDENCIES
   async-websocket
+  dotenv
   slack-ruby-bot
 
 BUNDLED WITH
