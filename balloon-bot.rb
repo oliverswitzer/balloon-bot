@@ -1,5 +1,6 @@
 require 'slack-ruby-bot'
 require 'pry'
+require 'dotenv'
 
 class BalloonBot < SlackRubyBot::Bot
   command 'hold deploys' do |client, data, match|
@@ -13,5 +14,7 @@ class BalloonBot < SlackRubyBot::Bot
     client.say
   end
 end
+
+Dotenv.load!
 
 BalloonBot.run
