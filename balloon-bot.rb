@@ -2,14 +2,16 @@ require 'slack-ruby-bot'
 require 'pry'
 require 'dotenv'
 
+require './core/hold_deployments'
+require './slack_client_wrapper'
+
 Dotenv.load!
 
-DEPLOYMENTS_CHANNEL = 'balloon-bot-test'.freeze
+DEPLOYMENTS_CHANNEL = ENV['DEPLOYMENTS_CHANNEL']
 
 class BalloonBot < SlackRubyBot::Bot
   command 'hold deploys' do |client, data, match|
-    client.say(channel: data.channel, text: 'Holding deploys!')
-    client.web_client.channels_setTopic(channel: "##{DEPLOYMENTS_CHANNEL}", topic: '⚠️ Hold deploys ⚠️')
+    HoldDeployments.new(chat_client: SlackClientWrapper.new(client)).execute
   end
 
   command 'green' do |client, data, match|
