@@ -16,9 +16,6 @@ describe RecordMessageForIncident do
 
   describe '#execute' do
     context 'when message is sent in configured deployments channel' do
-      before do
-      end
-
       it 'persists the message' do
         subject.execute(text: 'foo', channel: ENV['DEPLOYMENTS_CHANNEL'])
 

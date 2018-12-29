@@ -1,12 +1,17 @@
 require 'rspec'
 require './core/hold_deployments'
 require './slack_client_wrapper'
+require './persistence/incidents_repository'
+
 
 describe HoldDeployments do
   let(:slack_client_spy) { spy(SlackClientWrapper) }
+  let(:incidents_repository_spy) { spy(IncidentsRepository) }
+
   subject do
     HoldDeployments.new(
-      chat_client: slack_client_spy
+      chat_client: slack_client_spy,
+      incidents_repository: incidents_repository_spy
     )
   end
 
@@ -23,6 +28,13 @@ describe HoldDeployments do
 
       expect(slack_client_spy).to have_received(:set_channel_topic)
                                     .with(message: SlackClientWrapper::FAILURE_CHANNEL_TOPIC)
+    end
+
+    it 'creates an incident' do
+      subject.execute
+
+      expect(incidents_repository_spy.save).to have_received(:save)
+                                             .with(an_instance_of(Incident))
     end
   end
 end
