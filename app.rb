@@ -3,21 +3,22 @@ require 'pry'
 require 'dotenv'
 
 require './core/hold_deployments'
+require './core/continue_deployments'
 require './slack_client_wrapper'
 
 Dotenv.load!
 
-DEPLOYMENTS_CHANNEL = ENV['DEPLOYMENTS_CHANNEL']
-
 class BalloonBot < SlackRubyBot::Bot
   command 'hold deploys' do |client, data, match|
-    HoldDeployments.new(chat_client: SlackClientWrapper.new(client)).execute
+    HoldDeployments.new(
+      chat_client: SlackClientWrapper.new(client)
+    ).execute
   end
 
   command 'green' do |client, data, match|
-    client.say(channel: data.channel, text: "Nice. Setting ##{DEPLOYMENTS_CHANNEL} channel topic back to green.")
-    client.web_client.channels_setTopic(channel: "##{DEPLOYMENTS_CHANNEL}", topic: ':green_balloon: :circleci-pass:')
-    client.say
+    ContinueDeployments.new(
+      chat_client: SlackClientWrapper.new(client)
+    ).execute
   end
 end
 
@@ -27,7 +28,7 @@ module Hooks
   class Message
     def call(client, data)
       channel = client.web_client.channels_info(channel: data['channel'])['channel']
-      if channel['name'] == DEPLOYMENTS_CHANNEL
+      if channel['name'] == ENV['DEPLOYMENTS_CHANNEL']
         MESSAGES << data['text']
         puts "Here are all the messages that have been sent: "
         puts MESSAGES.join("\n")

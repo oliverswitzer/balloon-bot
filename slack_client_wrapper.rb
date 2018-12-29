@@ -25,5 +25,4 @@ class SlackClientWrapper
       text: message
     )
   end
-
 end
