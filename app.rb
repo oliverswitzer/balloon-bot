@@ -4,7 +4,10 @@ require 'dotenv'
 
 require './core/hold_deployments'
 require './core/continue_deployments'
+require './core/record_message_for_incident'
 require './slack_client_wrapper'
+
+require './persistence/messages_repository'
 
 Dotenv.load!
 
@@ -27,12 +30,14 @@ MESSAGES = []
 module Hooks
   class Message
     def call(client, data)
-      channel = client.web_client.channels_info(channel: data['channel'])['channel']
-      if channel['name'] == ENV['DEPLOYMENTS_CHANNEL']
-        MESSAGES << data['text']
-        puts "Here are all the messages that have been sent: "
-        puts MESSAGES.join("\n")
-      end
+      channel_name = client.web_client.channels_info(channel: data['channel'])['channel']['name']
+
+      RecordMessageForIncident.new(
+        chat_client: SlackClientWrapper.new(client)
+      ).execute(text: data['text'], channel: channel_name)
+
+      puts 'all messages: '
+      puts MessagesRepository::MESSAGES.map(&:text).join("\n")
     end
   end
 end
