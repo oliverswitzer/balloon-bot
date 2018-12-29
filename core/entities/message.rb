@@ -1,6 +1,9 @@
-require './core/entities/types'
+class Message
+  attr_accessor :id, :incident, :text
 
-class Message < Dry::Struct::Value
-  attribute :id, Types::Strict::Integer.meta(omittable: true)
-  attribute :text, Types::Strict::String
+  def initialize(id: nil, incident:, text:)
+    @id = id
+    @incident = incident
+    @text = text
+  end
 end

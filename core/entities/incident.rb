@@ -1,7 +1,9 @@
-require './core/entities/types'
+class Incident
+  attr_accessor :id, :created_at, :resolved_at
 
-class Incident < Dry::Struct::Value
-  attribute :id, Types::Strict::Integer.meta(omittable: true)
-  attribute :created_at, Types::Strict::Time.meta(omittable: true)
-
+  def initialize(id: nil, created_at: nil, resolved_at: nil)
+    @id = id
+    @created_at = created_at
+    @resolved_at = resolved_at
+  end
 end

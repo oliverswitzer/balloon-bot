@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 gem 'slack-ruby-bot'
 gem 'async-websocket'
 gem 'dotenv'
-gem 'dry-struct'
 
 group :development, :test do
   gem 'pry'

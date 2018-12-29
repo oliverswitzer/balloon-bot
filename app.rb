@@ -8,24 +8,28 @@ require './core/record_message_for_incident'
 require './slack_client_wrapper'
 
 require './persistence/messages_repository'
+require './persistence/incidents_repository'
 
 Dotenv.load!
+
+MESSAGES_REPOSITORY = MessagesRepository.new
+INCIDENTS_REPOSITORY = IncidentsRepository.new
 
 class BalloonBot < SlackRubyBot::Bot
   command 'hold deploys' do |client, data, match|
     HoldDeployments.new(
-      chat_client: SlackClientWrapper.new(client)
+      chat_client: SlackClientWrapper.new(client),
+      incidents_repository: INCIDENTS_REPOSITORY
     ).execute
   end
 
   command 'green' do |client, data, match|
     ContinueDeployments.new(
-      chat_client: SlackClientWrapper.new(client)
+      chat_client: SlackClientWrapper.new(client),
+      incidents_repository: INCIDENTS_REPOSITORY
     ).execute
   end
 end
-
-MESSAGES = []
 
 module Hooks
   class Message
@@ -33,11 +37,11 @@ module Hooks
       channel_name = client.web_client.channels_info(channel: data['channel'])['channel']['name']
 
       RecordMessageForIncident.new(
-        chat_client: SlackClientWrapper.new(client)
-      ).execute(text: data['text'], channel: channel_name)
+        chat_client: SlackClientWrapper.new(client),
+        incidents_repository: INCIDENTS_REPOSITORY,
+        messages_repository: MESSAGES_REPOSITORY
 
-      puts 'all messages: '
-      puts MessagesRepository::MESSAGES.map(&:text).join("\n")
+      ).execute(text: data['text'], channel: channel_name)
     end
   end
 end

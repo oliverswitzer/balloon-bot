@@ -1,10 +1,15 @@
 class MessagesRepository
-  MESSAGES = []
+  attr_reader :messages
+
+  def initialize
+    @messages = []
+  end
 
   def save(message)
-    persisted_message = Message.new(**message.attributes, id: MESSAGES.length + 1)
-    MESSAGES << persisted_message
+    message.id = @messages.length + 1
 
-    persisted_message
+    @messages << message
+
+    message
   end
 end
