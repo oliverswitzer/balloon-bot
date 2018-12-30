@@ -11,6 +11,8 @@ class ContinueDeployments
     chat_client.set_channel_topic(message: SlackClientWrapper::GREEN_CHANNEL_TOPIC)
 
     incident = incidents_repository.find_last_unresolved
-    incidents_repository.save(Incident.new(id: incident.id, resolved_at: Time.now))
+d    incident.resolved_at = Time.now
+
+    incidents_repository.save(incident)
   end
 end
