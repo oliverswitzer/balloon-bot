@@ -10,6 +10,11 @@ class HoldDeployments
   end
 
   def execute
+    if incidents_repository.find_last_unresolved
+      chat_client.say(message: SlackClientWrapper::ERROR_MESSAGES[:already_holding])
+      return
+    end
+
     chat_client.say(message: SlackClientWrapper::FAILURE_MESSAGE)
     chat_client.set_channel_topic(message: SlackClientWrapper::FAILURE_CHANNEL_TOPIC)
 

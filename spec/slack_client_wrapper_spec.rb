@@ -31,7 +31,14 @@ describe SlackClientWrapper do
                                         )
     end
   end
+
   describe '#say' do
+    before do
+      expect(slack_web_client_spy).to receive(:channels_list).and_return(
+        mock_channels_list_response
+      )
+    end
+
     it 'should set the topic for the configured deployments channel' do
       subject.say(
         message: 'foo'
@@ -39,10 +46,23 @@ describe SlackClientWrapper do
 
       expect(slack_bot_client_spy).to have_received(:say)
                                         .with(
-                                          channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
+                                          channel: "some-channel-id",
                                           text: 'foo'
                                         )
     end
+  end
+
+  private
+
+  def mock_channels_list_response
+    {
+      'channels' => [
+        {
+          'id' => 'some-channel-id',
+          'name' => ENV['DEPLOYMENTS_CHANNEL']
+        }
+      ]
+    }
   end
 
 end

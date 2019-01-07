@@ -1,4 +1,9 @@
+require 'pry'
+
 class SlackClientWrapper
+  ERROR_MESSAGES = {
+    already_holding: 'I\'m already holding deployments'
+  }
   FAILURE_MESSAGE = 'Holding deploys!'
   BACK_TO_GREEN_MESSAGE = "Nice. Setting channel topic back to green."
 
@@ -12,7 +17,6 @@ class SlackClientWrapper
   end
 
   def set_channel_topic(message:)
-
     slack_bot_client.web_client.channels_setTopic(
       channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
       topic: message
@@ -21,8 +25,15 @@ class SlackClientWrapper
 
   def say(message:)
     slack_bot_client.say(
-      channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
+      channel: lookup_channel_id(channel_name: ENV['DEPLOYMENTS_CHANNEL']),
       text: message
     )
+  end
+
+  private def lookup_channel_id(channel_name:)
+    found_channel = slack_bot_client.web_client.channels_list['channels']
+      .detect { |channel| channel['name'] == channel_name }
+
+    found_channel['id'] if found_channel
   end
 end
