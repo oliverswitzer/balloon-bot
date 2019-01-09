@@ -31,9 +31,13 @@ class SlackClientWrapper
   end
 
   private def lookup_channel_id(channel_name:)
-    found_channel = slack_bot_client.web_client.channels_list['channels']
-      .detect { |channel| channel['name'] == channel_name }
+    found_channel = all_channels['channels']
+                      .detect { |channel| channel['name'] == channel_name }
 
     found_channel['id'] if found_channel
+  end
+
+  private def all_channels
+    @all_channels ||= slack_bot_client.web_client.channels_list
   end
 end
