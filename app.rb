@@ -6,6 +6,7 @@ require './core/hold_deployments'
 require './core/continue_deployments'
 require './core/record_message_for_incident'
 require './slack_client_wrapper'
+require './github_client_wrapper'
 
 require './persistence/messages_repository'
 require './persistence/incidents_repository'
@@ -19,7 +20,8 @@ class BalloonBot < SlackRubyBot::Bot
   command 'hold deploys' do |client, data, match|
     HoldDeployments.new(
       chat_client: SlackClientWrapper.new(client),
-      incidents_repository: INCIDENTS_REPOSITORY
+      incidents_repository: INCIDENTS_REPOSITORY,
+      github_client: GithubClientWrapper.new
     ).execute
   end
 
