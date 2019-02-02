@@ -3,12 +3,12 @@ require 'pry'
 class SlackClientWrapper
   ERROR_MESSAGES = {
     already_holding: 'I\'m already holding deployments'
-  }
-  FAILURE_MESSAGE = 'Holding deploys!'
-  BACK_TO_GREEN_MESSAGE = "Nice. Setting channel topic back to green."
+  }.freeze
+  FAILURE_MESSAGE = 'Holding deploys!'.freeze
+  BACK_TO_GREEN_MESSAGE = "Nice. Setting channel topic back to green.".freeze
 
-  FAILURE_CHANNEL_TOPIC = '⚠️ Hold deploys ⚠️'
-  GREEN_CHANNEL_TOPIC = ':green_balloon: :circleci-pass:'
+  FAILURE_CHANNEL_TOPIC = '⚠️ Hold deploys ⚠️'.freeze
+  GREEN_CHANNEL_TOPIC = ':green_balloon: :circleci-pass:'.freeze
 
   attr_reader :slack_bot_client
 
