@@ -25,10 +25,10 @@ describe SlackClientWrapper do
       )
 
       expect(slack_web_client_spy).to have_received(:channels_setTopic)
-                                        .with(
-                                          channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
-                                          topic: 'yo'
-                                        )
+        .with(
+          channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
+          topic: 'yo'
+        )
     end
   end
 
@@ -45,10 +45,10 @@ describe SlackClientWrapper do
       )
 
       expect(slack_bot_client_spy).to have_received(:say)
-                                        .with(
-                                          channel: "some-channel-id",
-                                          text: 'foo'
-                                        )
+        .with(
+          channel: "some-channel-id",
+          text: 'foo'
+        )
     end
   end
 
