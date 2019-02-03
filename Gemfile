@@ -5,6 +5,7 @@ gem 'async-websocket'
 gem 'dotenv'
 
 group :development, :test do
+  gem 'rspec_junit_formatter'
   gem 'pry'
 end
 
