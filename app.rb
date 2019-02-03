@@ -5,7 +5,9 @@ require 'dotenv'
 require './core/hold_deployments'
 require './core/continue_deployments'
 require './core/record_message_for_incident'
-require './slack_client_wrapper'
+require './clients/slack/slack_client_wrapper'
+require './clients/slack/slack_message'
+require './clients/github/github_client_wrapper'
 
 require './persistence/messages_repository'
 require './persistence/incidents_repository'
@@ -17,10 +19,20 @@ INCIDENTS_REPOSITORY = IncidentsRepository.new
 
 class BalloonBot < SlackRubyBot::Bot
   command 'hold deploys' do |client, data, match|
+    message = SlackMessage.new(
+      timestamp: data[:ts],
+      channel_id: data[:channel]
+    )
+
     HoldDeployments.new(
       chat_client: SlackClientWrapper.new(client),
-      incidents_repository: INCIDENTS_REPOSITORY
-    ).execute
+      incidents_repository: INCIDENTS_REPOSITORY,
+      github_client: GithubClientWrapper.new
+    ).execute(
+      HoldDeployments::Request.new(
+        triggered_by: message
+      )
+    )
   end
 
   command 'green' do |client, data, match|

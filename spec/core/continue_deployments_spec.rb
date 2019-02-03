@@ -1,7 +1,7 @@
 require 'rspec'
 require './core/continue_deployments'
 require './core/entities/incident'
-require './slack_client_wrapper'
+require './clients/slack/slack_client_wrapper'
 require './persistence/incidents_repository'
 
 describe ContinueDeployments do

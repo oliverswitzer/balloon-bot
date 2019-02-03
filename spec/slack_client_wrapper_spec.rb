@@ -1,4 +1,5 @@
-require './slack_client_wrapper'
+require './clients/slack/slack_client_wrapper'
+require './clients/slack/slack_message'
 require 'slack-ruby-bot'
 require 'dotenv'
 
@@ -6,7 +7,7 @@ describe SlackClientWrapper do
   let(:slack_web_client_spy) { spy(Slack::Web::Client) }
   let(:slack_bot_client_spy) do
     spy(SlackRubyBot::Client,
-        { web_client: slack_web_client_spy }
+      { web_client: slack_web_client_spy }
     )
   end
 
@@ -25,10 +26,25 @@ describe SlackClientWrapper do
       )
 
       expect(slack_web_client_spy).to have_received(:channels_setTopic)
-                                        .with(
-                                          channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
-                                          topic: 'yo'
-                                        )
+        .with(
+          channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
+          topic: 'yo'
+        )
+    end
+  end
+
+  describe '#url_for' do
+    it 'should generate the url for the given slack message' do
+      subject.url_for(message: SlackMessage.new(
+        timestamp: '123',
+        channel_id: 'foo'
+      ))
+
+      expect(slack_web_client_spy).to have_received(:chat_getPermalink)
+        .with(
+          message_ts: '123',
+          channel: 'foo'
+        )
     end
   end
 
@@ -45,10 +61,10 @@ describe SlackClientWrapper do
       )
 
       expect(slack_bot_client_spy).to have_received(:say)
-                                        .with(
-                                          channel: "some-channel-id",
-                                          text: 'foo'
-                                        )
+        .with(
+          channel: "some-channel-id",
+          text: 'foo'
+        )
     end
   end
 
