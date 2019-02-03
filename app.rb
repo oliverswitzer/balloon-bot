@@ -18,11 +18,20 @@ INCIDENTS_REPOSITORY = IncidentsRepository.new
 
 class BalloonBot < SlackRubyBot::Bot
   command 'hold deploys' do |client, data, match|
+    message = SlackMessage.new(
+      timestamp: data[:ts],
+      channel_id: data[:channel]
+    )
+
     HoldDeployments.new(
       chat_client: SlackClientWrapper.new(client),
       incidents_repository: INCIDENTS_REPOSITORY,
       github_client: GithubClientWrapper.new
-    ).execute
+    ).execute(
+      HoldDeployments::Request.new(
+        triggered_by: message
+      )
+    )
   end
 
   command 'green' do |client, data, match|
