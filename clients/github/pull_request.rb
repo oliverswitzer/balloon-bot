@@ -1,8 +1,6 @@
-class PullRequest
-  attr_reader :head_sha, :branch
+require './types'
 
-  def initialize(head_sha:, branch:)
-    @head_sha = head_sha
-    @branch = branch
-  end
+class PullRequest < Dry::Struct
+  attribute :head_sha, Types::Strict::String
+  attribute :branch, Types::Strict::String
 end
