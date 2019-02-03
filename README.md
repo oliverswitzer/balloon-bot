@@ -2,6 +2,26 @@
 
 This Slack bot is meant to help let engineers in your organization know when master is broken. It also will help gather information for post-mortems.
 
+# How it works
+
+1. When something breaks, tell balloon bot!
+
+![Hold deployments example](images/hold-deploys.png)
+
+2. Balloon bot will set the channel topic
+
+![Set the channel topic](images/channel-topic.png)
+
+3. As well as make sure to set failing github statuses on all open pull requests
+
+![It sets github status on all open pull requests](images/pr-status.png)
+
+4. When you've fixed the issue, tell balloon bot and all will continue as if nothing ever happened.
+
+![You can resume deployments too!](images/back-to-green.png)
+
+
+
 # Development
 
 To run the bot locally, you first must setup your API token. 
