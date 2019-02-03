@@ -51,10 +51,12 @@ describe HoldDeployments do
       context 'when there are open PRs on the configured github repo' do
         before do
           expect(github_client_spy).to receive(:open_pull_requests)
-            .and_return([
-              PullRequest.new(head_sha: '123abc'),
-              PullRequest.new(head_sha: '456def')
-            ])
+            .and_return(
+              [
+                PullRequest.new(head_sha: '123abc', branch: 'some-branch'),
+                PullRequest.new(head_sha: '456def', branch: 'some-branch')
+              ]
+            )
 
           expect(slack_client_spy).to receive(:url_for)
             .with(message: fake_message)

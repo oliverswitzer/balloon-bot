@@ -3,6 +3,9 @@ require 'dotenv'
 require 'pry'
 require 'rspec'
 
+TEST_BRANCH_1 = 'test-branch'
+TEST_BRANCH_2 = 'other-test-branch'
+
 describe GithubClientWrapper do
   before do
     Dotenv.load('.env.test')
@@ -17,7 +20,7 @@ describe GithubClientWrapper do
         github_client.create_pull_request(
           test_repo,
           'master',
-          'oliverswitzer:test-branch',
+          "oliverswitzer:#{TEST_BRANCH_1}",
           'some pull request title',
           'some pull request body'
         )
@@ -27,7 +30,7 @@ describe GithubClientWrapper do
         github_client.create_pull_request(
           test_repo,
           'master',
-          'oliverswitzer:other-test-branch',
+          "oliverswitzer:#{TEST_BRANCH_2}",
           'some other pull request title',
           'some other pull request body'
         )
@@ -37,8 +40,8 @@ describe GithubClientWrapper do
         pull_requests = subject.open_pull_requests
 
         expect(pull_requests.size).to eq(2)
-        expect(pull_requests.first.head_sha).to eq(test_pull_request_1[:head][:sha])
-        expect(pull_requests.first.head_sha).to eq(test_pull_request_2[:head][:sha])
+        expect(pull_requests.detect { |pr| pr.branch == TEST_BRANCH_1 }.head_sha).to eq(test_pull_request_1[:head][:sha])
+        expect(pull_requests.detect { |pr| pr.branch == TEST_BRANCH_2 }.head_sha).to eq(test_pull_request_2[:head][:sha])
       end
 
       after do
