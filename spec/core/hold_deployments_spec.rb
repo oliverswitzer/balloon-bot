@@ -68,17 +68,17 @@ describe HoldDeployments do
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '123abc',
-              state: GithubClientWrapper::FAILURE_STATE,
-              context: 'Master is broken',
-              description: 'Do not merge into master',
+              state: GithubClientWrapper::STATUS_FAILURE_STATE,
+              context: GithubClientWrapper::STATUS_TEXT[:failure][:context],
+              description: GithubClientWrapper::STATUS_TEXT[:failure][:description],
               more_info_url: 'http://www.example.com'
             )
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '456def',
-              state: GithubClientWrapper::FAILURE_STATE,
-              context: 'Master is broken',
-              description: 'Do not merge into master',
+              state: GithubClientWrapper::STATUS_FAILURE_STATE,
+              context: GithubClientWrapper::STATUS_TEXT[:failure][:context],
+              description: GithubClientWrapper::STATUS_TEXT[:failure][:description],
               more_info_url: 'http://www.example.com'
             )
 

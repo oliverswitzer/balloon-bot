@@ -3,7 +3,13 @@ require 'pry'
 require './clients/github/pull_request'
 
 class GithubClientWrapper
-  FAILURE_STATE = 'failure'
+  STATUS_FAILURE_STATE = 'failure'.freeze
+  STATUS_TEXT = {
+    failure: {
+      context: 'BalloonBot: Master is currently broken'.freeze,
+      description: 'Please wait to merge your changes'.freeze
+    }
+  }.freeze
 
   attr_reader :github_client
 

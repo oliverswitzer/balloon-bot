@@ -25,9 +25,9 @@ class HoldDeployments
     github_client.open_pull_requests.each do |pull_request|
       github_client.set_status_for_commit(
         commit_sha: pull_request.head_sha,
-        state: GithubClientWrapper::FAILURE_STATE,
-        context: 'BalloonBot: Master is currently broken',
-        description: 'Please wait to merge your changes',
+        state: GithubClientWrapper::STATUS_FAILURE_STATE,
+        context: GithubClientWrapper::STATUS_TEXT[:failure][:context],
+        description: GithubClientWrapper::STATUS_TEXT[:failure][:description],
         more_info_url: chat_client.url_for(message: request.triggered_by)
       )
     end
