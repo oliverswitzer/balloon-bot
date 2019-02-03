@@ -74,7 +74,8 @@ describe GithubClientWrapper do
           commit_sha: commit_SHA,
           state: GithubClientWrapper::FAILURE_STATE,
           context: 'Things happened',
-          description: 'Because of stuff'
+          description: 'Because of stuff',
+          more_info_url: 'http://www.example.com'
         )
 
         statuses_for_commit = github_client.statuses(
@@ -85,6 +86,7 @@ describe GithubClientWrapper do
         expect(statuses_for_commit.first.state).to eq(GithubClientWrapper::FAILURE_STATE)
         expect(statuses_for_commit.first.context).to eq('Things happened')
         expect(statuses_for_commit.first.description).to eq('Because of stuff')
+        expect(statuses_for_commit.first.target_url).to eq('http://www.example.com')
       end
 
       after do

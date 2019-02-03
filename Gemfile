@@ -4,6 +4,8 @@ gem 'slack-ruby-bot'
 gem 'async-websocket'
 gem 'dotenv'
 gem 'octokit'
+gem 'dry-struct'
+gem 'dry-types'
 
 group :development, :test do
   gem 'rspec_junit_formatter'

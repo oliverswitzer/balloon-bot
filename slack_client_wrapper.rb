@@ -23,6 +23,15 @@ class SlackClientWrapper
     )
   end
 
+  def url_for(message:)
+    response = slack_bot_client.web_client.chat_getPermalink(
+      channel: message.channel_id,
+      message_ts: message.timestamp
+    )
+
+    response[:permalink]
+  end
+
   def say(message:)
     slack_bot_client.say(
       channel: lookup_channel_id(channel_name: ENV['DEPLOYMENTS_CHANNEL']),
@@ -32,7 +41,7 @@ class SlackClientWrapper
 
   private def lookup_channel_id(channel_name:)
     found_channel = all_channels['channels']
-                      .detect { |channel| channel['name'] == channel_name }
+      .detect { |channel| channel['name'] == channel_name }
 
     found_channel['id'] if found_channel
   end

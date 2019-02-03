@@ -1,5 +1,8 @@
 require './core/entities/incident'
+require './core/entities/message'
 require './persistence/incidents_repository'
+require './types'
+require './slack_message'
 
 class HoldDeployments
   attr_reader :chat_client, :incidents_repository, :github_client
@@ -10,7 +13,7 @@ class HoldDeployments
     @github_client = github_client
   end
 
-  def execute
+  def execute(request)
     if incidents_repository.find_last_unresolved
       chat_client.say(message: SlackClientWrapper::ERROR_MESSAGES[:already_holding])
       return
@@ -24,10 +27,15 @@ class HoldDeployments
         commit_sha: pull_request.head_sha,
         state: GithubClientWrapper::FAILURE_STATE,
         context: 'Master is broken',
-        description: 'Do not merge into master'
+        description: 'Do not merge into master',
+        more_info_url: chat_client.url_for(message: request.triggered_by)
       )
     end
 
     incidents_repository.save(Incident.new)
+  end
+
+  class Request < Dry::Struct
+    attribute :triggered_by, Types.Instance(SlackMessage)
   end
 end
