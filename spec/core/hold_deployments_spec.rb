@@ -1,7 +1,7 @@
 require 'rspec'
 require './core/hold_deployments'
-require './slack_client_wrapper'
-require './github_client_wrapper'
+require './clients/slack/slack_client_wrapper'
+require './clients/github/github_client_wrapper'
 require './persistence/incidents_repository'
 
 describe HoldDeployments do

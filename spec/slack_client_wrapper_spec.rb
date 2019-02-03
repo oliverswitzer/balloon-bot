@@ -1,5 +1,5 @@
-require './slack_client_wrapper'
-require './slack_message'
+require './clients/slack/slack_client_wrapper'
+require './clients/slack/slack_message'
 require 'slack-ruby-bot'
 require 'dotenv'
 

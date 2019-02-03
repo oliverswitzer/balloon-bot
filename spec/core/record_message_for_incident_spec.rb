@@ -3,7 +3,7 @@ require './core/record_message_for_incident'
 require './core/entities/incident'
 require './persistence/messages_repository'
 require './persistence/incidents_repository'
-require './slack_client_wrapper'
+require './clients/slack/slack_client_wrapper'
 
 describe RecordMessageForIncident do
   let(:slack_client_wrapper_spy) { spy(SlackClientWrapper) }

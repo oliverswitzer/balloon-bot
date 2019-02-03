@@ -1,6 +1,6 @@
 require 'octokit'
 require 'pry'
-require './core/entities/pull_request'
+require './clients/github/pull_request'
 
 class GithubClientWrapper
   FAILURE_STATE = 'failure'

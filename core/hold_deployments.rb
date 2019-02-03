@@ -2,7 +2,7 @@ require './core/entities/incident'
 require './core/entities/message'
 require './persistence/incidents_repository'
 require './types'
-require './slack_message'
+require './clients/slack/slack_message'
 
 class HoldDeployments
   attr_reader :chat_client, :incidents_repository, :github_client
@@ -26,8 +26,8 @@ class HoldDeployments
       github_client.set_status_for_commit(
         commit_sha: pull_request.head_sha,
         state: GithubClientWrapper::FAILURE_STATE,
-        context: 'Master is broken',
-        description: 'Do not merge into master',
+        context: 'BalloonBot: Master is currently broken',
+        description: 'Please wait to merge your changes',
         more_info_url: chat_client.url_for(message: request.triggered_by)
       )
     end
