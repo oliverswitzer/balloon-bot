@@ -3,6 +3,7 @@ require './core/entities/message'
 require './persistence/incidents_repository'
 require './types'
 require './clients/slack/slack_message'
+require './clients/github/status'
 
 class HoldDeployments
   attr_reader :chat_client, :incidents_repository, :github_client
@@ -25,9 +26,7 @@ class HoldDeployments
     github_client.open_pull_requests.each do |pull_request|
       github_client.set_status_for_commit(
         commit_sha: pull_request.head_sha,
-        state: GithubClientWrapper::STATUS_FAILURE_STATE,
-        context: GithubClientWrapper::STATUS_TEXT[:failure][:context],
-        description: GithubClientWrapper::STATUS_TEXT[:failure][:description],
+        status: Github::Status.failure,
         more_info_url: chat_client.url_for(message: request.triggered_by)
       )
     end

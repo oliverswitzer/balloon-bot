@@ -2,6 +2,7 @@ require 'rspec'
 require './core/hold_deployments'
 require './clients/slack/slack_client_wrapper'
 require './clients/github/github_client_wrapper'
+require './clients/github/status'
 require './persistence/incidents_repository'
 
 describe HoldDeployments do
@@ -68,18 +69,14 @@ describe HoldDeployments do
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '123abc',
-              state: GithubClientWrapper::STATUS_FAILURE_STATE,
-              context: GithubClientWrapper::STATUS_TEXT[:failure][:context],
-              description: GithubClientWrapper::STATUS_TEXT[:failure][:description],
-              more_info_url: 'http://www.example.com'
+              more_info_url: 'http://www.example.com',
+              status: instance_of(Github::FailureStatus)
             )
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '456def',
-              state: GithubClientWrapper::STATUS_FAILURE_STATE,
-              context: GithubClientWrapper::STATUS_TEXT[:failure][:context],
-              description: GithubClientWrapper::STATUS_TEXT[:failure][:description],
-              more_info_url: 'http://www.example.com'
+              more_info_url: 'http://www.example.com',
+              status: instance_of(Github::FailureStatus)
             )
 
           subject.execute(HoldDeployments::Request.new(triggered_by: fake_message))

@@ -26,13 +26,13 @@ class GithubClientWrapper
     end
   end
 
-  def set_status_for_commit(commit_sha:, state:, context:, description:, more_info_url:)
+  def set_status_for_commit(commit_sha:, status:, more_info_url:)
     github_client.create_status(
       ENV['GITHUB_REPO'],
       commit_sha,
-      state,
-      context: context,
-      description: description,
+      status.state,
+      context: status.context,
+      description: status.description,
       target_url: more_info_url
     )
   end

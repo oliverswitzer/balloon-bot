@@ -1,7 +1,9 @@
-require './clients/github/github_client_wrapper'
 require 'dotenv'
 require 'pry'
 require 'rspec'
+
+require './clients/github/github_client_wrapper'
+require './clients/github/status'
 
 TEST_BRANCH_1 = 'test-branch'
 TEST_BRANCH_2 = 'other-test-branch'
@@ -75,9 +77,7 @@ describe GithubClientWrapper do
 
         subject.set_status_for_commit(
           commit_sha: commit_SHA,
-          state: GithubClientWrapper::STATUS_FAILURE_STATE,
-          context: 'Things happened',
-          description: 'Because of stuff',
+          status: Github::Status.failure,
           more_info_url: 'http://www.example.com'
         )
 
@@ -86,9 +86,9 @@ describe GithubClientWrapper do
           commit_SHA
         )
 
-        expect(statuses_for_commit.first.state).to eq(GithubClientWrapper::STATUS_FAILURE_STATE)
-        expect(statuses_for_commit.first.context).to eq('Things happened')
-        expect(statuses_for_commit.first.description).to eq('Because of stuff')
+        expect(statuses_for_commit.first.state).to eq(Github::Status.failure.state)
+        expect(statuses_for_commit.first.context).to eq(Github::Status.failure.context)
+        expect(statuses_for_commit.first.description).to eq(Github::Status.failure.description)
         expect(statuses_for_commit.first.target_url).to eq('http://www.example.com')
       end
 
