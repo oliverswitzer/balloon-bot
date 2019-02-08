@@ -49,7 +49,7 @@ describe HoldDeployments do
     end
 
     describe 'github status behavior' do
-      context 'when there are open PRs on the configured github repo' do
+      context 'for each open PR on the configured github repo' do
         before do
           expect(github_client_spy).to receive(:open_pull_requests)
             .and_return(
@@ -65,7 +65,7 @@ describe HoldDeployments do
             .twice
         end
 
-        it 'sets a github status for each open PR to failure' do
+        it 'sets a github failing github status' do
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '123abc',

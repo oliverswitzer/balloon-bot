@@ -26,8 +26,7 @@ class BalloonBot < SlackRubyBot::Bot
 
     HoldDeployments.new(
       chat_client: SlackClientWrapper.new(client),
-      incidents_repository: INCIDENTS_REPOSITORY,
-      github_client: GithubClientWrapper.new
+      incidents_repository: INCIDENTS_REPOSITORY
     ).execute(
       HoldDeployments::Request.new(
         triggered_by: message

@@ -8,7 +8,11 @@ require './clients/github/status'
 class HoldDeployments
   attr_reader :chat_client, :incidents_repository, :github_client
 
-  def initialize(chat_client:, incidents_repository: IncidentsRepository.new, github_client:)
+  def initialize(
+    chat_client:,
+    incidents_repository: IncidentsRepository.new,
+    github_client: GithubClientWrapper.new
+  )
     @chat_client = chat_client
     @incidents_repository = incidents_repository
     @github_client = github_client
