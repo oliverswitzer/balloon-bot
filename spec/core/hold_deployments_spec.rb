@@ -65,7 +65,7 @@ describe HoldDeployments do
             .twice
         end
 
-        it 'sets a github failing github status' do
+        it 'sets a failing github status' do
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '123abc',
