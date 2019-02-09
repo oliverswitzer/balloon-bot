@@ -18,17 +18,19 @@ class GithubClientWrapper
   end
 
   def open_pull_requests
+    log_rate_limit
+
     github_client.pull_requests(ENV['GITHUB_REPO'], { state: :open }).map do |pr|
       PullRequest.new(
         head_sha: pr[:head][:sha],
         branch: pr[:head][:ref]
       )
     end
-
-    log_rate_limit
   end
 
   def set_status_for_commit(commit_sha:, status:, more_info_url: nil)
+    log_rate_limit
+
     github_client.create_status(
       ENV['GITHUB_REPO'],
       commit_sha,
@@ -37,8 +39,6 @@ class GithubClientWrapper
       description: status.description,
       target_url: more_info_url || ''
     )
-
-    log_rate_limit
   end
 
   private def log_rate_limit
