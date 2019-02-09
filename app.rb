@@ -1,10 +1,12 @@
 require 'slack-ruby-bot'
 require 'pry'
 require 'dotenv'
+require 'rufus-scheduler'
 
 require './core/hold_deployments'
 require './core/continue_deployments'
 require './core/record_message_for_incident'
+require './core/update_pull_request_statuses'
 require './clients/slack/slack_client_wrapper'
 require './clients/slack/slack_message'
 require './clients/github/github_client_wrapper'
@@ -57,5 +59,15 @@ module Hooks
   end
 end
 
+
+scheduler = Rufus::Scheduler.new
+
+scheduler.every '10s' do
+  UpdatePullRequestStatuses.new(
+    incidents_repository: INCIDENTS_REPOSITORY
+  ).execute
+end
+
 BalloonBot.instance.on(:message, Hooks::Message.new)
 BalloonBot.run
+

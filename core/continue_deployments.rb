@@ -18,6 +18,8 @@ class ContinueDeployments
     incident = incidents_repository.find_last_unresolved
 
     github_client.open_pull_requests.each do |pull_request|
+      puts "Marking PR for branch #{pull_request.branch} as passing"
+
       github_client.set_status_for_commit(
         commit_sha: pull_request.head_sha,
         status: Github::Status.success

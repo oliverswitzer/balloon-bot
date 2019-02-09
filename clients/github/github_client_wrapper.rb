@@ -24,6 +24,8 @@ class GithubClientWrapper
         branch: pr[:head][:ref]
       )
     end
+
+    log_rate_limit
   end
 
   def set_status_for_commit(commit_sha:, status:, more_info_url: nil)
@@ -35,5 +37,11 @@ class GithubClientWrapper
       description: status.description,
       target_url: more_info_url || ''
     )
+
+    log_rate_limit
+  end
+
+  private def log_rate_limit
+    puts "Github rate limit: #{github_client.rate_limit}"
   end
 end
