@@ -7,4 +7,11 @@ class EntityFactory
       incident: incident || Incident.new
     )
   end
+
+  def self.build_incident(created_at: nil, resolved_at: nil)
+    Incident.new(
+      created_at: created_at || Time.now,
+      resolved_at: resolved_at || nil
+    )
+  end
 end
