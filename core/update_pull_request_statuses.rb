@@ -15,7 +15,7 @@ class UpdatePullRequestStatuses
 
   def execute
     if active_incident?
-      puts "Ongoing incident: marking all open pull requests as failing"
+      puts 'Ongoing incident: marking all open pull requests as failing'
       mark_open_pull_requests_as_failing
     end
   end
