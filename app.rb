@@ -47,14 +47,19 @@ end
 module Hooks
   class Message
     def call(client, data)
-      channel_name = client.web_client.channels_info(channel: data['channel'])['channel']['name']
+      request = RecordMessageForIncident::Request.new(
+        message: {
+          text: data[:text],
+          channel_id: data[:channel],
+          timestamp: data[:ts]
+        }
+      )
 
       RecordMessageForIncident.new(
         chat_client: SlackClientWrapper.new(client),
         incidents_repository: INCIDENTS_REPOSITORY,
         messages_repository: MESSAGES_REPOSITORY
-
-      ).execute(text: data['text'], channel: channel_name)
+      ).execute(request)
     end
   end
 end
