@@ -64,8 +64,15 @@ end
 
 scheduler = Rufus::Scheduler.new
 scheduler.every '10s' do
+  # `send` is a bit of a hack here, but AFAIK this is the only
+  # way to get access to the slack bot client outside of
+  # the BalloonBot/Hooks class
+  slack_bot_client = BalloonBot.instance.send(:client)
+
   UpdatePullRequestStatuses.new(
-    incidents_repository: INCIDENTS_REPOSITORY
+    incidents_repository: INCIDENTS_REPOSITORY,
+    messages_repository: MESSAGES_REPOSITORY,
+    chat_client: SlackClientWrapper.new(slack_bot_client)
   ).execute
 end
 

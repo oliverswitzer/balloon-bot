@@ -4,23 +4,30 @@ require './clients/github/status'
 require './clients/slack/slack_client_wrapper'
 require './core/update_pull_request_statuses'
 require './core/hold_deployments'
+require './persistence/incidents_repository'
+require './persistence/messages_repository'
 
-describe "Integration Test: HoldDeployments + UpdatePullRequestStatuses" do
+describe 'Integration Test: HoldDeployments + UpdatePullRequestStatuses' do
   let(:github_client_spy) { spy(GithubClientWrapper) }
+  let(:slack_client_spy) { spy(SlackClientWrapper) }
   let(:incidents_repository) { IncidentsRepository.new }
+  let(:messages_repository) { MessagesRepository.new }
 
   let(:hold_deployments) {
     HoldDeployments.new(
       chat_client: spy(SlackClientWrapper),
       github_client: spy(GithubClientWrapper),
-      incidents_repository: incidents_repository
+      incidents_repository: incidents_repository,
+      messages_repository: messages_repository
     )
   }
 
   subject do
     UpdatePullRequestStatuses.new(
       github_client: github_client_spy,
-      incidents_repository: incidents_repository
+      incidents_repository: incidents_repository,
+      messages_repository: messages_repository,
+      chat_client: slack_client_spy
     )
   end
 
@@ -43,19 +50,32 @@ describe "Integration Test: HoldDeployments + UpdatePullRequestStatuses" do
               ]
             )
 
+          current_incident = incidents_repository.find_last_unresolved
+          first_incident_message = messages_repository.find_by_incident_id(
+            current_incident.id
+          ).first
+
+          expect(slack_client_spy).to receive(:url_for_message)
+            .with(
+              timestamp: first_incident_message.timestamp,
+              channel_id: first_incident_message.channel_id
+            )
+            .and_return('http://example.com')
         end
 
         it 'sets a failing github status' do
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '123abc',
-              status: instance_of(Github::FailureStatus)
+              status: instance_of(Github::FailureStatus),
+              more_info_url: 'http://example.com'
             )
           expect(github_client_spy).to receive(:set_status_for_commit)
-             .with(
-               commit_sha: '456def',
-               status: instance_of(Github::FailureStatus)
-             )
+            .with(
+              commit_sha: '456def',
+              status: instance_of(Github::FailureStatus),
+              more_info_url: 'http://example.com'
+            )
 
           subject.execute
         end
