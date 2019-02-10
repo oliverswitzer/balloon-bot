@@ -23,10 +23,10 @@ class SlackClientWrapper
     )
   end
 
-  def url_for(message:)
+  def url_for_message(timestamp:, channel_id:)
     response = slack_bot_client.web_client.chat_getPermalink(
-      channel: message.channel_id,
-      message_ts: message.timestamp
+      channel: channel_id,
+      message_ts: timestamp
     )
 
     response[:permalink]

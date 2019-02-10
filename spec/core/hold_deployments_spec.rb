@@ -10,10 +10,11 @@ describe HoldDeployments do
   let(:github_client_spy) { spy(GithubClientWrapper) }
   let(:incidents_repository) { IncidentsRepository.new }
   let(:fake_message) do
-    SlackMessage.new(
+    {
+      text: 'some message',
       timestamp: '123',
       channel_id: 'abc'
-    )
+    }
   end
 
   subject do
@@ -26,21 +27,21 @@ describe HoldDeployments do
 
   describe '#execute' do
     it 'tells the specified deployments channel to hold deploys' do
-      subject.execute(HoldDeployments::Request.new(triggered_by: fake_message))
+      subject.execute(HoldDeployments::Request.new(message: fake_message))
 
       expect(slack_client_spy).to have_received(:say)
         .with(message: SlackClientWrapper::FAILURE_MESSAGE)
     end
 
     it 'tells slack client to set channel topic for failure' do
-      subject.execute(HoldDeployments::Request.new(triggered_by: fake_message))
+      subject.execute(HoldDeployments::Request.new(message: fake_message))
 
       expect(slack_client_spy).to have_received(:set_channel_topic)
         .with(message: SlackClientWrapper::FAILURE_CHANNEL_TOPIC)
     end
 
     it 'creates an unresolved incident' do
-      subject.execute(HoldDeployments::Request.new(triggered_by: fake_message))
+      subject.execute(HoldDeployments::Request.new(message: fake_message))
 
       saved_incident = incidents_repository.find_last_unresolved
 
@@ -59,8 +60,11 @@ describe HoldDeployments do
               ]
             )
 
-          expect(slack_client_spy).to receive(:url_for)
-            .with(message: fake_message)
+          expect(slack_client_spy).to receive(:url_for_message)
+            .with(
+              timestamp: fake_message[:timestamp],
+              channel_id: fake_message[:channel_id]
+            )
             .and_return('http://www.example.com')
             .twice
         end
@@ -79,7 +83,7 @@ describe HoldDeployments do
               status: instance_of(Github::FailureStatus)
             )
 
-          subject.execute(HoldDeployments::Request.new(triggered_by: fake_message))
+          subject.execute(HoldDeployments::Request.new(message: fake_message))
         end
       end
     end
@@ -90,7 +94,7 @@ describe HoldDeployments do
       end
 
       it 'warns that deployments are already being held' do
-        subject.execute(HoldDeployments::Request.new(triggered_by: fake_message))
+        subject.execute(HoldDeployments::Request.new(message: fake_message))
 
         expect(slack_client_spy).to have_received(:say)
           .with(message: SlackClientWrapper::ERROR_MESSAGES[:already_holding])

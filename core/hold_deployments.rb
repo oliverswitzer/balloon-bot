@@ -2,7 +2,6 @@ require './core/entities/incident'
 require './core/entities/message'
 require './persistence/incidents_repository'
 require './types'
-require './clients/slack/slack_message'
 require './clients/github/status'
 
 class HoldDeployments
@@ -31,14 +30,23 @@ class HoldDeployments
       github_client.set_status_for_commit(
         commit_sha: pull_request.head_sha,
         status: Github::Status.failure,
-        more_info_url: chat_client.url_for(message: request.triggered_by)
+        more_info_url: chat_client.url_for_message(
+          timestamp: request.message[:timestamp],
+          channel_id: request.message[:channel_id]
+        )
       )
     end
 
     incidents_repository.save(Incident.new)
   end
 
+
   class Request < Dry::Struct
-    attribute :triggered_by, Types.Instance(SlackMessage)
+    attribute :message, Types::Hash.schema(
+      text: Types::Strict::String,
+      timestamp: Types::Strict::String,
+      channel_id: Types::Strict::String
+    )
   end
+
 end
