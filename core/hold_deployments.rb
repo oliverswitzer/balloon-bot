@@ -5,15 +5,17 @@ require './types'
 require './clients/github/status'
 
 class HoldDeployments
-  attr_reader :chat_client, :incidents_repository, :github_client
+  attr_reader :chat_client, :incidents_repository, :github_client, :messages_repository
 
   def initialize(
     chat_client:,
-    incidents_repository: IncidentsRepository.new,
-    github_client: GithubClientWrapper.new
+      incidents_repository: IncidentsRepository.new,
+      messages_repository: MessagesRepository.new,
+      github_client: GithubClientWrapper.new
   )
     @chat_client = chat_client
     @incidents_repository = incidents_repository
+    @messages_repository = messages_repository
     @github_client = github_client
   end
 
@@ -26,6 +28,16 @@ class HoldDeployments
     chat_client.say(message: SlackClientWrapper::FAILURE_MESSAGE)
     chat_client.set_channel_topic(message: SlackClientWrapper::FAILURE_CHANNEL_TOPIC)
 
+    incident = incidents_repository.save(Incident.new)
+    messages_repository.save(
+      Message.new(
+        incident: incident,
+        text: request.message[:text],
+        timestamp: request.message[:timestamp],
+        channel_id: request.message[:channel_id]
+      )
+    )
+
     github_client.open_pull_requests.each do |pull_request|
       github_client.set_status_for_commit(
         commit_sha: pull_request.head_sha,
@@ -36,8 +48,6 @@ class HoldDeployments
         )
       )
     end
-
-    incidents_repository.save(Incident.new)
   end
 
 
@@ -48,5 +58,4 @@ class HoldDeployments
       channel_id: Types::Strict::String
     )
   end
-
 end

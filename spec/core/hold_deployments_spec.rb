@@ -3,12 +3,15 @@ require './core/hold_deployments'
 require './clients/slack/slack_client_wrapper'
 require './clients/github/github_client_wrapper'
 require './clients/github/status'
+require './persistence/messages_repository'
 require './persistence/incidents_repository'
 
 describe HoldDeployments do
   let(:slack_client_spy) { spy(SlackClientWrapper) }
   let(:github_client_spy) { spy(GithubClientWrapper) }
   let(:incidents_repository) { IncidentsRepository.new }
+  let(:messages_repository) { MessagesRepository.new }
+
   let(:fake_message) do
     {
       text: 'some message',
@@ -21,6 +24,7 @@ describe HoldDeployments do
     HoldDeployments.new(
       chat_client: slack_client_spy,
       incidents_repository: incidents_repository,
+      messages_repository: messages_repository,
       github_client: github_client_spy
     )
   end
@@ -47,6 +51,18 @@ describe HoldDeployments do
 
       expect(saved_incident).to be_an_instance_of(Incident)
       expect(saved_incident.resolved_at).to be_nil
+    end
+
+    it 'saves the message that triggered the incident' do
+      subject.execute(HoldDeployments::Request.new(message: fake_message))
+
+      incident = incidents_repository.find_last_unresolved
+
+      message = messages_repository.find_by_incident_id(incident.id).first
+
+      expect(message.text).to eq(fake_message[:text])
+      expect(message.channel_id).to eq(fake_message[:channel_id])
+      expect(message.timestamp).to eq(fake_message[:timestamp])
     end
 
     describe 'github status behavior' do
