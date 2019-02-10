@@ -27,18 +27,19 @@ describe RecordMessageForIncident do
       }
     end
 
-    context 'when message is sent in configured deployments channel' do
-      let(:channel) { ENV['DEPLOYMENTS_CHANNEL'] }
-
-      before do
-        expect(slack_client_wrapper_spy).to receive(:channel_name)
-          .with('123abc')
-          .and_return(channel)
+    context 'when there is an unresolved incident' do
+      let!(:persisted_incident) do
+        incidents_repository.save(Incident.new(resolved_at: nil))
       end
 
-      context 'when there is an unresolved incident' do
-        let!(:persisted_incident) do
-          incidents_repository.save(Incident.new(resolved_at: nil))
+
+      context 'when message is sent in configured deployments channel' do
+        let(:channel) { ENV['DEPLOYMENTS_CHANNEL'] }
+
+        before do
+          expect(slack_client_wrapper_spy).to receive(:channel_name)
+            .with('123abc')
+            .and_return(channel)
         end
 
         it 'persists the message with the unresolved incident id' do
@@ -55,7 +56,13 @@ describe RecordMessageForIncident do
         end
       end
 
-      context 'when there is NOT an unresolved incident' do
+      context 'when message is sent in a channel other than the configured deployments channel' do
+        before do
+          expect(slack_client_wrapper_spy).to receive(:channel_name)
+            .with('123abc')
+            .and_return('some other channel')
+        end
+
         it 'does not persist the message' do
           request = RecordMessageForIncident::Request.new(message: message)
 
@@ -66,13 +73,7 @@ describe RecordMessageForIncident do
       end
     end
 
-    context 'when message is sent in a channel other than the configured deployments channel' do
-      before do
-        expect(slack_client_wrapper_spy).to receive(:channel_name)
-          .with('123abc')
-          .and_return('some other channel')
-      end
-
+    context 'when there is NOT an unresolved incident' do
       it 'does not persist the message' do
         request = RecordMessageForIncident::Request.new(message: message)
 

@@ -17,9 +17,8 @@ class RecordMessageForIncident
 
   def execute(request)
     incident = incidents_repository.find_last_unresolved
-    channel_name = chat_client.channel_name(request.message[:channel_id])
 
-    if channel_name == ENV['DEPLOYMENTS_CHANNEL'] && incident
+    if incident && is_in_deployments_channel?(request)
       messages_repository.save(
         Message.new(
           text: request.message[:text],
@@ -33,8 +32,6 @@ class RecordMessageForIncident
     end
   end
 
-  private
-
   class Request < Dry::Struct
     attribute :message, Types::Hash.schema(
       text: Types::Strict::String,
@@ -43,7 +40,14 @@ class RecordMessageForIncident
     )
   end
 
-  def log_current_state
+
+  private def is_in_deployments_channel?(request)
+    channel_name = chat_client.channel_name(request.message[:channel_id])
+
+    channel_name == ENV['DEPLOYMENTS_CHANNEL']
+  end
+
+  private def log_current_state
     puts 'All messages:'
     puts "count: #{messages_repository.messages.size}"
     p messages_repository.messages

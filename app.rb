@@ -8,7 +8,6 @@ require './core/continue_deployments'
 require './core/record_message_for_incident'
 require './core/update_pull_request_statuses'
 require './clients/slack/slack_client_wrapper'
-require './clients/slack/slack_message'
 require './clients/github/github_client_wrapper'
 
 require './persistence/messages_repository'
@@ -19,21 +18,24 @@ Dotenv.load!
 MESSAGES_REPOSITORY = MessagesRepository.new
 INCIDENTS_REPOSITORY = IncidentsRepository.new
 
+def parse_message(data)
+  {
+    message: {
+      text: data[:text],
+      channel_id: data[:channel],
+      timestamp: data[:ts]
+    }
+  }
+end
+
 class BalloonBot < SlackRubyBot::Bot
   command 'hold deploys' do |client, data, match|
-    message = SlackMessage.new(
-      timestamp: data[:ts],
-      channel_id: data[:channel]
-    )
+    request = HoldDeployments::Request.new(parse_message(data))
 
     HoldDeployments.new(
       chat_client: SlackClientWrapper.new(client),
       incidents_repository: INCIDENTS_REPOSITORY
-    ).execute(
-      HoldDeployments::Request.new(
-        triggered_by: message
-      )
-    )
+    ).execute(request)
   end
 
   command 'green' do |client, data, match|
@@ -48,11 +50,7 @@ module Hooks
   class Message
     def call(client, data)
       request = RecordMessageForIncident::Request.new(
-        message: {
-          text: data[:text],
-          channel_id: data[:channel],
-          timestamp: data[:ts]
-        }
+        parse_message(data)
       )
 
       RecordMessageForIncident.new(
@@ -64,9 +62,7 @@ module Hooks
   end
 end
 
-
 scheduler = Rufus::Scheduler.new
-
 scheduler.every '10s' do
   UpdatePullRequestStatuses.new(
     incidents_repository: INCIDENTS_REPOSITORY

@@ -1,7 +1,6 @@
 require 'rspec'
 require './clients/github/github_client_wrapper'
 require './clients/github/status'
-require './clients/slack/slack_message'
 require './clients/slack/slack_client_wrapper'
 require './core/update_pull_request_statuses'
 require './core/hold_deployments'
@@ -28,8 +27,8 @@ describe "Integration Test: HoldDeployments + UpdatePullRequestStatuses" do
   describe '#execute' do
     context 'when deployments have been previously held' do
       before do
-        fake_slack_message = SlackMessage.new(timestamp: 'some time', channel_id: 'some channel')
-        hold_deployments_request = HoldDeployments::Request.new(triggered_by: fake_slack_message)
+        fake_slack_message = { text: 'some message', timestamp: 'some time', channel_id: 'some channel' }
+        hold_deployments_request = HoldDeployments::Request.new(message: fake_slack_message)
 
         hold_deployments.execute(hold_deployments_request)
       end
@@ -38,10 +37,10 @@ describe "Integration Test: HoldDeployments + UpdatePullRequestStatuses" do
         before do
           expect(github_client_spy).to receive(:open_pull_requests)
             .and_return(
-             [
-               PullRequest.new(head_sha: '123abc', branch: 'some-branch'),
-               PullRequest.new(head_sha: '456def', branch: 'some-branch')
-             ]
+              [
+                PullRequest.new(head_sha: '123abc', branch: 'some-branch'),
+                PullRequest.new(head_sha: '456def', branch: 'some-branch')
+              ]
             )
 
         end
@@ -49,8 +48,8 @@ describe "Integration Test: HoldDeployments + UpdatePullRequestStatuses" do
         it 'sets a failing github status' do
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
-             commit_sha: '123abc',
-             status: instance_of(Github::FailureStatus)
+              commit_sha: '123abc',
+              status: instance_of(Github::FailureStatus)
             )
           expect(github_client_spy).to receive(:set_status_for_commit)
              .with(
