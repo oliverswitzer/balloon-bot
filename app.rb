@@ -1,5 +1,4 @@
 require 'slack-ruby-bot'
-require 'dotenv'
 require 'rufus-scheduler'
 
 require './core/hold_deployments'
@@ -12,7 +11,7 @@ require './clients/github/github_client_wrapper'
 require './persistence/messages_repository'
 require './persistence/incidents_repository'
 
-Dotenv.load!
+Dotenv.load! unless ENV['ENVIRONMENT'] == 'production'
 
 MESSAGES_REPOSITORY = MessagesRepository.new
 INCIDENTS_REPOSITORY = IncidentsRepository.new
