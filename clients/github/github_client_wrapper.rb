@@ -3,14 +3,6 @@ require 'pry'
 require './clients/github/pull_request'
 
 class GithubClientWrapper
-  STATUS_FAILURE_STATE = 'failure'.freeze
-  STATUS_TEXT = {
-    failure: {
-      context: 'BalloonBot: Master is currently broken'.freeze,
-      description: 'Please wait to merge your changes'.freeze
-    }
-  }.freeze
-
   attr_reader :github_client
 
   def initialize(github_client: Octokit::Client.new(access_token: ENV['GITHUB_PERSONAL_ACCESS_TOKEN']))
