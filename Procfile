@@ -1,1 +1,1 @@
-web: bundle exec ruby app.rb
+balloonbot: bundle exec ruby app.rb
