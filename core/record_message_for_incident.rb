@@ -34,7 +34,7 @@ class RecordMessageForIncident
 
   class Request < Dry::Struct
     attribute :message, Types::Hash.schema(
-      text: Types::Strict::String,
+      text: Types::Strict::String.optional,
       timestamp: Types::Strict::String,
       channel_id: Types::Strict::String
     )
