@@ -1,12 +1,14 @@
 source 'https://rubygems.org'
 
-ruby '2.5.3'
+ruby '2.4.1'
 
 gem 'slack-ruby-bot'
 gem 'async-websocket'
 gem 'octokit'
 gem 'dry-struct'
 gem 'dry-types'
+gem 'puma'
+gem 'sinatra'
 gem 'rufus-scheduler'
 
 group :development, :test do
