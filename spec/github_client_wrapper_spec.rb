@@ -1,5 +1,4 @@
 require 'dotenv'
-require 'pry'
 require 'rspec'
 
 require './clients/github/github_client_wrapper'

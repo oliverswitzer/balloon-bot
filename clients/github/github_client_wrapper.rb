@@ -1,5 +1,4 @@
 require 'octokit'
-require 'pry'
 require './clients/github/pull_request'
 
 class GithubClientWrapper

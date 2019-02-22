@@ -3,8 +3,6 @@ require './clients/github/status'
 require './persistence/incidents_repository'
 require './persistence/messages_repository'
 
-require 'pry'
-
 class UpdatePullRequestStatuses
   attr_reader :github_client, :chat_client, :incidents_repository, :messages_repository
 

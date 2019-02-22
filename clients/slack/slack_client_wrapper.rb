@@ -1,5 +1,3 @@
-require 'pry'
-
 class SlackClientWrapper
   ERROR_MESSAGES = {
     already_holding: 'I\'m already holding deployments'

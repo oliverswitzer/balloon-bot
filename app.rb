@@ -1,5 +1,4 @@
 require 'slack-ruby-bot'
-require 'pry'
 require 'dotenv'
 require 'rufus-scheduler'
 
