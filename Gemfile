@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.5.3'
+
 gem 'slack-ruby-bot'
 gem 'async-websocket'
 gem 'dotenv'
