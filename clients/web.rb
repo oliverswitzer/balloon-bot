@@ -1,6 +1,6 @@
 require 'sinatra/base'
 
-module SlackMathbot
+module Clients
   class Web < Sinatra::Base
     get '/' do
       'Balloon bot is a-runnin'

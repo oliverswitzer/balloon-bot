@@ -21,4 +21,4 @@ end
 
 # Heroku will shut down the server if your app doesn't bind to it's available port within 60 seconds.
 # Running this dumb web server is necessary to prevent this from happening.
-run SlackMathbot::Web
+run Clients::Web
