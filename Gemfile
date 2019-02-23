@@ -7,12 +7,11 @@ gem 'async-websocket'
 gem 'octokit'
 gem 'dry-struct'
 gem 'dry-types'
-gem 'puma'
 gem 'sinatra'
 gem 'rufus-scheduler'
+gem 'dotenv'
 
 group :development, :test do
-  gem 'dotenv'
   gem 'rspec_junit_formatter'
   gem 'pry'
   gem 'rb-readline'
