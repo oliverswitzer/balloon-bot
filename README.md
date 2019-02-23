@@ -27,7 +27,8 @@ This Slack bot is meant to help let engineers in your organization know when mas
 To run the bot locally, you first must setup your API token. 
 
 1. Create a `.env` file that looks like `.env.sample` and fill it out
-1. Run the app `bundle exec ruby balloon-bot.rb`
+1. Install foreman `gem install foreman`
+1. Run the app `foreman start`
 
 # Running tests
 
