@@ -1,18 +1,17 @@
 require 'rspec'
-require './core/continue_deployments'
-require './core/entities/incident'
+require './core/core'
 require './clients/slack/slack_client_wrapper'
 require './clients/github/github_client_wrapper'
 require './clients/github/status'
 require './persistence/incidents_repository'
 
-describe ContinueDeployments do
+describe Core::ContinueDeployments do
   let(:slack_client_spy) {spy(SlackClientWrapper)}
   let(:github_client_spy) {spy(GithubClientWrapper)}
   let(:incidents_repository) {IncidentsRepository.new}
 
   subject do
-    ContinueDeployments.new(
+    Core::ContinueDeployments.new(
       chat_client: slack_client_spy,
       github_client: github_client_spy,
       incidents_repository: incidents_repository

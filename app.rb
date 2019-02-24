@@ -39,7 +39,7 @@ class BalloonBot < SlackRubyBot::Bot
   end
 
   command 'green' do |client, data, match|
-    ContinueDeployments.new(
+    Core::ContinueDeployments.new(
       chat_client: SlackClientWrapper.new(client),
       incidents_repository: INCIDENTS_REPOSITORY
     ).execute
