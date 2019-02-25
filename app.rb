@@ -1,8 +1,6 @@
-require 'rufus-scheduler'
-
-require './clients/slack/slack_client_wrapper'
-require './clients/slack/balloon-bot'
-require './persistence/persistence'
+require 'clients'
+require 'core'
+require 'persistence'
 
 class App
   def self.run
@@ -18,9 +16,9 @@ class App
       UpdatePullRequestStatuses.new(
         incidents_repository: Persistence::INCIDENTS_REPOSITORY,
         messages_repository: Persistence::MESSAGES_REPOSITORY,
-        chat_client: SlackClientWrapper.new(slack_bot_client)
+        chat_client: SlackClientWrapper.new(slack_bot_client),
+        github_client: GithubClientWrapper.new
       ).execute
     end
   end
 end
-

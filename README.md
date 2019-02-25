@@ -20,8 +20,6 @@ This Slack bot is meant to help let engineers in your organization know when mas
 
 ![You can resume deployments too!](images/back-to-green.png)
 
-
-
 # Development
 
 To run the bot locally, you first must setup your API token. 
@@ -40,5 +38,17 @@ specified by the `GITHUB_REPO` env var.
     - It is recommended to use a separate github repo than what you use for local development
     to avoid possible data conflicts from simultaneous test runs 
 
+1. `bundle exec rspec`
 
-`bundle exec rspec`
+# Deployments
+
+1. `git push heroku master`
+
+If you want to run the app locally, you currently have to stop Heroku from running. This is because you will receive duplicate
+messages from Heroku and your local machine. To stop the Heroku app from running:
+
+`$ heroku ps:scale web=0`
+
+To start it back up again
+
+`$ heroku ps:scale web=1`

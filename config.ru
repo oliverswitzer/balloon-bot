@@ -1,10 +1,7 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'dotenv'
-require 'rufus-scheduler'
-
-require './clients/web'
-require './app'
+require 'app'
 
 Dotenv.load! unless ENV['ENVIRONMENT'] == 'production'
 
@@ -19,6 +16,15 @@ Thread.new do
   end
 end
 
+
+
 # Heroku will shut down the server if your app doesn't bind to it's available port within 60 seconds.
 # Running this dumb web server is necessary to prevent this from happening.
-run Clients::Web
+require 'sinatra/base'
+class Server < Sinatra::Base
+  get '/' do
+    'Balloon bot is a-runnin'
+  end
+end
+
+run Server
