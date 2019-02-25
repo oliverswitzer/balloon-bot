@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'core', path: '../core'
+gem 'persistence', path: '../persistence'
+
+gemspec
