@@ -1,8 +1,8 @@
 module Core
   require 'types'
   require 'entities/incident'
-  require 'entities/pull_request'
   require 'entities/message'
+  require 'github/pull_request'
   require 'github/status'
   require 'use_cases/continue_deployments'
   require 'use_cases/hold_deployments'
