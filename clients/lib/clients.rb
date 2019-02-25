@@ -7,5 +7,4 @@ module Clients
   require 'github/github_client_wrapper'
   require 'slack/slack_client_wrapper'
   require 'slack/balloon-bot'
-  require 'slack/slack_message'
 end
