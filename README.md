@@ -42,3 +42,13 @@ specified by the `GITHUB_REPO` env var.
 
 
 `bundle exec rspec`
+
+# Starting/Stopping staging
+
+To stop staging:
+
+`$ heroku dyno:scale web=0`
+
+To start staging:
+
+`$ heroku dyno:scale web=1`
