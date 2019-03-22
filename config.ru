@@ -1,7 +1,6 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'dotenv'
-require 'rufus-scheduler'
 
 require './clients/web'
 require './app'

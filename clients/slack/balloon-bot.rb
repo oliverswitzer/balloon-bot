@@ -3,7 +3,6 @@ require 'slack-ruby-bot'
 require './core/hold_deployments'
 require './core/continue_deployments'
 require './core/record_message_for_incident'
-require './core/update_pull_request_statuses'
 require './clients/slack/slack_client_wrapper'
 require './clients/github/github_client_wrapper'
 

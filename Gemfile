@@ -8,7 +8,6 @@ gem 'octokit'
 gem 'dry-struct'
 gem 'dry-types'
 gem 'sinatra'
-gem 'rufus-scheduler'
 gem 'dotenv'
 
 group :development, :test do
