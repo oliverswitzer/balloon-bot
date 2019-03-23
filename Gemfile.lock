@@ -24,6 +24,15 @@ PATH
       core
       dotenv
 
+PATH
+  remote: test_support
+  specs:
+    test_support (0.0.0)
+      dotenv
+      pry
+      rb-readline
+      rspec
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -157,7 +166,7 @@ DEPENDENCIES
   pry
   rake
   rb-readline
-  rspec
+  test_support!
 
 RUBY VERSION
    ruby 2.4.1p111

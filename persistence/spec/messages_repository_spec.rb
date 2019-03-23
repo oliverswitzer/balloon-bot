@@ -1,4 +1,5 @@
-require 'rspec'
+require 'test_support'
+
 require 'persistence'
 require 'core'
 

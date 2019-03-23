@@ -10,10 +10,10 @@ gem 'dotenv'
 gem 'rake'
 
 group :test do
-  gem 'rspec'
+  gem 'test_support', path: 'test_support'
 end
 
-group :development, :test do
+group :development do
   gem 'pry'
   gem 'rb-readline'
 end

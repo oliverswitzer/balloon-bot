@@ -1,5 +1,5 @@
 require 'clients'
 
-require './spec/base_spec_helper'
+require 'test_support'
 
 
