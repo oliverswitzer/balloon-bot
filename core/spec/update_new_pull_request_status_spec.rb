@@ -3,8 +3,8 @@ require_relative './spec_helper'
 describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
   let(:slack_client_spy) { spy('SlackClientWrapper') }
   let(:github_client_spy) { spy('GithubClientWrapper') }
-  let(:incidents_repository) {IncidentsRepository.new}
-  let(:messages_repository) {MessagesRepository.new}
+  let(:incidents_repository) { IncidentsRepository.new }
+  let(:messages_repository) { MessagesRepository.new }
 
   let(:hold_deployments) {
     HoldDeployments.new(
@@ -46,21 +46,21 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
         ).first
 
         expect(slack_client_spy).to receive(:url_for_message)
-                                      .with(
-                                        timestamp: first_incident_message.timestamp,
-                                        channel_id: first_incident_message.channel_id
-                                      )
-                                      .and_return('http://example.com')
+          .with(
+            timestamp: first_incident_message.timestamp,
+            channel_id: first_incident_message.channel_id
+          )
+          .and_return('http://example.com')
       end
 
       context 'when pull request event is when a new pull request is opened' do
         it 'sets a failing github status for the passed in pull request' do
           expect(github_client_spy).to receive(:set_status_for_commit)
-                                         .with(
-                                           commit_sha: '123abc',
-                                           status: instance_of(Github::FailureStatus),
-                                           more_info_url: 'http://example.com'
-                                         )
+            .with(
+              commit_sha: '123abc',
+              status: instance_of(Github::FailureStatus),
+              more_info_url: 'http://example.com'
+            )
 
           subject.execute(
             github_event: PullRequestEvent.new(
@@ -77,11 +77,11 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
       context 'when pull request event is when a new pull request is re-opened' do
         it 'sets a failing github status for the passed in pull request' do
           expect(github_client_spy).to receive(:set_status_for_commit)
-                                         .with(
-                                           commit_sha: '123abc',
-                                           status: instance_of(Github::FailureStatus),
-                                           more_info_url: 'http://example.com'
-                                         )
+            .with(
+              commit_sha: '123abc',
+              status: instance_of(Github::FailureStatus),
+              more_info_url: 'http://example.com'
+            )
 
           subject.execute(
             github_event: PullRequestEvent.new(
@@ -96,7 +96,7 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
       end
     end
 
-    context 'when pull request event is not about when a pull request has been opened' do
+    context 'when pull request event is not about when a pull request has been opened or re-opened' do
       it 'it does not set failing statuses on the passed in pull request in github' do
         expect(github_client_spy).not_to receive(:set_status_for_commit)
 
@@ -113,8 +113,12 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
     end
 
     context 'when deployments have not been previously held' do
-      it 'it does not set failing statuses on the passed in pull request in github' do
-        expect(github_client_spy).not_to receive(:set_status_for_commit)
+      it 'sets successful statuses on the passed in pull request' do
+        expect(github_client_spy).to receive(:set_status_for_commit)
+          .with(
+            commit_sha: '123abc',
+            status: instance_of(Github::SuccessStatus),
+          )
 
         subject.execute(
           github_event: PullRequestEvent.new(

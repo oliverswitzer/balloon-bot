@@ -3,9 +3,9 @@ class UpdateNewPullRequestStatus
 
   def initialize(
     github_client:,
-    chat_client:,
-    incidents_repository:,
-    messages_repository:
+      chat_client:,
+      incidents_repository:,
+      messages_repository:
   )
     @github_client = github_client
     @chat_client = chat_client
@@ -14,7 +14,9 @@ class UpdateNewPullRequestStatus
   end
 
   def execute(github_event:)
-    if active_incident? && pr_is_being_opened?(github_event)
+    return unless pr_is_being_opened?(github_event)
+
+    if active_incident?
       initial_slack_message = messages_repository.find_by_incident_id(
         current_incident.id
       ).first
@@ -24,12 +26,15 @@ class UpdateNewPullRequestStatus
         channel_id: initial_slack_message.channel_id
       )
 
-      puts '*** Ongoing incident: marking all open pull requests as failing'
-
       github_client.set_status_for_commit(
         commit_sha: github_event.pull_request.head_sha,
         status: Github::Status.failure,
         more_info_url: more_info_url
+      )
+    else
+      github_client.set_status_for_commit(
+        commit_sha: github_event.pull_request.head_sha,
+        status: Github::Status.success
       )
     end
   end
