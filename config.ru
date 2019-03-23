@@ -1,11 +1,14 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-require 'dotenv'
-
 require './app'
-require 'pry'
 
-Dotenv.load! unless ENV['ENVIRONMENT'] == 'production'
+if ENV['ENVIRONMENT'] != 'production'
+  require 'dotenv'
+  require 'pry'
+
+  Dotenv.load!
+end
+
 
 Thread.abort_on_exception = true
 Thread.new do
