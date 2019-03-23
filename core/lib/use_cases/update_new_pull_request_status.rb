@@ -14,7 +14,7 @@ class UpdateNewPullRequestStatus
   end
 
   def execute(github_event:)
-    if active_incident? && github_event.type == PullRequestEvent::OPENED
+    if active_incident? && pr_is_being_opened?(github_event)
       initial_slack_message = messages_repository.find_by_incident_id(
         current_incident.id
       ).first
@@ -40,5 +40,10 @@ class UpdateNewPullRequestStatus
 
   private def current_incident
     incidents_repository.find_last_unresolved
+  end
+
+  private def pr_is_being_opened?(github_event)
+    (github_event.type == PullRequestEvent::OPENED ||
+      github_event.type == PullRequestEvent::REOPENED)
   end
 end
