@@ -2,6 +2,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'dotenv'
 require 'app'
+require 'pry'
 
 Dotenv.load! unless ENV['ENVIRONMENT'] == 'production'
 
