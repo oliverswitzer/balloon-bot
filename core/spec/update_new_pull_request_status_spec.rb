@@ -73,6 +73,27 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
           )
         end
       end
+
+      context 'when pull request event is when a new pull request is re-opened' do
+        it 'sets a failing github status for the passed in pull request' do
+          expect(github_client_spy).to receive(:set_status_for_commit)
+                                         .with(
+                                           commit_sha: '123abc',
+                                           status: instance_of(Github::FailureStatus),
+                                           more_info_url: 'http://example.com'
+                                         )
+
+          subject.execute(
+            github_event: PullRequestEvent.new(
+              type: PullRequestEvent::REOPENED,
+              pull_request: PullRequest.new(
+                head_sha: '123abc',
+                branch: 'some-branch'
+              )
+            )
+          )
+        end
+      end
     end
 
     context 'when pull request event is not about when a pull request has been opened' do
