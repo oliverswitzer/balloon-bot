@@ -1,4 +1,4 @@
-require './clients/slack/balloon-bot'
+require 'clients'
 
 class App
   def self.run
@@ -10,4 +10,3 @@ class App
     BalloonBot.instance.send(:client)
   end
 end
-

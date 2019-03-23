@@ -1,0 +1,10 @@
+source 'https://rubygems.org'
+
+gem 'core', path: '../core'
+gem 'persistence', path: '../persistence'
+
+group :test do
+  gem 'test_support', path: '../test_support'
+end
+
+gemspec
