@@ -10,6 +10,7 @@ gem 'dotenv'
 gem 'rake'
 
 group :test do
+  gem 'rspec_junit_formatter'
   gem 'test_support', path: 'test_support'
 end
 
