@@ -28,6 +28,36 @@ To run the bot locally, you first must setup your API token.
 1. Install foreman `gem install foreman`
 1. Run the app `foreman start`
 
+### Webhooks: Local Development 
+
+If you'd like to test the webhook functionality with Github locally (marking new PRs as failing when there's an incident), you will need to use ngrok.
+
+* `gem install ngrok`
+* Start ngrok 
+
+`nkgrok http 5000` 
+
+foreman automatically chooses port 5000 for now. Output in terminal should look like this: 
+
+![ngrok_how_to!](images/ngrok.png)
+
+* Under the configured github repo's settings, add a webhook to point at the app
+ 
+![github_webhooks!](images/github-webhooks.png)
+
+* Select "Add webhook"
+
+* Enter the ngrok Forwarding url (http://cca022c1.ngrok.io in the example):
+
+`http://cca022c1.ngrok.io/pull-request`
+
+* Select "Let me select individual events"
+* Uncheck "Pushes" and check "Pull requests"
+* Click "Add Webhook"
+* The app running locally should now respond to incoming github webhooks!
+
+Note that you'll have to update this webhook in the future if you run ngrok again, since you get assigned a new `Forwarding` url each time you run ngrok. It's a bit unfortunate, but part of development :/
+
 # Running tests
 
 1. Create a `.env.test` file. 
