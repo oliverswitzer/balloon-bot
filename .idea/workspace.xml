@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="baf4afb6-1403-4e0d-bf7a-2ed7322c2e93" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/balloon-bot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/balloon-bot.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/clients.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/clients.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/core.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/core.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/persistence.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/persistence.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/test_support.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/test_support.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb" beforeDir="false" afterPath="$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/spec/update_new_pull_request_status_spec.rb" beforeDir="false" afterPath="$PROJECT_DIR$/core/spec/update_new_pull_request_status_spec.rb" afterDir="false" />
     </list>
     <ignored path="balloon-bot.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -21,7 +26,7 @@
     <SUITE FILE_PATH="coverage/balloon_bot@ContinueDeployments_execute_tells_slack_client_to_set_channel_topic_for_failure__balloon_bot.rcov" NAME="ContinueDeployments#execute tells slack client to set channel topic for failure: balloon-bot Coverage Results" MODIFIED="1546365816012" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="balloon-bot" />
     <SUITE FILE_PATH="coverage/balloon_bot@IncidentsRepository_find_returns_an_incident_matching_the_given_id__balloon_bot.rcov" NAME="IncidentsRepository#find returns an incident matching the given id: balloon-bot Coverage Results" MODIFIED="1546105113344" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="balloon-bot" />
     <SUITE FILE_PATH="coverage/balloon_bot@RecordMessageForIncident_execute__balloon_bot.rcov" NAME="RecordMessageForIncident#execute: balloon-bot Coverage Results" MODIFIED="1546103593221" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="balloon-bot" />
-    <SUITE FILE_PATH="coverage/balloon_bot@Integration_Test__HoldDeployments___UpdateNewPullRequestStatus__core.rcov" NAME="Integration Test: HoldDeployments + UpdateNewPullRequestStatus: core Coverage Results" MODIFIED="1553379371001" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/core" MODULE_NAME="core" />
+    <SUITE FILE_PATH="coverage/balloon_bot@Integration_Test__HoldDeployments___UpdateNewPullRequestStatus__core.rcov" NAME="Integration Test: HoldDeployments + UpdateNewPullRequestStatus: core Coverage Results" MODIFIED="1553634410202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/core" MODULE_NAME="core" />
     <SUITE FILE_PATH="coverage/balloon_bot@HoldDeployments_execute_saves_the_message_that_triggered_the_incident__balloon_bot.rcov" NAME="HoldDeployments#execute saves the message that triggered the incident: balloon-bot Coverage Results" MODIFIED="1549836510292" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="balloon-bot" />
     <SUITE FILE_PATH="coverage/balloon_bot@MessagesRepository_save_should_generate_unique_integer_ids_for_each_persisted_message__balloon_bot.rcov" NAME="MessagesRepository#save should generate unique integer ids for each persisted message: balloon-bot Coverage Results" MODIFIED="1549772704287" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="balloon-bot" />
     <SUITE FILE_PATH="coverage/balloon_bot@SlackClientWrapper__balloon_bot.rcov" NAME="SlackClientWrapper: balloon-bot Coverage Results" MODIFIED="1546883283032" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="balloon-bot" />
@@ -101,12 +106,30 @@
   <component name="FileEditorManager">
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="220">
-                  <caret line="20" column="28" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
+                <state relative-caret-position="391">
+                  <caret line="23" column="7" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/config.ru">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="519">
+                  <caret line="45" column="26" selection-start-line="45" selection-start-column="4" selection-end-line="45" selection-end-column="30" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/.env.sample">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="119">
+                  <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
                 </state>
               </provider>
             </entry>
@@ -114,12 +137,12 @@
         </leaf>
       </split-first>
       <split-second>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/core/spec/update_new_pull_request_status_spec.rb">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="36">
-                  <caret line="2" column="18" lean-forward="true" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+                <state relative-caret-position="333">
+                  <caret line="92" column="13" selection-start-line="92" selection-start-column="13" selection-end-line="92" selection-end-column="13" />
                   <folding>
                     <element signature="e#136#165#0" />
                     <element signature="e#192#222#0" />
@@ -240,9 +263,9 @@
         <option value="$PROJECT_DIR$/Gemfile" />
         <option value="$PROJECT_DIR$/.circleci/config.yml" />
         <option value="$PROJECT_DIR$/config.ru" />
-        <option value="$PROJECT_DIR$/.env.sample" />
         <option value="$PROJECT_DIR$/core/spec/update_new_pull_request_status_spec.rb" />
         <option value="$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb" />
+        <option value="$PROJECT_DIR$/.env.sample" />
       </list>
     </option>
   </component>
@@ -257,16 +280,17 @@
       <scroll-view-position x="0" y="0" />
     </layout>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
-    <option name="width" value="1680" />
-    <option name="height" value="1027" />
+    <option name="width" value="1920" />
+    <option name="height" value="1002" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -277,24 +301,12 @@
             <path>
               <item name="balloon-bot" type="b2602c69:ProjectViewProjectNode" />
               <item name="balloon-bot" type="462c0819:PsiDirectoryNode" />
-              <item name="clients" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="balloon-bot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="balloon-bot" type="462c0819:PsiDirectoryNode" />
-              <item name="clients" type="462c0819:PsiDirectoryNode" />
-              <item name="spec" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="balloon-bot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="balloon-bot" type="462c0819:PsiDirectoryNode" />
               <item name="persistence" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -591,13 +603,11 @@
       <workItem from="1551556469863" duration="595000" />
       <workItem from="1551763132956" duration="1715000" />
       <workItem from="1553364107934" duration="11297000" />
+      <workItem from="1553633776453" duration="1192000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Integration_Test__HoldDeployments_+_UpdateNewPullRequestStatus_#execute_when_deployments_have_been_previously_held_when_pull_request_event_is_when_a_new_pull_request_is_re-opened__core - 2019.03.23 at 16h 02m 54s.xml">
-      <configuration name="Integration Test: HoldDeployments + UpdateNewPullRequestStatus #execute when deployments have been previously held when pull request event is when a new pull request is re-opened: core" configurationId="RSpecRunConfigurationType" />
-    </history-entry>
     <history-entry file="Integration_Test__HoldDeployments_+_UpdateNewPullRequestStatus_#execute_when_deployments_have_been_previously_held_when_pull_request_event_is_when_a_new_pull_request_is_re-opened__core - 2019.03.23 at 16h 03m 55s.xml">
       <configuration name="Integration Test: HoldDeployments + UpdateNewPullRequestStatus #execute when deployments have been previously held when pull request event is when a new pull request is re-opened: core" configurationId="RSpecRunConfigurationType" />
     </history-entry>
@@ -625,20 +635,24 @@
     <history-entry file="Integration_Test__HoldDeployments_+_UpdateNewPullRequestStatus__core - 2019.03.23 at 18h 16m 12s.xml">
       <configuration name="Integration Test: HoldDeployments + UpdateNewPullRequestStatus: core" configurationId="RSpecRunConfigurationType" />
     </history-entry>
+    <history-entry file="Integration_Test__HoldDeployments_+_UpdateNewPullRequestStatus__core - 2019.03.26 at 17h 06m 51s.xml">
+      <configuration name="Integration Test: HoldDeployments + UpdateNewPullRequestStatus: core" configurationId="RSpecRunConfigurationType" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104424000" />
+    <option name="totallyTimeSpent" value="105616000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
+    <frame x="0" y="23" width="1920" height="1002" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18796068" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16595289" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" weight="0.3290398" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.33078602" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.30458516" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.25526932" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.28072155" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -760,23 +774,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/lib/entities/pull_request.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="3" lean-forward="true" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/clients/lib/github/pull_request_event.rb">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/clients/lib/github/status.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="25" column="15" selection-start-line="25" selection-start-column="15" selection-end-line="25" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/clients/lib/github/pull_request_event.rb" />
+    <entry file="file://$PROJECT_DIR$/clients/lib/github/status.rb" />
     <entry file="file://$PROJECT_DIR$/clients/lib/clients.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
@@ -819,13 +818,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spec/all_tests_spec.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="10" lean-forward="true" selection-start-column="10" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/spec/all_tests_spec.rb" />
     <entry file="file://$PROJECT_DIR$/Rakefile">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -833,9 +826,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clients/web.rb">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/clients/web.rb" />
     <entry file="file://$PROJECT_DIR$/app.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
@@ -871,9 +862,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/spec/base_spec_helper.rb">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/core/spec/base_spec_helper.rb" />
     <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -881,12 +870,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test-support/lib/persistence.rb">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test-support/Gemfile.lock">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/test-support/lib/persistence.rb" />
+    <entry file="file://$PROJECT_DIR$/test-support/Gemfile.lock" />
     <entry file="file://$PROJECT_DIR$/core/lib/core.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
@@ -992,13 +977,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.ru">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/clients/spec/github/github_client_wrapper_spec.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1020,13 +998,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.env.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
@@ -1037,10 +1008,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/config.ru">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="519">
+          <caret line="45" column="26" selection-start-line="45" selection-start-column="4" selection-end-line="45" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/spec/update_new_pull_request_status_spec.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="18" lean-forward="true" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+        <state relative-caret-position="333">
+          <caret line="92" column="13" selection-start-line="92" selection-start-column="13" selection-end-line="92" selection-end-column="13" />
           <folding>
             <element signature="e#136#165#0" />
             <element signature="e#192#222#0" />
@@ -1048,10 +1026,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.env.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="20" column="28" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
+        <state relative-caret-position="391">
+          <caret line="23" column="7" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
         </state>
       </provider>
     </entry>
