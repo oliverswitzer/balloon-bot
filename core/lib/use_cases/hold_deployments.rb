@@ -4,8 +4,8 @@ class HoldDeployments
   ERROR_MESSAGES = {
     already_holding: 'I\'m already holding deployments'
   }.freeze
-  FAILURE_MESSAGE = 'Holding deploys!'.freeze
-  FAILURE_CHANNEL_TOPIC = '⚠️ Hold deploys ⚠️'.freeze
+  MESSAGE = 'Holding deploys! Setting failing github statuses on all open and future pull requests'.freeze
+  CHANNEL_TOPIC = '⚠️ Hold deploys ⚠️'.freeze
 
   def initialize(
     chat_client:,
@@ -27,8 +27,8 @@ class HoldDeployments
       return
     end
 
-    chat_client.say(message: FAILURE_MESSAGE)
-    chat_client.set_channel_topic(message: FAILURE_CHANNEL_TOPIC)
+    chat_client.say(message: MESSAGE)
+    chat_client.set_channel_topic(message: CHANNEL_TOPIC)
 
     incident = incidents_repository.save(Incident.new)
     messages_repository.save(

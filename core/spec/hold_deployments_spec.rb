@@ -28,14 +28,14 @@ describe HoldDeployments do
       subject.execute(HoldDeployments::Request.new(message: fake_message))
 
       expect(slack_client_spy).to have_received(:say)
-        .with(message: HoldDeployments::FAILURE_MESSAGE)
+        .with(message: HoldDeployments::MESSAGE)
     end
 
     it 'tells slack client to set channel topic for failure' do
       subject.execute(HoldDeployments::Request.new(message: fake_message))
 
       expect(slack_client_spy).to have_received(:set_channel_topic)
-        .with(message: HoldDeployments::FAILURE_CHANNEL_TOPIC)
+        .with(message: HoldDeployments::CHANNEL_TOPIC)
     end
 
     it 'creates an unresolved incident' do
