@@ -17,15 +17,6 @@ class UpdateNewPullRequestStatus
     return unless pr_is_being_opened?(github_event)
 
     if active_incident?
-      initial_slack_message = messages_repository.find_by_incident_id(
-        current_incident.id
-      ).first
-
-      more_info_url = chat_client.url_for_message(
-        timestamp: initial_slack_message.timestamp,
-        channel_id: initial_slack_message.channel_id
-      )
-
       github_client.set_status_for_commit(
         commit_sha: github_event.pull_request.head_sha,
         status: Github::Status.failure,
@@ -50,5 +41,16 @@ class UpdateNewPullRequestStatus
   private def pr_is_being_opened?(github_event)
     (github_event.type == PullRequestEvent::OPENED ||
       github_event.type == PullRequestEvent::REOPENED)
+  end
+
+  private def more_info_url
+    initial_slack_message = messages_repository.find_by_incident_id(
+      current_incident.id
+    ).first
+
+    @more_info_url ||= chat_client.url_for_message(
+      timestamp: initial_slack_message.timestamp,
+      channel_id: initial_slack_message.channel_id
+    )
   end
 end
