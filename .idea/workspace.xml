@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="baf4afb6-1403-4e0d-bf7a-2ed7322c2e93" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/balloon-bot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/balloon-bot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/clients.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/clients.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/core.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/core.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/persistence.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/persistence.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/test_support.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/test_support.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/github-webhooks.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/ngrok.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb" beforeDir="false" afterPath="$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <ignored path="balloon-bot.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -104,56 +101,38 @@
     <favorites_list name="balloon-bot" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="391">
-                  <caret line="23" column="7" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/config.ru">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="519">
-                  <caret line="45" column="26" selection-start-line="45" selection-start-column="4" selection-end-line="45" selection-end-column="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/.env.sample">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="119">
-                  <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/core/spec/update_new_pull_request_status_spec.rb">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="333">
-                  <caret line="92" column="13" selection-start-line="92" selection-start-column="13" selection-end-line="92" selection-end-column="13" />
-                  <folding>
-                    <element signature="e#136#165#0" />
-                    <element signature="e#192#222#0" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="24" column="8" lean-forward="true" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.env.sample">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="765">
+                <caret line="45" column="29" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -244,7 +223,6 @@
         <option value="$PROJECT_DIR$/persistence/spec/incidents_repository_spec.rb" />
         <option value="$PROJECT_DIR$/spec/base_spec_helper.rb" />
         <option value="$PROJECT_DIR$/spec/all_tests_spec.rb" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/Rakefile" />
         <option value="$PROJECT_DIR$/core/lib/core.rb" />
         <option value="$PROJECT_DIR$/core/lib/entities/pull_request_event.rb" />
@@ -266,6 +244,7 @@
         <option value="$PROJECT_DIR$/core/spec/update_new_pull_request_status_spec.rb" />
         <option value="$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb" />
         <option value="$PROJECT_DIR$/.env.sample" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -301,7 +280,7 @@
             <path>
               <item name="balloon-bot" type="b2602c69:ProjectViewProjectNode" />
               <item name="balloon-bot" type="462c0819:PsiDirectoryNode" />
-              <item name="persistence" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -318,19 +297,19 @@
     <property name="settings.editor.selected.configurable" value="editor.preferences.tabs" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/images" />
+      <recent name="$PROJECT_DIR$/test_support/lib" />
+      <recent name="$PROJECT_DIR$/test_support/spec" />
+      <recent name="$PROJECT_DIR$/test_support" />
+      <recent name="$PROJECT_DIR$/core/lib/entities" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/core/lib/entities" />
       <recent name="$PROJECT_DIR$/core/spec/test-support" />
       <recent name="$PROJECT_DIR$/clients/lib" />
       <recent name="$PROJECT_DIR$/core/lib" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/test_support/lib" />
-      <recent name="$PROJECT_DIR$/test_support/spec" />
-      <recent name="$PROJECT_DIR$/test_support" />
-      <recent name="$PROJECT_DIR$/core/lib/entities" />
-      <recent name="$PROJECT_DIR$/core/spec" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -603,7 +582,7 @@
       <workItem from="1551556469863" duration="595000" />
       <workItem from="1551763132956" duration="1715000" />
       <workItem from="1553364107934" duration="11297000" />
-      <workItem from="1553633776453" duration="1192000" />
+      <workItem from="1553633776453" duration="1879000" />
     </task>
     <servers />
   </component>
@@ -640,13 +619,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="105616000" />
+    <option name="totallyTimeSpent" value="106303000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1002" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16595289" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16595289" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Messages" weight="0.3290398" />
@@ -998,34 +977,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="224">
-            <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.ru">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="519">
-          <caret line="45" column="26" selection-start-line="45" selection-start-column="4" selection-end-line="45" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/spec/update_new_pull_request_status_spec.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
-          <caret line="92" column="13" selection-start-line="92" selection-start-column="13" selection-end-line="92" selection-end-column="13" />
-          <folding>
-            <element signature="e#136#165#0" />
-            <element signature="e#192#222#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.env.sample">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -1033,10 +984,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/config.ru">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="511">
+          <caret line="34" column="23" selection-start-line="34" selection-start-column="23" selection-end-line="34" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/lib/use_cases/update_new_pull_request_status.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="7" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
+        <state relative-caret-position="408">
+          <caret line="24" column="8" lean-forward="true" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/images/github-webhooks.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/spec/update_new_pull_request_status_spec.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="61">
+          <caret line="76" column="13" selection-start-line="76" selection-start-column="13" selection-end-line="76" selection-end-column="13" />
+          <folding>
+            <element signature="e#136#165#0" />
+            <element signature="e#192#222#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="765">
+            <caret line="45" column="29" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
