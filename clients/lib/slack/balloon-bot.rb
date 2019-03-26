@@ -9,7 +9,7 @@ def parse_message(data)
 end
 
 class BalloonBot < SlackRubyBot::Bot
-  command 'hold deploys' do |client, data, match|
+  command 'hold', 'pop' do |client, data, match|
     request = HoldDeployments::Request.new(parse_message(data))
 
     HoldDeployments.new(
@@ -20,7 +20,7 @@ class BalloonBot < SlackRubyBot::Bot
     ).execute(request)
   end
 
-  command 'green' do |client, data, match|
+  command 'continue', 'inflate' do |client, data, match|
     ContinueDeployments.new(
       chat_client: SlackClientWrapper.new(client),
       incidents_repository: Persistence::INCIDENTS_REPOSITORY,
@@ -32,14 +32,14 @@ class BalloonBot < SlackRubyBot::Bot
     title 'BalloonBot'
     desc 'This Slack bot is meant to help let engineers in your organization know when master is broken.'
 
-    command 'hold deploys' do
+    command 'pop <description of issue>, hold <description of issue>' do
       desc 'will change the channel topic to a failing icon and prevent merges into master via a failing github status check. It is best to provide a reason for the failure'
-      long_desc 'Usage: "@balloonbot hold deploys <optional description of the issue>"'
+      long_desc 'Usage: "@balloonbot pop <description of issue>; @balloonbot hold <description of the issue>"'
     end
 
-    command 'green' do
+    command 'inflate, continue' do
       desc 'will change the channel topic back to a passing icon and allow merges into master again'
-      long_desc('Usage: "@balloonbot green"')
+      long_desc('Usage: "@balloonbot inflate; @balloonbot continue"')
     end
   end
 end
