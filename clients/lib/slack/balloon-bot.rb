@@ -9,7 +9,11 @@ def parse_message(data)
 end
 
 class BalloonBot < SlackRubyBot::Bot
+  PRIVATE_MESSAGE_ID_REGEX = /(D[A-Z0-9]{8}|G[A-Z0-9]{8})/
+
   command 'hold', 'pop' do |client, data, match|
+    next if is_private_message? data[:channel]
+
     request = HoldDeployments::Request.new(parse_message(data))
 
     HoldDeployments.new(
@@ -21,11 +25,17 @@ class BalloonBot < SlackRubyBot::Bot
   end
 
   command 'continue', 'inflate' do |client, data, match|
+    next if is_private_message? data[:channel]
+
     ContinueDeployments.new(
       chat_client: SlackClientWrapper.new(client),
       incidents_repository: Persistence::INCIDENTS_REPOSITORY,
       github_client: GithubClientWrapper.new
     ).execute
+  end
+
+  def self.is_private_message?(channel)
+    channel =~ PRIVATE_MESSAGE_ID_REGEX
   end
 
   help do
