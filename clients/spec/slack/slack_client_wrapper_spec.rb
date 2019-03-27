@@ -12,10 +12,6 @@ describe SlackClientWrapper do
     SlackClientWrapper.new(slack_bot_client_spy)
   end
 
-  before do
-    Dotenv.load
-  end
-
   describe '#set_channel_topic' do
     it 'should set the topic for the configured deployments channel' do
       subject.set_channel_topic(

@@ -1,4 +1,14 @@
 PATH
+  remote: ../clients
+  specs:
+    clients (0.0.0)
+      celluloid-io
+      dry-struct
+      dry-types
+      octokit
+      slack-ruby-bot
+
+PATH
   remote: ../core
   specs:
     core (0.0.0)
@@ -12,35 +22,50 @@ PATH
       core
       dotenv
 
-PATH
-  remote: ../test_support
-  specs:
-    test_support (0.0.0)
-      dotenv
-      pry
-      rb-readline
-      rspec
-
-PATH
-  remote: .
-  specs:
-    clients (0.0.0)
-      celluloid-io
-      dry-struct
-      dry-types
-      octokit
-      slack-ruby-bot
-
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (5.2.2.1)
+    actioncable (5.1.6.2)
+      actionpack (= 5.1.6.2)
+      nio4r (~> 2.0)
+      websocket-driver (~> 0.6.1)
+    actionmailer (5.1.6.2)
+      actionpack (= 5.1.6.2)
+      actionview (= 5.1.6.2)
+      activejob (= 5.1.6.2)
+      mail (~> 2.5, >= 2.5.4)
+      rails-dom-testing (~> 2.0)
+    actionpack (5.1.6.2)
+      actionview (= 5.1.6.2)
+      activesupport (= 5.1.6.2)
+      rack (~> 2.0)
+      rack-test (>= 0.6.3)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    actionview (5.1.6.2)
+      activesupport (= 5.1.6.2)
+      builder (~> 3.1)
+      erubi (~> 1.4)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    activejob (5.1.6.2)
+      activesupport (= 5.1.6.2)
+      globalid (>= 0.3.6)
+    activemodel (5.1.6.2)
+      activesupport (= 5.1.6.2)
+    activerecord (5.1.6.2)
+      activemodel (= 5.1.6.2)
+      activesupport (= 5.1.6.2)
+      arel (~> 8.0)
+    activesupport (5.1.6.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
+    arel (8.0.0)
+    builder (3.2.3)
     celluloid (0.17.4)
       celluloid-essentials
       celluloid-extras
@@ -64,6 +89,7 @@ GEM
       timers (>= 4.1.1)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
+    crass (1.0.4)
     diff-lcs (1.3)
     dotenv (2.7.2)
     dry-configurable (0.8.2)
@@ -92,25 +118,74 @@ GEM
       dry-equalizer (~> 0.2, >= 0.2.2)
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 0.5, >= 0.5)
+    erubi (1.8.0)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.13.1)
       faraday (>= 0.7.4, < 1.0)
+    ffi (1.10.0)
     gli (2.18.0)
+    globalid (0.4.2)
+      activesupport (>= 4.2.0)
     hashie (3.6.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
+    listen (3.1.5)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
+    loofah (2.2.3)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.5.9)
+    mail (2.7.1)
+      mini_mime (>= 0.1.1)
     method_source (0.9.2)
+    mini_mime (1.0.1)
+    mini_portile2 (2.4.0)
     minitest (5.11.3)
     multipart-post (2.0.0)
     nio4r (2.3.1)
+    nokogiri (1.10.2)
+      mini_portile2 (~> 2.4.0)
     octokit (4.13.0)
       sawyer (~> 0.8.0, >= 0.5.3)
+    pg (1.1.2)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (3.0.3)
+    puma (3.12.1)
+    rack (2.0.6)
+    rack-test (1.1.0)
+      rack (>= 1.0, < 3)
+    rails (5.1.6.2)
+      actioncable (= 5.1.6.2)
+      actionmailer (= 5.1.6.2)
+      actionpack (= 5.1.6.2)
+      actionview (= 5.1.6.2)
+      activejob (= 5.1.6.2)
+      activemodel (= 5.1.6.2)
+      activerecord (= 5.1.6.2)
+      activesupport (= 5.1.6.2)
+      bundler (>= 1.3.0)
+      railties (= 5.1.6.2)
+      sprockets-rails (>= 2.0.0)
+    rails-dom-testing (2.0.3)
+      activesupport (>= 4.2.0)
+      nokogiri (>= 1.6)
+    rails-html-sanitizer (1.0.4)
+      loofah (~> 2.2, >= 2.2.2)
+    railties (5.1.6.2)
+      actionpack (= 5.1.6.2)
+      activesupport (= 5.1.6.2)
+      method_source
+      rake (>= 0.8.7)
+      thor (>= 0.18.1, < 2.0)
+    rake (12.3.2)
+    rb-fsevent (0.10.3)
+    rb-inotify (0.10.0)
+      ffi (~> 1.0)
     rb-readline (0.5.5)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
@@ -125,6 +200,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
+    ruby_dep (1.5.0)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
@@ -138,11 +214,24 @@ GEM
       gli
       hashie
       websocket-driver
+    spring (2.0.2)
+      activesupport (>= 4.2)
+    spring-watcher-listen (2.0.1)
+      listen (>= 2.7, < 4.0)
+      spring (>= 1.2, < 3.0)
+    sprockets (3.7.2)
+      concurrent-ruby (~> 1.0)
+      rack (> 1, < 3)
+    sprockets-rails (3.2.1)
+      actionpack (>= 4.0)
+      activesupport (>= 4.0)
+      sprockets (>= 3.0.0)
+    thor (0.20.3)
     thread_safe (0.3.6)
     timers (4.3.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    websocket-driver (0.7.0)
+    websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
 
@@ -153,9 +242,21 @@ DEPENDENCIES
   clients!
   core!
   dotenv
+  listen (>= 3.0.5, < 3.2)
   persistence!
+  pg
+  pry
+  puma (~> 3.7)
+  rails (~> 5.1.6, >= 5.1.6.1)
+  rake
+  rb-readline
   rspec
-  test_support!
+  spring
+  spring-watcher-listen (~> 2.0.0)
+  tzinfo-data
+
+RUBY VERSION
+   ruby 2.4.1p111
 
 BUNDLED WITH
    2.0.1
