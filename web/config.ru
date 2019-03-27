@@ -3,14 +3,6 @@
 require_relative 'config/environment'
 require 'clients'
 
-# TODO: Might not need this anymore with Rails magic
-if ENV['ENVIRONMENT'] != 'production'
-  require 'dotenv'
-  require 'pry'
-
-  Dotenv.load!
-end
-
 class App
   def self.run
     BalloonBot.instance.on(:message, Hooks::Message.new)
@@ -32,6 +24,5 @@ Thread.new do
     raise e
   end
 end
-
 
 run Rails.application
