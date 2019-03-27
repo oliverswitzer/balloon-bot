@@ -28,7 +28,7 @@ To run the bot locally, you first must setup your API token.
 1. Install foreman `gem install foreman`
 1. Run the app `foreman start`
 
-### Webhooks: Local Development 
+### Webhook behavior
 
 If you'd like to test the webhook functionality with Github locally (marking new PRs as failing when there's an incident), you will need to use ngrok.
 
@@ -74,11 +74,10 @@ specified by the `GITHUB_REPO` env var.
 
 1. `git push heroku master`
 
-If you want to run the app locally, you currently have to stop Heroku from running. This is because you will receive duplicate
-messages from Heroku and your local machine. To stop the Heroku app from running:
+To stop the app:
 
 `$ heroku ps:scale web=0`
 
-To start it back up again
+To start it back up again:
 
 `$ heroku ps:scale web=1`
