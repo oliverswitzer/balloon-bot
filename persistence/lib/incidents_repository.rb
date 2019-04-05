@@ -1,4 +1,4 @@
-class ArIncidentsRepository
+class IncidentsRepository
   def save(incident)
     if incident.id.nil?
       record = IncidentRecord.create(resolved_at: incident.resolved_at)

@@ -1,7 +1,7 @@
 module Persistence
   require 'active_record'
-  require 'ar_incidents_repository'
-  require 'ar_messages_repository'
+  require 'incidents_repository'
+  require 'messages_repository'
   require 'incident_record'
   require 'message_record'
 
@@ -15,6 +15,6 @@ module Persistence
     end
   end
 
-  INCIDENTS_REPOSITORY = ArIncidentsRepository.new
-  MESSAGES_REPOSITORY = ArMessagesRepository.new
+  INCIDENTS_REPOSITORY = IncidentsRepository.new
+  MESSAGES_REPOSITORY = MessagesRepository.new
 end

@@ -1,4 +1,4 @@
-class ArMessagesRepository
+class MessagesRepository
   def save(message)
     if message.id.nil?
       record = MessageRecord.new(**MessageRecord.to_record_attributes(message))
