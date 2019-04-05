@@ -6,16 +6,34 @@ def messages_repository_contract(repo_class:, incident_repo_class:)
     let(:incidents_repository) { incident_repo_class.new }
 
     describe '#save' do
-      it 'should generate unique integer ids for each persisted message' do
-        message1 = EntityFactory.build_message
-        message2 = EntityFactory.build_message
+      context 'when id has not already been set' do
+        it 'should generate unique integer ids for each persisted message' do
+          message1 = EntityFactory.build_message
+          message2 = EntityFactory.build_message
 
-        persisted_message1 = subject.save(message1)
-        persisted_message2 = subject.save(message2)
+          persisted_message1 = subject.save(message1)
+          persisted_message2 = subject.save(message2)
 
-        expect(persisted_message1.id).to be_a(Integer)
-        expect(persisted_message2.id).to be_a(Integer)
-        expect(persisted_message1.id).not_to eq(persisted_message2.id)
+          expect(persisted_message1.id).to be_a(Integer)
+          expect(persisted_message2.id).to be_a(Integer)
+          expect(persisted_message1.id).not_to eq(persisted_message2.id)
+        end
+      end
+
+      context 'when id has been set' do
+        it 'updates the existing message with the corresponding id' do
+          persisted_message = subject.save(EntityFactory.build_message)
+
+          updated_message = subject.save(
+            EntityFactory.build_message(
+              id: persisted_message.id,
+              text: 'some updated message'
+            )
+          )
+
+          expect(updated_message.id).to eq(persisted_message.id)
+          expect(updated_message.text).to eq('some updated message')
+        end
       end
     end
 
@@ -36,9 +54,9 @@ def messages_repository_contract(repo_class:, incident_repo_class:)
         subject.save(message_for_other_incident)
 
         expect(subject.find_by_incident_id(incident1.id)).to contain_exactly(
-                                                               message_1_for_incident,
-                                                               message_2_for_incident
-                                                             )
+          message_1_for_incident,
+          message_2_for_incident
+        )
       end
     end
   end

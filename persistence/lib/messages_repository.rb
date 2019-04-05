@@ -10,9 +10,15 @@ class MessagesRepository
   end
 
   def save(message)
-    message.id = @messages.length + 1
+    if message.id.nil?
+      message.id = @messages.length + 1
 
-    @messages << message
+      @messages << message
+    else
+      index_to_update = @messages.find_index { |saved_message| saved_message.id == message.id }
+
+      messages[index_to_update] = message
+    end
 
     message
   end

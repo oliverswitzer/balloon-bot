@@ -1,6 +1,3 @@
-require 'test_support'
-
-require 'persistence'
-require 'core'
+require_relative './spec_helper'
 
 incidents_repository_contract(IncidentsRepository)
