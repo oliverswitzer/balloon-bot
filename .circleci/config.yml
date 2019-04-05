@@ -37,7 +37,6 @@ jobs:
           name: install dependencies
           command: |
             cd web && bundle install --jobs=4 --retry=3 --path vendor/bundle
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
 
       - save_cache:
           paths:
