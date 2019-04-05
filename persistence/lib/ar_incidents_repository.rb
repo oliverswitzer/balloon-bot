@@ -17,14 +17,10 @@ class ArIncidentsRepository
   end
 
   def find(id)
-    record = IncidentRecord.find(id)
-
-    Incident.new(resolved_at: record.resolved_at, created_at: record.created_at)
+    IncidentRecord.find(id).to_incident
   end
 
   def find_last_unresolved
-    record = IncidentRecord.where(resolved_at: nil).last
-
-    Incident.new(id: record.id, resolved_at: record.resolved_at, created_at: record.created_at) if record
+    IncidentRecord.where(resolved_at: nil).last&.to_incident
   end
 end

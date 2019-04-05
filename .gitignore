@@ -3,8 +3,7 @@ web/.env.test
 .idea
 
 web/.bundle
-web/log/*
-web/tmp/*
+web/log/*.log
 !web/log/.keep
 !web/tmp/.keep
 
