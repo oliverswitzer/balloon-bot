@@ -20,8 +20,5 @@ module Web
   class Application < Rails::Application
     config.load_defaults 5.1
     config.api_only = true
-
-    config.messages_repository = MessagesRepository
-    config.incidents_repository = IncidentsRepository
   end
 end
