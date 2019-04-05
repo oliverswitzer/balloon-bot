@@ -26,7 +26,7 @@ To run the bot locally, you first must setup your API token.
 
 1. Create a `.env` file that looks like `.env.sample` and fill it out
 1. Install foreman `gem install foreman`
-1. Run the app `foreman start`
+1. Run the app with `foreman start` or `bundle exec rake server` in the root directory
 
 ### Webhooks: Local Development 
 
