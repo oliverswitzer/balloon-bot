@@ -6,7 +6,7 @@ require 'core'
 ActiveRecord::Base.establish_connection("postgresql://localhost:5432/balloon_bot_test")
 
 migrations_path = File.join(__dir__, "..", "lib", "migrations")
-ActiveRecord::MigrationContext.new(migrations_path).migrate
+ActiveRecord::Migrator.up(migrations_path)
 
 RSpec.configure do |c|
   c.before do
