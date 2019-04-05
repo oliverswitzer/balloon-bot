@@ -1,4 +1,4 @@
-class MessagesRepository
+class FakeMessagesRepository
   attr_reader :messages
 
   def initialize

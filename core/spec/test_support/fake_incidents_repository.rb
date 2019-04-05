@@ -1,4 +1,4 @@
-class IncidentsRepository
+class FakeIncidentsRepository
   attr_reader :incidents
 
   def initialize

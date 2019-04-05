@@ -3,8 +3,8 @@ require_relative './spec_helper'
 describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
   let(:slack_client_spy) { spy('SlackClientWrapper') }
   let(:github_client_spy) { spy('GithubClientWrapper') }
-  let(:incidents_repository) { IncidentsRepository.new }
-  let(:messages_repository) { MessagesRepository.new }
+  let(:incidents_repository) { FakeIncidentsRepository.new }
+  let(:messages_repository) { FakeMessagesRepository.new }
 
   let(:hold_deployments) {
     HoldDeployments.new(
