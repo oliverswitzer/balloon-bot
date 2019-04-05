@@ -28,7 +28,6 @@ describe ContinueDeployments do
         .with(message: ContinueDeployments::GREEN_CHANNEL_TOPIC)
     end
 
-
     describe 'github status behavior' do
       context 'for each open PR on the configured github repo' do
         before do

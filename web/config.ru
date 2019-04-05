@@ -2,6 +2,9 @@
 
 require_relative 'config/environment'
 require 'clients'
+require 'dotenv'
+
+Dotenv.load! if ENV['RAILS_ENV'] == 'development'
 
 class App
   def self.run

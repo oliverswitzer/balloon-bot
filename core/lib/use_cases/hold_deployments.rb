@@ -20,8 +20,6 @@ class HoldDeployments
   end
 
   def execute(request)
-    puts "IM HOLDING DEPLOYS"
-
     if incidents_repository.find_last_unresolved
       chat_client.say(message: ERROR_MESSAGES[:already_holding])
       return
