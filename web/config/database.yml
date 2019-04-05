@@ -18,5 +18,4 @@ test:
   database: balloon_bot_test
 
 production:
-  <<: *default
-  database: balloon_bot_production
+  url: <%= ENV['DATABASE_URL'] %>

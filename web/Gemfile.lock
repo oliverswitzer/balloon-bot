@@ -24,6 +24,15 @@ PATH
       dotenv
       pg
 
+PATH
+  remote: ../test_support
+  specs:
+    test_support (0.0.0)
+      dotenv
+      pry
+      rb-readline
+      rspec
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -196,6 +205,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
+    rspec_junit_formatter (0.4.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
@@ -241,6 +252,8 @@ DEPENDENCIES
   rake
   rb-readline
   rspec
+  rspec_junit_formatter
+  test_support!
   tzinfo-data
 
 RUBY VERSION
