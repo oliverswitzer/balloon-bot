@@ -36,12 +36,13 @@ jobs:
 
       - save_cache:
           paths:
-            - ./vendor/bundle
+            - ./web/vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       - run:
           name: Database Setup
           command: |
+            cd web
             bundle exec rake db:create
             bundle exec rake db:structure:load
 
