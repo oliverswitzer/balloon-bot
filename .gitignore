@@ -1,3 +1,10 @@
-.env
-.env.test
+web/.env
+web/.env.test
 .idea
+
+web/.bundle
+web/log/*.log
+!web/log/.keep
+!web/tmp/.keep
+
+web/.byebug_history

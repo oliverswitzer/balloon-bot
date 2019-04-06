@@ -7,5 +7,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'core'
   gem.add_dependency 'dotenv'
   gem.add_dependency 'activerecord'
+  gem.add_dependency 'pg'
   gem.add_development_dependency 'rspec'
 end

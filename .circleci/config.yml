@@ -2,7 +2,15 @@ version: 2
 jobs:
   build:
     docker:
-       - image: circleci/ruby:2.4.1-node-browsers
+      - image: circleci/ruby:2.4.1-node-browsers
+        environment:
+          RAILS_ENV: test
+          PGUSER: root
+
+      - image: circleci/postgres:9.6.2-alpine
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: balloon_bot_test
 
     working_directory: ~/balloon-bot
     steps:
@@ -28,12 +36,19 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
+            cd web && bundle install --jobs=4 --retry=3 --path vendor/bundle
 
       - save_cache:
           paths:
-            - ./vendor/bundle
+            - ./web/vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Database Setup
+          command: |
+            cd web
+            bundle exec rake db:create
+            bundle exec rake db:migrate
 
       # run tests!
       - run:
@@ -45,7 +60,7 @@ jobs:
                             --format RspecJunitFormatter \
                             --out /tmp/test-results/rspec.xml \
                             --format progress \
-                            core clients persistence
+                            core clients persistence web
       # collect reports
       - store_test_results:
           path: /tmp/test-results

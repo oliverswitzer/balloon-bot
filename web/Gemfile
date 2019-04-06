@@ -1,0 +1,10 @@
+source 'https://rubygems.org'
+
+ruby '2.4.1'
+
+gem 'core', path: '../core'
+gem 'persistence', path: '../persistence'
+gem 'clients', path: '../clients'
+
+gemspec
+

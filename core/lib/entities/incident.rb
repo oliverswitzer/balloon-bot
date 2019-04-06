@@ -1,9 +1,3 @@
-class Incident
-  attr_accessor :id, :created_at, :resolved_at
+require_relative './keyword_struct'
 
-  def initialize(id: nil, created_at: nil, resolved_at: nil)
-    @id = id
-    @created_at = created_at
-    @resolved_at = resolved_at
-  end
-end
+Incident = KeywordStruct.new(:id, :created_at, :resolved_at)

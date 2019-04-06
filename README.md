@@ -26,7 +26,42 @@ To run the bot locally, you first must setup your API token.
 
 1. Create a `.env` file that looks like `.env.sample` and fill it out
 1. Install foreman `gem install foreman`
-1. Run the app `foreman start`
+1. Run the app with `foreman start` or `bundle exec rake server` in the root directory
+
+### Creating and running migrations
+
+#### Postgres database setup
+
+**Install postgres**
+
+`$ brew install postgresql`
+`$ brew services start postgresql`
+
+#### Create the balloonbot database
+
+`$ cd web && bundle exec rake db:create`
+
+**To create a new migration**
+
+From the top-level of the directory (not `web`), run:
+
+`$ bundle exec rake db:generate:migration[<name of migration>]`
+
+e.g.
+
+`$ bundle exec rake db:generate:migration[CreateUsersTable]`
+
+This will output the migration into `persistence/lib/migrations/20190406001400_create_users_table.rb` (not `web/db/migrate`)
+
+**To run migrations**
+
+From the top-level of the directory, run:
+
+`$ bundle exec rake db:migrate`
+
+All migrations in `persistence/lib/migrations` will be run.
+
+**For any other Rails rake task feel free to run these in the `web/` directory**
 
 ### Webhook behavior
 

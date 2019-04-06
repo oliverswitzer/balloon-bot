@@ -3,7 +3,7 @@ require_relative './spec_helper'
 describe ContinueDeployments do
   let(:slack_client_spy) { spy("SlackClientWrapper") }
   let(:github_client_spy) { spy("GithubClientWrapper") }
-  let(:incidents_repository) { IncidentsRepository.new }
+  let(:incidents_repository) { FakeIncidentsRepository.new }
 
   subject do
     ContinueDeployments.new(
@@ -18,40 +18,39 @@ describe ContinueDeployments do
       subject.execute
 
       expect(slack_client_spy).to have_received(:say)
-                                    .with(message: ContinueDeployments::BACK_TO_GREEN_MESSAGE)
+        .with(message: ContinueDeployments::BACK_TO_GREEN_MESSAGE)
     end
 
     it 'tells slack client to set channel topic for failure' do
       subject.execute
 
       expect(slack_client_spy).to have_received(:set_channel_topic)
-                                    .with(message: ContinueDeployments::GREEN_CHANNEL_TOPIC)
+        .with(message: ContinueDeployments::GREEN_CHANNEL_TOPIC)
     end
-
 
     describe 'github status behavior' do
       context 'for each open PR on the configured github repo' do
         before do
           expect(github_client_spy).to receive(:open_pull_requests)
-             .and_return(
-               [
-                 PullRequest.new(head_sha: '123abc', branch: 'some-branch'),
-                 PullRequest.new(head_sha: '456def', branch: 'some-branch')
-               ]
-             )
+            .and_return(
+              [
+                PullRequest.new(head_sha: '123abc', branch: 'some-branch'),
+                PullRequest.new(head_sha: '456def', branch: 'some-branch')
+              ]
+            )
         end
 
         it 'sets a github successful github status' do
           expect(github_client_spy).to receive(:set_status_for_commit)
-             .with(
-               commit_sha: '123abc',
-               status: instance_of(Github::SuccessStatus)
-             )
+            .with(
+              commit_sha: '123abc',
+              status: instance_of(Github::SuccessStatus)
+            )
           expect(github_client_spy).to receive(:set_status_for_commit)
-             .with(
-               commit_sha: '456def',
-               status: instance_of(Github::SuccessStatus)
-             )
+            .with(
+              commit_sha: '456def',
+              status: instance_of(Github::SuccessStatus)
+            )
 
           subject.execute
         end

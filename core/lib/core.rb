@@ -9,4 +9,6 @@ module Core
   require 'use_cases/hold_deployments'
   require 'use_cases/record_message_for_incident'
   require 'use_cases/update_new_pull_request_status'
+  require 'contracts/messages_repository_contract'
+  require 'contracts/incidents_repository_contract'
 end

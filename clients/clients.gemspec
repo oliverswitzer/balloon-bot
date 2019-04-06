@@ -8,10 +8,9 @@ Gem::Specification.new do |gem|
   gem.files = Dir["lib/**/*"]
   gem.test_files = Dir["spec/**/*"]
 
-  gem.add_dependency 'sinatra'
   gem.add_dependency 'slack-ruby-bot'
-  gem.add_dependency 'async-websocket'
   gem.add_dependency 'dry-struct'
+  gem.add_dependency 'celluloid-io'
   gem.add_dependency 'dry-types'
   gem.add_dependency 'octokit'
 

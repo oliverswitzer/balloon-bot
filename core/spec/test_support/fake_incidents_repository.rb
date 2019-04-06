@@ -1,6 +1,6 @@
-class IncidentsRepository
+class FakeIncidentsRepository
   attr_reader :incidents
-  
+
   def initialize
     @incidents = []
   end
@@ -18,7 +18,6 @@ class IncidentsRepository
 
       @incidents[index_to_update] = incident
     end
-
   end
 
   def find_last_unresolved

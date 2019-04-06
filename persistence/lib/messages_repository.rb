@@ -1,19 +1,18 @@
 class MessagesRepository
-  attr_reader :messages
+  def save(message)
+    if message.id.nil?
+      record = MessageRecord.new(**MessageRecord.to_record_attributes(message))
+      record.save
 
-  def initialize
-    @messages = []
+      message.id = record.id
+    else
+      MessageRecord.find(message.id).update_attributes(**MessageRecord.to_record_attributes(message))
+    end
+
+    message
   end
 
   def find_by_incident_id(incident_id)
-    @messages.select { |message| message.incident.id == incident_id }
-  end
-
-  def save(message)
-    message.id = @messages.length + 1
-
-    @messages << message
-
-    message
+    MessageRecord.where(incident_id: incident_id).map(&:to_message)
   end
 end

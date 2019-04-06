@@ -1,33 +1,26 @@
 class IncidentsRepository
-  attr_reader :incidents
-  
-  def initialize
-    @incidents = []
-  end
-
   def save(incident)
     if incident.id.nil?
-      incident.id = @incidents.length + 1
-      incident.created_at = Time.now
+      record = IncidentRecord.create(resolved_at: incident.resolved_at)
 
-      @incidents << incident
+      incident.id = record.id
+      incident.created_at = record.created_at
 
       incident
     else
-      index_to_update = @incidents.find_index { |saved_incident| saved_incident.id == incident.id }
-
-      @incidents[index_to_update] = incident
+      record = IncidentRecord.find(incident.id)
+      record.resolved_at = incident.resolved_at
+      record.save
     end
 
-  end
-
-  def find_last_unresolved
-    @incidents
-      .sort { |x, y| y.created_at <=> x.created_at }
-      .detect { |incident| incident.resolved_at.nil? }
+    incident
   end
 
   def find(id)
-    @incidents.find { |incidents| incidents.id == id }
+    IncidentRecord.find(id).to_incident
+  end
+
+  def find_last_unresolved
+    IncidentRecord.where(resolved_at: nil).last&.to_incident
   end
 end
