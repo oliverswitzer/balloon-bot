@@ -6,5 +6,9 @@ gem 'core', path: '../core'
 gem 'persistence', path: '../persistence'
 gem 'clients', path: '../clients'
 
+group :test do
+  gem 'test_support', path: '../test_support'
+end
+
 gemspec
 
