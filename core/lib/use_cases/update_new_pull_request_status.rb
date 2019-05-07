@@ -14,7 +14,7 @@ class UpdateNewPullRequestStatus
   end
 
   def execute(github_event:)
-    return unless pr_is_being_opened?(github_event)
+    return unless valid_event?(github_event)
 
     if active_incident?
       github_client.set_status_for_commit(
@@ -38,9 +38,14 @@ class UpdateNewPullRequestStatus
     incidents_repository.find_last_unresolved
   end
 
-  private def pr_is_being_opened?(github_event)
-    (github_event.type == PullRequestEvent::OPENED ||
-      github_event.type == PullRequestEvent::REOPENED)
+  private def valid_event?(github_event)
+    valid_events = [
+      PullRequestEvent::OPENED,
+      PullRequestEvent::REOPENED,
+      PullRequestEvent::SYNCHRONIZE
+    ]
+
+    valid_events.include? github_event.type
   end
 
   private def more_info_url
