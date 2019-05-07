@@ -31,11 +31,30 @@ describe HoldDeployments do
         .with(message: HoldDeployments::MESSAGE)
     end
 
-    it 'tells slack client to set channel topic for failure' do
-      subject.execute(HoldDeployments::Request.new(message: fake_message))
+    context 'when a failure channel topic has been configured' do
+      before do
+        ENV['FAILURE_CHANNEL_TOPIC'] = 'something bad happened'
+      end
 
-      expect(slack_client_spy).to have_received(:set_channel_topic)
-        .with(message: HoldDeployments::CHANNEL_TOPIC)
+      it 'tells slack client to set the channel topic to the configured topic' do
+        subject.execute(HoldDeployments::Request.new(message: fake_message))
+
+        expect(slack_client_spy).to have_received(:set_channel_topic)
+          .with(message: 'something bad happened')
+      end
+    end
+
+    context 'when a failure channel topic has not been configured' do
+      before do
+        ENV['FAILURE_CHANNEL_TOPIC'] = nil
+      end
+
+      it 'tells slack client to set the default channel topic for failure' do
+        subject.execute(HoldDeployments::Request.new(message: fake_message))
+
+        expect(slack_client_spy).to have_received(:set_channel_topic)
+          .with(message: HoldDeployments::DEFAULT_CHANNEL_TOPIC)
+      end
     end
 
     it 'creates an unresolved incident' do

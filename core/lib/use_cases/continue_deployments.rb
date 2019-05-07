@@ -1,8 +1,8 @@
 class ContinueDeployments
   attr_reader :chat_client, :github_client, :incidents_repository
 
-  BACK_TO_GREEN_MESSAGE = "Nice. Setting channel topic back to green.".freeze
-  GREEN_CHANNEL_TOPIC = ':green_balloon: :circleci-pass:'.freeze
+  BACK_TO_GREEN_MESSAGE = 'Nice. Setting channel topic back to green.'.freeze
+  DEFAULT_CHANNEL_TOPIC = 'Master is green, feel free to merge and deploy.'.freeze
 
   def initialize(
     chat_client:,
@@ -16,7 +16,7 @@ class ContinueDeployments
 
   def execute
     chat_client.say(message: BACK_TO_GREEN_MESSAGE)
-    chat_client.set_channel_topic(message: GREEN_CHANNEL_TOPIC)
+    chat_client.set_channel_topic(message: ENV['SUCCESS_CHANNEL_TOPIC'] || DEFAULT_CHANNEL_TOPIC)
 
     incident = incidents_repository.find_last_unresolved
 

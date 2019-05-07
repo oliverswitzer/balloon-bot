@@ -25,7 +25,33 @@ describe ContinueDeployments do
       subject.execute
 
       expect(slack_client_spy).to have_received(:set_channel_topic)
-        .with(message: ContinueDeployments::GREEN_CHANNEL_TOPIC)
+        .with(message: ContinueDeployments::DEFAULT_CHANNEL_TOPIC)
+    end
+
+    context 'when a success channel topic has been configured' do
+      before do
+        ENV['SUCCESS_CHANNEL_TOPIC'] = 'good to go, yo!'
+      end
+
+      it 'tells slack client to set the channel topic to the configured topic' do
+        subject.execute
+
+        expect(slack_client_spy).to have_received(:set_channel_topic)
+          .with(message: 'good to go, yo!')
+      end
+    end
+
+    context 'when a success channel topic has not been configured' do
+      before do
+        ENV['SUCCESS_CHANNEL_TOPIC'] = nil
+      end
+
+      it 'tells slack client to set the default channel topic for failure' do
+        subject.execute
+
+        expect(slack_client_spy).to have_received(:set_channel_topic)
+          .with(message: ContinueDeployments::DEFAULT_CHANNEL_TOPIC)
+      end
     end
 
     describe 'github status behavior' do
