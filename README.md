@@ -108,6 +108,11 @@ specified by the `GITHUB_REPO` env var.
 # Deployments
 
 1. `git push heroku master`
+2. If there are migrations
+
+```bash
+$ herkoku run rake db:migrate
+```
 
 To stop the app:
 
