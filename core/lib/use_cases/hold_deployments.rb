@@ -4,7 +4,7 @@ class HoldDeployments
   ERROR_MESSAGES = {
     already_holding: 'I\'m already holding deployments'
   }.freeze
-  MESSAGE = 'Holding deploys! Setting failing github statuses on all open and future pull requests'.freeze
+  MESSAGE = '<!channel|channel> please hold deploys and merges! Setting failing github statuses on all pull requests'.freeze
   DEFAULT_CHANNEL_TOPIC = '⚠️ Hold deploys ⚠️'.freeze
 
   def initialize(
