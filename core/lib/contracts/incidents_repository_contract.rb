@@ -69,7 +69,7 @@ def incidents_repository_contract(repo_class)
 
         found_incident = subject.find(incident.id)
 
-        expect(found_incident.resolved_at).to eq(resolved_at)
+        expect(Time.at(found_incident.resolved_at.to_i)).to eq(Time.at(resolved_at.to_i))
       end
     end
   end
