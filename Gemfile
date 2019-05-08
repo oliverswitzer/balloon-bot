@@ -7,10 +7,16 @@ gem 'persistence', path: 'persistence'
 gem 'clients', path: 'clients'
 gem 'web', path: 'web'
 
+gem 'dotenv'
 gem 'rake'
 
 group :test do
   gem 'dotenv'
   gem 'rspec_junit_formatter'
   gem 'test_support', path: 'test_support'
+end
+
+group :development do
+  gem 'pry'
+  gem 'rb-readline'
 end
