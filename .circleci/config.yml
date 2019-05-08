@@ -16,12 +16,6 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
-          - v1-dependencies-
-
       - run:
           name: print env var GITHUB_REPO
           command: 'echo $GITHUB_REPO'
@@ -37,7 +31,6 @@ jobs:
           name: install dependencies
           command: |
             bundle install --jobs=4 --retry=3
-            cd web && bundle install --jobs=4 --retry=3
 
       - save_cache:
           paths:
