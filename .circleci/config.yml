@@ -36,8 +36,8 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
-            cd web && bundle install --jobs=4 --retry=3 --path vendor/bundle
+            bundle install --jobs=4 --retry=3
+            cd web && bundle install --jobs=4 --retry=3
 
       - save_cache:
           paths:
@@ -61,7 +61,7 @@ jobs:
                             --format RspecJunitFormatter \
                             --out /tmp/test-results/rspec.xml \
                             --format progress \
-                            --exclude-pattern "vendor/**/*_spec.rb"
+                            --exclude-pattern "vendor/**/*"
                             core web persistence
       # collect reports
       - store_test_results:
