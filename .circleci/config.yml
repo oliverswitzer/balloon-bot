@@ -61,7 +61,6 @@ jobs:
                             --format RspecJunitFormatter \
                             --out /tmp/test-results/rspec.xml \
                             --format progress \
-                            --exclude-pattern "vendor/**/*"
                             core web persistence
       # collect reports
       - store_test_results:
