@@ -24,36 +24,57 @@ describe HoldDeployments do
   end
 
   describe '#execute' do
-    it 'tells the specified deployments channel to hold deploys' do
-      subject.execute(HoldDeployments::Request.new(message: fake_message))
+    describe 'tells the channel to hold deploys' do
+      context 'when a failure channel topic has been configured' do
+        before do
+          ENV['FAILURE_CHANNEL_TOPIC'] = 'something bad happened'
+        end
 
-      expect(slack_client_spy).to have_received(:say)
-        .with(message: HoldDeployments::MESSAGE)
-    end
+        it 'tells slack client to set the channel topic to the configured topic' do
+          subject.execute(HoldDeployments::Request.new(message: fake_message))
 
-    context 'when a failure channel topic has been configured' do
-      before do
-        ENV['FAILURE_CHANNEL_TOPIC'] = 'something bad happened'
+          expect(slack_client_spy).to have_received(:set_channel_topic)
+            .with(message: 'something bad happened')
+        end
+
+        after do
+          ENV['FAILURE_CHANNEL_TOPIC'] = nil
+        end
       end
 
-      it 'tells slack client to set the channel topic to the configured topic' do
-        subject.execute(HoldDeployments::Request.new(message: fake_message))
+      context 'when a failure channel topic has not been configured' do
+        it 'tells slack client to set the default channel topic for failure' do
+          subject.execute(HoldDeployments::Request.new(message: fake_message))
 
-        expect(slack_client_spy).to have_received(:set_channel_topic)
-          .with(message: 'something bad happened')
-      end
-    end
-
-    context 'when a failure channel topic has not been configured' do
-      before do
-        ENV['FAILURE_CHANNEL_TOPIC'] = nil
+          expect(slack_client_spy).to have_received(:set_channel_topic)
+            .with(message: HoldDeployments::DEFAULT_CHANNEL_TOPIC)
+        end
       end
 
-      it 'tells slack client to set the default channel topic for failure' do
-        subject.execute(HoldDeployments::Request.new(message: fake_message))
+      context 'when a slack handle has been configured' do
+        before do
+          ENV['SLACK_HANDLE_TO_NOTIFY'] = 'engineerzz'
+        end
 
-        expect(slack_client_spy).to have_received(:set_channel_topic)
-          .with(message: HoldDeployments::DEFAULT_CHANNEL_TOPIC)
+        it 'uses that handle when notifying the configured deployments channel' do
+          subject.execute(HoldDeployments::Request.new(message: fake_message))
+
+          expect(slack_client_spy).to have_received(:say)
+            .with(message: "<!engineerzz|engineerzz> #{HoldDeployments::MESSAGE}")
+        end
+
+        after do
+          ENV['SLACK_HANDLE_TO_NOTIFY'] = nil
+        end
+      end
+
+      context 'when a slack handle has not been configured' do
+        it 'uses @channel handle when notifying the configured deployments channel' do
+          subject.execute(HoldDeployments::Request.new(message: fake_message))
+
+          expect(slack_client_spy).to have_received(:say)
+            .with(message: "<!channel|channel> #{HoldDeployments::MESSAGE}")
+        end
       end
     end
 

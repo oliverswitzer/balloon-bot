@@ -4,7 +4,7 @@ class HoldDeployments
   ERROR_MESSAGES = {
     already_holding: 'I\'m already holding deployments'
   }.freeze
-  MESSAGE = '<!channel|channel> please hold deploys and merges! Setting failing github statuses on all pull requests'.freeze
+  MESSAGE = 'please hold deploys and merges! Setting failing github statuses on all pull requests'.freeze
   DEFAULT_CHANNEL_TOPIC = '⚠️ Hold deploys ⚠️'.freeze
 
   def initialize(
@@ -25,7 +25,7 @@ class HoldDeployments
       return
     end
 
-    chat_client.say(message: MESSAGE)
+    chat_client.say(message: "<!#{slack_handle}|#{slack_handle}> #{MESSAGE}")
     chat_client.set_channel_topic(message: ENV['FAILURE_CHANNEL_TOPIC'] || DEFAULT_CHANNEL_TOPIC)
 
     incident = incidents_repository.save(Incident.new)
@@ -57,5 +57,9 @@ class HoldDeployments
       timestamp: Types::Strict::String,
       channel_id: Types::Strict::String
     )
+  end
+
+  private def slack_handle
+    ENV['SLACK_HANDLE_TO_NOTIFY'] || 'channel'
   end
 end
