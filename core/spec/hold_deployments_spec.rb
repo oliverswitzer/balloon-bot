@@ -53,14 +53,14 @@ describe HoldDeployments do
 
       context 'when a slack handle has been configured' do
         before do
-          ENV['SLACK_HANDLE_TO_NOTIFY'] = 'engineerzz'
+          ENV['SLACK_HANDLE_TO_NOTIFY'] = '<!here|here>'
         end
 
         it 'uses that handle when notifying the configured deployments channel' do
           subject.execute(HoldDeployments::Request.new(message: fake_message))
 
           expect(slack_client_spy).to have_received(:say)
-            .with(message: "<!engineerzz|engineerzz> #{HoldDeployments::MESSAGE}")
+            .with(message: "<!here|here> #{HoldDeployments::MESSAGE}")
         end
 
         after do

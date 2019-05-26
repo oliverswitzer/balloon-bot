@@ -25,7 +25,7 @@ class HoldDeployments
       return
     end
 
-    chat_client.say(message: "<!#{slack_handle}|#{slack_handle}> #{MESSAGE}")
+    chat_client.say(message: "#{slack_handle} #{MESSAGE}")
     chat_client.set_channel_topic(message: ENV['FAILURE_CHANNEL_TOPIC'] || DEFAULT_CHANNEL_TOPIC)
 
     incident = incidents_repository.save(Incident.new)
@@ -60,6 +60,6 @@ class HoldDeployments
   end
 
   private def slack_handle
-    ENV['SLACK_HANDLE_TO_NOTIFY'] || 'channel'
+    ENV['SLACK_HANDLE_TO_NOTIFY'] || '<!channel|channel>'
   end
 end
