@@ -1,5 +1,2 @@
-class ApplicationController < ActionController::API
-  if %w(staging production).include? Rails.env
-    http_basic_authenticate_with name: ENV['HTTP_AUTH_USER'], password: ENV['HTTP_AUTH_PASSWORD']
-  end
+class ApplicationController < ActionController::Base
 end

@@ -1,6 +1,4 @@
 class SlackClientWrapper
-
-
   attr_reader :slack_bot_client
 
   def initialize(slack_bot_client)
