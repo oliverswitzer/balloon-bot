@@ -23,4 +23,12 @@ class IncidentsRepository
   def find_last_unresolved
     IncidentRecord.where(resolved_at: nil).last&.to_incident
   end
+
+  def find_last_n_with_messages(n = 10)
+    incident_records = IncidentRecord.includes(:messages).last(n)
+
+    incident_records.map do |record|
+      record.to_incident_with_messages(messages: record.messages)
+    end
+  end
 end

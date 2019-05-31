@@ -49,7 +49,7 @@ def incidents_repository_contract(repo_class)
 
       it 'should return the last unresolved incident' do
         subject.save(Incident.new(resolved_at: nil))
-        sleep 1
+
         last_unresolved_incident = subject.save(Incident.new(resolved_at: nil))
         subject.save(Incident.new(resolved_at: Time.new(2018, 10, 31)))
 

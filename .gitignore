@@ -4,7 +4,9 @@ web/.env.test
 
 web/.bundle
 web/log/*.log
-!web/log/.keep
-!web/tmp/.keep
-
+web/node_modules
 web/.byebug_history
+web/tmp
+web/public/packs
+yarn-error.log
+.DS_Store
