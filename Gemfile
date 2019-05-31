@@ -13,5 +13,4 @@ group :test do
   gem 'dotenv'
   gem 'rspec_junit_formatter'
   gem 'test_support', path: 'test_support'
-  gem 'faker'
 end
