@@ -163,12 +163,18 @@ GEM
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
+    multi_json (1.13.1)
     multipart-post (2.0.0)
     nio4r (2.3.1)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     octokit (4.13.0)
       sawyer (~> 0.8.0, >= 0.5.3)
+    oj (3.7.12)
+    olive_branch (2.1.5)
+      multi_json
+      oj
+      rails (>= 4.0)
     pg (1.1.2)
     pry (0.12.2)
       coderay (~> 1.1.0)
@@ -264,6 +270,7 @@ DEPENDENCIES
   clients!
   core!
   faker
+  olive_branch
   persistence!
   pry
   pry-rails
