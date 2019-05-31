@@ -6,6 +6,7 @@ gem 'core', path: 'core'
 gem 'persistence', path: 'persistence'
 gem 'clients', path: 'clients'
 gem 'web', path: 'web'
+gem 'olive_branch'
 
 gem 'rake'
 
