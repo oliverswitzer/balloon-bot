@@ -10,6 +10,7 @@ PATH
       tzinfo-data
 
 GEM
+  remote: https://rubygems.org/
   specs:
     actioncable (5.1.7)
       actionpack (= 5.1.7)
@@ -121,6 +122,9 @@ PLATFORMS
 
 DEPENDENCIES
   web!
+
+RUBY VERSION
+   ruby 2.4.1p111
 
 BUNDLED WITH
    2.0.1
