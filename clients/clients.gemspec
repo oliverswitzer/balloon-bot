@@ -2,9 +2,9 @@ Gem::Specification.new do |gem|
   gem.name = 'clients'
   gem.author = ''
   gem.summary = ''
-  gem.version = '0.0.0'
+  gem.version = '0.0.1'
 
-  gem.require_path = "lib"
+  gem.require_paths = ["lib"]
   gem.files = Dir["lib/**/*"]
   gem.test_files = Dir["spec/**/*"]
 
