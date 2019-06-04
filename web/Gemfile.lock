@@ -37,7 +37,11 @@ PATH
   remote: .
   specs:
     web (0.0.0)
+      clients
+      core
       dotenv
+      olive_branch
+      persistence
       pg
       puma (~> 3.7)
       rails (~> 5.1.6, >= 5.1.6.1)
@@ -267,7 +271,6 @@ PLATFORMS
 DEPENDENCIES
   clients!
   core!
-  olive_branch
   persistence!
   pry
   pry-rails

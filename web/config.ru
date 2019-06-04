@@ -8,12 +8,12 @@ Dotenv.load! if ENV['RAILS_ENV'] == 'development'
 
 class App
   def self.run
-    BalloonBot.instance.on(:message, Hooks::Message.new)
-    BalloonBot.run
+    Clients::BalloonBot.instance.on(:message, Hooks::Message.new)
+    Clients::BalloonBot.run
   end
 
   def self.slack_bot_client
-    BalloonBot.instance.send(:client)
+    Clients::BalloonBot.instance.send(:client)
   end
 end
 
