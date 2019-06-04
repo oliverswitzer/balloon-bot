@@ -11,6 +11,11 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'tzinfo-data'
   gem.add_dependency 'dotenv'
   gem.add_dependency 'olive_branch'
+
+  gem.add_dependency 'clients'
+  gem.add_dependency 'core'
+  gem.add_dependency 'persistence'
+
   gem.add_development_dependency 'pry-rails'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rspec_junit_formatter'

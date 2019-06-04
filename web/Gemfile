@@ -2,6 +2,9 @@ source 'https://rubygems.org'
 
 ruby '2.4.1'
 
+gemspec
+
+gem 'clients', path: '../clients'
 gem 'core', path: '../core'
 gem 'persistence', path: '../persistence'
 
@@ -15,6 +18,4 @@ group :test do
 end
 
 gem 'webpacker'
-
-gemspec
 
