@@ -1,8 +1,10 @@
 # This file is used by Rack-based servers to start the application.
 
 require_relative 'config/environment'
-require 'clients'
 require 'dotenv'
+require 'bundler'
+
+Bundler.require
 
 Dotenv.load! if ENV['RAILS_ENV'] == 'development'
 
