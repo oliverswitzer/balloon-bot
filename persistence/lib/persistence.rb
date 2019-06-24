@@ -1,9 +1,9 @@
 module Persistence
   require 'active_record'
-  require 'incidents_repository'
-  require 'messages_repository'
-  require 'incident_record'
-  require 'message_record'
+  require 'persistence/incidents_repository'
+  require 'persistence/messages_repository'
+  require 'persistence/incident_record'
+  require 'persistence/message_record'
 
   if defined? Rails
     require "active_record/railtie"
@@ -15,6 +15,6 @@ module Persistence
     end
   end
 
-  INCIDENTS_REPOSITORY = IncidentsRepository.new
-  MESSAGES_REPOSITORY = MessagesRepository.new
+  INCIDENTS_REPOSITORY = Persistence::IncidentsRepository.new
+  MESSAGES_REPOSITORY = Persistence::MessagesRepository.new
 end
