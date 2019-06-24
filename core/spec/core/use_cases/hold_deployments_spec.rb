@@ -1,6 +1,6 @@
-require_relative './spec_helper'
+require_relative '../../spec_helper'
 
-describe HoldDeployments do
+describe Core::HoldDeployments do
   let(:slack_client_spy) { spy('SlackClientWrapper') }
   let(:github_client_spy) { spy('GithubClientWrapper') }
   let(:incidents_repository) { FakeIncidentsRepository.new }
@@ -15,7 +15,7 @@ describe HoldDeployments do
   end
 
   subject do
-    HoldDeployments.new(
+    Core::HoldDeployments.new(
       chat_client: slack_client_spy,
       incidents_repository: incidents_repository,
       messages_repository: messages_repository,
@@ -31,7 +31,7 @@ describe HoldDeployments do
         end
 
         it 'tells slack client to set the channel topic to the configured topic' do
-          subject.execute(HoldDeployments::Request.new(message: fake_message))
+          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
 
           expect(slack_client_spy).to have_received(:set_channel_topic)
             .with(message: 'something bad happened')
@@ -44,10 +44,10 @@ describe HoldDeployments do
 
       context 'when a failure channel topic has not been configured' do
         it 'tells slack client to set the default channel topic for failure' do
-          subject.execute(HoldDeployments::Request.new(message: fake_message))
+          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
 
           expect(slack_client_spy).to have_received(:set_channel_topic)
-            .with(message: HoldDeployments::DEFAULT_CHANNEL_TOPIC)
+            .with(message: Core::HoldDeployments::DEFAULT_CHANNEL_TOPIC)
         end
       end
 
@@ -57,10 +57,10 @@ describe HoldDeployments do
         end
 
         it 'uses that handle when notifying the configured deployments channel' do
-          subject.execute(HoldDeployments::Request.new(message: fake_message))
+          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
 
           expect(slack_client_spy).to have_received(:say)
-            .with(message: "<!here|here> #{HoldDeployments::MESSAGE}")
+            .with(message: "<!here|here> #{Core::HoldDeployments::MESSAGE}")
         end
 
         after do
@@ -70,25 +70,25 @@ describe HoldDeployments do
 
       context 'when a slack handle has not been configured' do
         it 'uses @channel handle when notifying the configured deployments channel' do
-          subject.execute(HoldDeployments::Request.new(message: fake_message))
+          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
 
           expect(slack_client_spy).to have_received(:say)
-            .with(message: "<!channel|channel> #{HoldDeployments::MESSAGE}")
+            .with(message: "<!channel|channel> #{Core::HoldDeployments::MESSAGE}")
         end
       end
     end
 
     it 'creates an unresolved incident' do
-      subject.execute(HoldDeployments::Request.new(message: fake_message))
+      subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
 
       saved_incident = incidents_repository.find_last_unresolved
 
-      expect(saved_incident).to be_an_instance_of(Incident)
+      expect(saved_incident).to be_an_instance_of(Core::Incident)
       expect(saved_incident.resolved_at).to be_nil
     end
 
     it 'saves the message that triggered the incident' do
-      subject.execute(HoldDeployments::Request.new(message: fake_message))
+      subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
 
       incident = incidents_repository.find_last_unresolved
 
@@ -105,8 +105,8 @@ describe HoldDeployments do
           expect(github_client_spy).to receive(:open_pull_requests)
             .and_return(
               [
-                PullRequest.new(head_sha: '123abc', branch: 'some-branch'),
-                PullRequest.new(head_sha: '456def', branch: 'some-branch')
+                Core::PullRequest.new(head_sha: '123abc', branch: 'some-branch'),
+                Core::PullRequest.new(head_sha: '456def', branch: 'some-branch')
               ]
             )
 
@@ -124,30 +124,30 @@ describe HoldDeployments do
             .with(
               commit_sha: '123abc',
               more_info_url: 'http://www.example.com',
-              status: instance_of(Github::FailureStatus)
+              status: instance_of(Core::Github::FailureStatus)
             )
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '456def',
               more_info_url: 'http://www.example.com',
-              status: instance_of(Github::FailureStatus)
+              status: instance_of(Core::Github::FailureStatus)
             )
 
-          subject.execute(HoldDeployments::Request.new(message: fake_message))
+          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
         end
       end
     end
 
     context 'when there is already an unresolved incident' do
       before do
-        incidents_repository.save(Incident.new(resolved_at: nil))
+        incidents_repository.save(Core::Incident.new(resolved_at: nil))
       end
 
       it 'warns that deployments are already being held' do
-        subject.execute(HoldDeployments::Request.new(message: fake_message))
+        subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
 
         expect(slack_client_spy).to have_received(:say)
-          .with(message: HoldDeployments::ERROR_MESSAGES[:already_holding])
+          .with(message: Core::HoldDeployments::ERROR_MESSAGES[:already_holding])
       end
     end
   end

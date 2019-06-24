@@ -1,12 +1,12 @@
-require_relative './spec_helper'
+require_relative '../../spec_helper'
 
-describe RecordMessageForIncident do
+describe Core::RecordMessageForIncident do
   let(:slack_client_wrapper_spy) { spy('SlackClientWrapper') }
   let(:messages_repository_spy) { spy(FakeMessagesRepository) }
   let(:incidents_repository) { FakeIncidentsRepository.new }
 
   subject do
-    RecordMessageForIncident.new(
+    Core::RecordMessageForIncident.new(
       chat_client: slack_client_wrapper_spy,
       messages_repository: messages_repository_spy,
       incidents_repository: incidents_repository
@@ -24,7 +24,7 @@ describe RecordMessageForIncident do
 
     context 'when there is an unresolved incident' do
       let!(:persisted_incident) do
-        incidents_repository.save(Incident.new(resolved_at: nil))
+        incidents_repository.save(Core::Incident.new(resolved_at: nil))
       end
 
 
@@ -38,7 +38,7 @@ describe RecordMessageForIncident do
         end
 
         it 'persists the message with the unresolved incident id' do
-          request = RecordMessageForIncident::Request.new(message: message)
+          request = Core::RecordMessageForIncident::Request.new(message: message)
 
           subject.execute(request)
 
@@ -59,7 +59,7 @@ describe RecordMessageForIncident do
         end
 
         it 'does not persist the message' do
-          request = RecordMessageForIncident::Request.new(message: message)
+          request = Core::RecordMessageForIncident::Request.new(message: message)
 
           subject.execute(request)
 
@@ -70,7 +70,7 @@ describe RecordMessageForIncident do
 
     context 'when there is NOT an unresolved incident' do
       it 'does not persist the message' do
-        request = RecordMessageForIncident::Request.new(message: message)
+        request = Core::RecordMessageForIncident::Request.new(message: message)
 
         subject.execute(request)
 

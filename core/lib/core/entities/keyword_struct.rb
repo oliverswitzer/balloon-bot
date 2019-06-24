@@ -5,8 +5,10 @@
 # SomeStruct = KeywordStruct.new(:attribute_one, :attribute_two)
 # struct_instance = SomeStruct.new(attribute_one: 'hello', attribute_two: 'world')
 
-class KeywordStruct < Struct
-  def initialize(**kwargs)
-    super(*members.map{|k| kwargs[k] })
+module Core
+  class KeywordStruct < Struct
+    def initialize(**kwargs)
+      super(*members.map{|k| kwargs[k] })
+    end
   end
 end
