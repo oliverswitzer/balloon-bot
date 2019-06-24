@@ -1,2 +1,2 @@
 require 'clients/slack/slack_client_wrapper'
-require 'clients/slack/balloon-bot'
+require 'clients/slack/balloon_bot'
