@@ -8,11 +8,11 @@ export const IncidentComponent = ({incident}: { incident: Incident }) => {
   const duration = moment.duration(resolvedAt.diff(createdAt));
 
   return (
-    <>
-      <p>Happened: {createdAt.fromNow()}</p>
-      <p>Duration: {duration.humanize()}</p>
-      <p>Initial message: {incident.messages[0].text}</p>
+    <div style={{ border: '1px solid black', textAlign: 'center', paddingLeft: '10vw', paddingRight: '10vw', margin: '5vh auto', width: '50vw' }}>
+      <p><span style={{fontWeight: 'bold'}}>Happened:</span> {createdAt.fromNow()}</p>
+      <p><span style={{fontWeight: 'bold'}}>Duration:</span> {duration.humanize()}</p>
+      <p><span style={{fontWeight: 'bold'}}>Initial message:</span> {incident.messages[0].text}</p>
       <br/>
-    </>
+    </div>
   )
 };

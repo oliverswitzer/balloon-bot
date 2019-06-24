@@ -20,7 +20,7 @@ export const Main = () => {
 
   return (
     <div>
-      <h1>Resolved Incidents</h1>
+      <h1 style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '5vh' }}>Resolved Incidents</h1>
       {isLoading && <h1>Loading incidents!</h1>}
 
       {
