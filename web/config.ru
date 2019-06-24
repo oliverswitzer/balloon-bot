@@ -5,24 +5,24 @@ require 'dotenv'
 require 'bundler'
 
 Bundler.require
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
-Rails.logger.info "LOAD PATH:"
-Rails.logger.info $LOAD_PATH.inspect
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
-Rails.logger.info "LOADED_FEATURES:"
-Rails.logger.info $LOADED_FEATURES.inspect
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
-Rails.logger.info "***********************"
+puts "***********************"
+puts "***********************"
+puts "***********************"
+puts "***********************"
+puts "LOAD PATH:"
+puts $LOAD_PATH.inspect
+puts "***********************"
+puts "***********************"
+puts "***********************"
+puts "***********************"
+puts "***********************"
+puts "LOADED_FEATURES:"
+puts $LOADED_FEATURES.inspect
+puts "***********************"
+puts "***********************"
+puts "***********************"
+puts "***********************"
+puts "***********************"
 
 Dotenv.load! if ENV['RAILS_ENV'] == 'development'
 
