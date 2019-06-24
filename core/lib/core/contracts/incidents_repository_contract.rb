@@ -5,8 +5,8 @@ def incidents_repository_contract(repo_class)
     describe '#save' do
       context 'when id has not been set' do
         it 'generates unique integer ids for each persisted incident' do
-          incident1 = Incident.new(resolved_at: nil)
-          incident2 = Incident.new(resolved_at: nil)
+          incident1 = Core::Incident.new(resolved_at: nil)
+          incident2 = Core::Incident.new(resolved_at: nil)
 
           persisted_incident1 = subject.save(incident1)
           persisted_incident2 = subject.save(incident2)
@@ -17,7 +17,7 @@ def incidents_repository_contract(repo_class)
         end
 
         it 'generates a created_at timestamp for the incident' do
-          persisted_incident = subject.save(Incident.new(resolved_at: nil))
+          persisted_incident = subject.save(Core::Incident.new(resolved_at: nil))
 
           expect(persisted_incident.created_at).to be_a(Time)
         end
@@ -27,11 +27,11 @@ def incidents_repository_contract(repo_class)
         it 'updates the existing incident with the corresponding id' do
           resolved_at = Time.now
 
-          subject.save(Incident.new(resolved_at: nil))
-          persisted_incident = subject.save(Incident.new(resolved_at: nil))
+          subject.save(Core::Incident.new(resolved_at: nil))
+          persisted_incident = subject.save(Core::Incident.new(resolved_at: nil))
 
           updated_incident = subject.save(
-            Incident.new(id: persisted_incident.id, resolved_at: resolved_at)
+            Core::Incident.new(id: persisted_incident.id, resolved_at: resolved_at)
           )
 
           expect(updated_incident.id).to eq(persisted_incident.id)
@@ -48,10 +48,10 @@ def incidents_repository_contract(repo_class)
       end
 
       it 'should return the last unresolved incident' do
-        subject.save(Incident.new(resolved_at: nil))
+        subject.save(Core::Incident.new(resolved_at: nil))
 
-        last_unresolved_incident = subject.save(Incident.new(resolved_at: nil))
-        subject.save(Incident.new(resolved_at: Time.new(2018, 10, 31)))
+        last_unresolved_incident = subject.save(Core::Incident.new(resolved_at: nil))
+        subject.save(Core::Incident.new(resolved_at: Time.new(2018, 10, 31)))
 
         found_incident = subject.find_last_unresolved
 
@@ -63,9 +63,9 @@ def incidents_repository_contract(repo_class)
       it 'returns an incident matching the given id' do
         resolved_at = Time.now
 
-        subject.save(Incident.new)
-        incident = subject.save(Incident.new(resolved_at: resolved_at))
-        subject.save(Incident.new)
+        subject.save(Core::Incident.new)
+        incident = subject.save(Core::Incident.new(resolved_at: resolved_at))
+        subject.save(Core::Incident.new)
 
         found_incident = subject.find(incident.id)
 

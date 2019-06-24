@@ -1,13 +1,13 @@
-require_relative './spec_helper'
+require_relative '../../spec_helper'
 
-describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
+describe 'Integration Test: Core::HoldDeployments + Core::UpdateNewPullRequestStatus' do
   let(:slack_client_spy) { spy('SlackClientWrapper') }
   let(:github_client_spy) { spy('GithubClientWrapper') }
   let(:incidents_repository) { FakeIncidentsRepository.new }
   let(:messages_repository) { FakeMessagesRepository.new }
 
   let(:hold_deployments) {
-    HoldDeployments.new(
+    Core::HoldDeployments.new(
       chat_client: spy('SlackClientWrapper'),
       github_client: spy('GithubClientWrapper'),
       incidents_repository: incidents_repository,
@@ -16,7 +16,7 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
   }
 
   subject do
-    UpdateNewPullRequestStatus.new(
+    Core::UpdateNewPullRequestStatus.new(
       github_client: github_client_spy,
       incidents_repository: incidents_repository,
       messages_repository: messages_repository,
@@ -27,13 +27,13 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
   describe '#execute' do
     context 'when deployments have been previously held' do
       before do
-        # Trigger HoldDeployments
+        # Trigger Core::HoldDeployments
         fake_slack_message = {
           text: 'some message',
           timestamp: 'some time',
           channel_id: 'some channel'
         }
-        hold_deployments_request = HoldDeployments::Request.new(message: fake_slack_message)
+        hold_deployments_request = Core::HoldDeployments::Request.new(message: fake_slack_message)
         hold_deployments.execute(hold_deployments_request)
 
         # Stub first slack message for that hold deployments call since
@@ -58,14 +58,14 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '123abc',
-              status: instance_of(Github::FailureStatus),
+              status: instance_of(Core::Github::FailureStatus),
               more_info_url: 'http://example.com'
             )
 
           subject.execute(
-            github_event: PullRequestEvent.new(
-              type: PullRequestEvent::OPENED,
-              pull_request: PullRequest.new(
+            github_event: Core::PullRequestEvent.new(
+              type: Core::PullRequestEvent::OPENED,
+              pull_request: Core::PullRequest.new(
                 head_sha: '123abc',
                 branch: 'some-branch'
               )
@@ -79,14 +79,14 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '123abc',
-              status: instance_of(Github::FailureStatus),
+              status: instance_of(Core::Github::FailureStatus),
               more_info_url: 'http://example.com'
             )
 
           subject.execute(
-            github_event: PullRequestEvent.new(
-              type: PullRequestEvent::REOPENED,
-              pull_request: PullRequest.new(
+            github_event: Core::PullRequestEvent.new(
+              type: Core::PullRequestEvent::REOPENED,
+              pull_request: Core::PullRequest.new(
                 head_sha: '123abc',
                 branch: 'some-branch'
               )
@@ -100,14 +100,14 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
           expect(github_client_spy).to receive(:set_status_for_commit)
             .with(
               commit_sha: '123abc',
-              status: instance_of(Github::FailureStatus),
+              status: instance_of(Core::Github::FailureStatus),
               more_info_url: 'http://example.com'
             )
 
           subject.execute(
-            github_event: PullRequestEvent.new(
-              type: PullRequestEvent::SYNCHRONIZE,
-              pull_request: PullRequest.new(
+            github_event: Core::PullRequestEvent.new(
+              type: Core::PullRequestEvent::SYNCHRONIZE,
+              pull_request: Core::PullRequest.new(
                 head_sha: '123abc',
                 branch: 'some-branch'
               )
@@ -122,9 +122,9 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
         expect(github_client_spy).not_to receive(:set_status_for_commit)
 
         subject.execute(
-          github_event: PullRequestEvent.new(
+          github_event: Core::PullRequestEvent.new(
             type: 'foo event',
-            pull_request: PullRequest.new(
+            pull_request: Core::PullRequest.new(
               head_sha: '123abc',
               branch: 'some-branch'
             )
@@ -138,13 +138,13 @@ describe 'Integration Test: HoldDeployments + UpdateNewPullRequestStatus' do
         expect(github_client_spy).to receive(:set_status_for_commit)
           .with(
             commit_sha: '123abc',
-            status: instance_of(Github::SuccessStatus),
+            status: instance_of(Core::Github::SuccessStatus),
           )
 
         subject.execute(
-          github_event: PullRequestEvent.new(
-            type: PullRequestEvent::OPENED,
-            pull_request: PullRequest.new(
+          github_event: Core::PullRequestEvent.new(
+            type: Core::PullRequestEvent::OPENED,
+            pull_request: Core::PullRequest.new(
               head_sha: '123abc',
               branch: 'some-branch'
             )

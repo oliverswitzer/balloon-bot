@@ -22,12 +22,12 @@ module Persistence
     private_class_method :find_or_create_incident_record
 
     def to_message
-      Message.new(
+      Core::Message.new(
         id: id,
         text: text,
         channel_id: channel_id,
         timestamp: timestamp,
-        incident: Incident.new(
+        incident: Core::Incident.new(
           id: incident.id,
           resolved_at: incident.resolved_at,
           created_at: incident.created_at

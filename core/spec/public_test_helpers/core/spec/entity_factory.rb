@@ -1,6 +1,6 @@
 class EntityFactory
   def self.build_message(id: nil, text: nil, channel_id: nil, timestamp: nil, incident: nil)
-    Message.new(
+    Core::Message.new(
       id: id,
       text: text || 'this is a message',
       channel_id: channel_id || Random.rand(10000).to_s,
@@ -10,7 +10,7 @@ class EntityFactory
   end
 
   def self.build_incident(created_at: nil, resolved_at: nil)
-    Incident.new(
+    Core::Incident.new(
       created_at: created_at || Time.now,
       resolved_at: resolved_at || nil
     )

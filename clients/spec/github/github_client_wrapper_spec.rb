@@ -72,7 +72,7 @@ describe GithubClientWrapper do
 
         subject.set_status_for_commit(
           commit_sha: commit_SHA,
-          status: Github::Status.failure,
+          status: Core::Github::Status.failure,
           more_info_url: 'http://www.example.com'
         )
 
@@ -81,9 +81,9 @@ describe GithubClientWrapper do
           commit_SHA
         )
 
-        expect(statuses_for_commit.first.state).to eq(Github::Status.failure.state)
-        expect(statuses_for_commit.first.context).to eq(Github::Status.failure.context)
-        expect(statuses_for_commit.first.description).to eq(Github::Status.failure.description)
+        expect(statuses_for_commit.first.state).to eq(Core::Github::Status.failure.state)
+        expect(statuses_for_commit.first.context).to eq(Core::Github::Status.failure.context)
+        expect(statuses_for_commit.first.description).to eq(Core::Github::Status.failure.description)
         expect(statuses_for_commit.first.target_url).to eq('http://www.example.com')
       end
 

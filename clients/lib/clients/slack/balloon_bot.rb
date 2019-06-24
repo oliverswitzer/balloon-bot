@@ -16,9 +16,9 @@ module Clients
       command 'hold', 'pop' do |client, data, match|
         next if is_private_message? data[:channel]
 
-        request = HoldDeployments::Request.new(parse_message(data))
+        request = Core::HoldDeployments::Request.new(parse_message(data))
 
-        HoldDeployments.new(
+        Core::HoldDeployments.new(
           chat_client: SlackClientWrapper.new(client),
           incidents_repository: Persistence::INCIDENTS_REPOSITORY,
           messages_repository: Persistence::MESSAGES_REPOSITORY,
@@ -29,7 +29,7 @@ module Clients
       command 'continue', 'inflate' do |client, data, match|
         next if is_private_message? data[:channel]
 
-        ContinueDeployments.new(
+        Core::ContinueDeployments.new(
           chat_client: SlackClientWrapper.new(client),
           incidents_repository: Persistence::INCIDENTS_REPOSITORY,
           github_client: GithubClientWrapper.new
@@ -63,11 +63,11 @@ end
 module Hooks
   class Message
     def call(client, data)
-      request = RecordMessageForIncident::Request.new(
+      request = Core::RecordMessageForIncident::Request.new(
         parse_message(data)
       )
 
-      RecordMessageForIncident.new(
+      Core::RecordMessageForIncident.new(
         chat_client: SlackClientWrapper.new(client),
         incidents_repository: Persistence::INCIDENTS_REPOSITORY,
         messages_repository: Persistence::MESSAGES_REPOSITORY
