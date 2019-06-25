@@ -6,7 +6,7 @@ def messages_repository_contract(repo_class:, incident_repo_class:)
     let(:incidents_repository) { incident_repo_class.new }
 
     describe '#save' do
-      context 'when id has not already been set' do
+      context 'when message id has not already been set' do
         it 'should generate unique integer ids for each persisted message' do
           message1 = Core::EntityFactory.build_message
           message2 = Core::EntityFactory.build_message
@@ -33,6 +33,12 @@ def messages_repository_contract(repo_class:, incident_repo_class:)
 
           expect(updated_message.id).to eq(persisted_message.id)
           expect(updated_message.text).to eq('some updated message')
+        end
+      end
+
+      context 'when associated incident does not have an id' do
+        it 'should raise an error' do
+          # TODO: Implement! Was on a plane and couldn't look up docs on how to assert that a method call raises
         end
       end
     end

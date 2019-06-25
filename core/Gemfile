@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
 group :test do
+  # To make use of time helpers (e.g. 2.days.from_now) in tests
+  gem 'active_support'
   gem 'test_support', path: '../test_support'
 end
 

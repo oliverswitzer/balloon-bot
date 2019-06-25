@@ -4,8 +4,13 @@ class IncidentsController < ApplicationController
   end
 
   def index
-    @incidents = Persistence::INCIDENTS_REPOSITORY.find_last_n_with_messages(
-      safe_params[:last].to_i
+    lower_bound = Time.at(safe_params[:created_after].to_i) if safe_params[:created_after]
+    upper_bound = Time.at(safe_params[:created_before].to_i) if safe_params[:created_before]
+
+    # noinspection RubyScope
+    @incidents = Persistence::INCIDENTS_REPOSITORY.find_by_created_at_with_messages(
+      lower_bound: lower_bound,
+      upper_bound: upper_bound
     )
 
     respond_to do |format|
@@ -15,6 +20,6 @@ class IncidentsController < ApplicationController
   end
 
   private def safe_params
-    params.permit(:last)
+    params.permit(:created_after, :created_before, :format)
   end
 end

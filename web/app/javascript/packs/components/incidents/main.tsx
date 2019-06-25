@@ -13,7 +13,7 @@ function isResolved(incident: Incident): boolean {
 
 export const Main = () => {
   const [incidents, isLoading] = useFetch<Incident[]>(
-    '/incidents.json?last=100',
+    '/incidents.json',
     [],
     mapToIncidents
   );
