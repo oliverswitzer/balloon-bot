@@ -1,6 +1,6 @@
 module Clients
   module Slack
-    class SlackClientWrapper
+    class Wrapper
       attr_reader :slack_bot_client
 
       def initialize(slack_bot_client)

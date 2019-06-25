@@ -1,8 +1,8 @@
 require_relative '../../spec_helper'
 
 describe Core::HoldDeployments do
-  let(:slack_client_spy) { spy('Clients::Slack::SlackClientWrapper') }
-  let(:github_client_spy) { spy('Clients::Github::GithubClientWrapper') }
+  let(:slack_client_spy) { spy('Clients::Slack::Wrapper') }
+  let(:github_client_spy) { spy('Clients::Github::Wrapper') }
   let(:incidents_repository) { FakeIncidentsRepository.new }
   let(:messages_repository) { FakeMessagesRepository.new }
 

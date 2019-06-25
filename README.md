@@ -96,7 +96,7 @@ Note that you'll have to update this webhook in the future if you run ngrok agai
 # Running tests
 
 1. Create a `.env.test` file. 
-- The credentials entered here will be used to run integration tests against `Clients::Github::GithubClientWrapper` on a test repo
+- The credentials entered here will be used to run integration tests against `Clients::Github::Wrapper` on a test repo
 specified by the `GITHUB_REPO` env var. 
     - Note that two specific branches must exist in this repo for these tests to succeed, as indicated by the constants
     `TEST_BRANCH_1` and `TEST_BRANCH_2` in the spec.

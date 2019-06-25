@@ -11,10 +11,10 @@ class GithubHooksController < ApplicationController
     )
 
     Core::UpdateNewPullRequestStatus.new(
-      github_client: Clients::Github::GithubClientWrapper.new,
+      github_client: Clients::Github::Wrapper.new,
       incidents_repository: Persistence::INCIDENTS_REPOSITORY,
       messages_repository: Persistence::MESSAGES_REPOSITORY,
-      chat_client: Clients::Slack::SlackClientWrapper.new(App.slack_bot_client)
+      chat_client: Clients::Slack::Wrapper.new(App.slack_bot_client)
     ).execute(github_event: event)
   end
 end
