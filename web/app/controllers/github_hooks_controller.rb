@@ -4,7 +4,7 @@ class GithubHooksController < ApplicationController
 
     event = Core::PullRequestEvent.new(
       type: request_body['action'],
-      pull_request: Core::PullReques.new(
+      pull_request: Core::PullRequest.new(
         head_sha: request_body['pull_request']['head']['sha'],
         branch: request_body['pull_request']['head']['ref']
       )
