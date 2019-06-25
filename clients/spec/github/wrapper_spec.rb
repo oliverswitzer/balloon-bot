@@ -3,7 +3,7 @@ require_relative '../spec_helper'
 TEST_BRANCH_1 = 'test-branch'
 TEST_BRANCH_2 = 'other-test-branch'
 
-describe Clients::Github::GithubClientWrapper do
+describe Clients::Github::Wrapper do
   let(:test_repo) { ENV['GITHUB_REPO'] }
   let(:github_client) { Octokit::Client.new(access_token: ENV['GITHUB_PERSONAL_ACCESS_TOKEN']) }
 

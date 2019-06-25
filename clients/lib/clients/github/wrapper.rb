@@ -2,7 +2,7 @@ require 'octokit'
 
 module Clients
   module Github
-    class GithubClientWrapper
+    class Wrapper
       attr_reader :github_client
 
       def initialize(github_client: Octokit::Client.new(access_token: ENV['GITHUB_PERSONAL_ACCESS_TOKEN']))
