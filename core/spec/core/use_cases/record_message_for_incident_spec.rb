@@ -1,7 +1,7 @@
 require_relative '../../spec_helper'
 
 describe Core::RecordMessageForIncident do
-  let(:slack_client_wrapper_spy) { spy('SlackClientWrapper') }
+  let(:slack_client_wrapper_spy) { spy('Clients::Slack::SlackClientWrapper') }
   let(:messages_repository_spy) { spy(FakeMessagesRepository) }
   let(:incidents_repository) { FakeIncidentsRepository.new }
 

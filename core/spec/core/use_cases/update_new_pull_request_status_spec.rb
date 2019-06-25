@@ -1,15 +1,15 @@
 require_relative '../../spec_helper'
 
 describe 'Integration Test: Core::HoldDeployments + Core::UpdateNewPullRequestStatus' do
-  let(:slack_client_spy) { spy('SlackClientWrapper') }
-  let(:github_client_spy) { spy('GithubClientWrapper') }
+  let(:slack_client_spy) { spy('Clients::Slack::SlackClientWrapper') }
+  let(:github_client_spy) { spy('Clients::Github::GithubClientWrapper') }
   let(:incidents_repository) { FakeIncidentsRepository.new }
   let(:messages_repository) { FakeMessagesRepository.new }
 
   let(:hold_deployments) {
     Core::HoldDeployments.new(
-      chat_client: spy('SlackClientWrapper'),
-      github_client: spy('GithubClientWrapper'),
+      chat_client: spy('Clients::Slack::SlackClientWrapper'),
+      github_client: spy('Clients::Github::GithubClientWrapper'),
       incidents_repository: incidents_repository,
       messages_repository: messages_repository
     )
