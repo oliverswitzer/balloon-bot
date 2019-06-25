@@ -8,7 +8,7 @@ class FakeIncidentsRepository
   def save(incident)
     if incident.id.nil?
       incident.id = @incidents.length + 1
-      incident.created_at = Time.now
+      incident.created_at = incident.created_at || Time.now
 
       @incidents << incident
 
@@ -27,6 +27,13 @@ class FakeIncidentsRepository
   end
 
   def find(id)
-    @incidents.find { |incidents| incidents.id == id }
+    @incidents.find { |incident| incident.id == id }
+  end
+
+  def find_by_created_at_with_messages(lower_bound: nil, upper_bound: nil)
+    incidents = @incidents.select { |incident| incident.created_at > lower_bound } if lower_bound
+    incidents = @incidents.select { |incident| incident.created_at < upper_bound } if upper_bound
+
+    incidents
   end
 end

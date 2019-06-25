@@ -2,7 +2,10 @@ module Persistence
   class IncidentsRepository
     def save(incident)
       if incident.id.nil?
-        record = Persistence::IncidentRecord.create(resolved_at: incident.resolved_at)
+        record = Persistence::IncidentRecord.create(
+          resolved_at: incident.resolved_at,
+          created_at: incident.created_at
+        )
 
         incident.id = record.id
         incident.created_at = record.created_at
@@ -25,11 +28,14 @@ module Persistence
       Persistence::IncidentRecord.where(resolved_at: nil).last&.to_incident
     end
 
-    def find_last_n_with_messages(n = 10)
-      incident_records = Persistence::IncidentRecord.includes(:messages).last(n)
+    def find_by_created_at_with_messages(lower_bound: nil, upper_bound: nil)
+      base_query = Persistence::IncidentRecord.includes(:messages)
 
-      incident_records.map do |record|
-        record.to_incident_with_messages(messages: record.messages)
+      base_query = base_query.where('created_at > ?', lower_bound) if lower_bound
+      base_query = base_query.where('created_at < ?', upper_bound) if upper_bound
+
+      base_query.map do
+        |record| record.to_incident_with_messages(messages: record.messages)
       end
     end
   end

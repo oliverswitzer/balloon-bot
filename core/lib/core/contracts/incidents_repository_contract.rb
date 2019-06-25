@@ -1,3 +1,5 @@
+require 'active_support'
+
 def incidents_repository_contract(repo_class)
   describe "IncidentRepository contract for: #{repo_class.name}" do
     subject { repo_class.new }
