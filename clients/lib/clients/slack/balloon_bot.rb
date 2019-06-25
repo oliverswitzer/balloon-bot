@@ -19,10 +19,10 @@ module Clients
         request = Core::HoldDeployments::Request.new(parse_message(data))
 
         Core::HoldDeployments.new(
-          chat_client: SlackClientWrapper.new(client),
+          chat_client: Clients::Slack::SlackClientWrapper.new(client),
           incidents_repository: Persistence::INCIDENTS_REPOSITORY,
           messages_repository: Persistence::MESSAGES_REPOSITORY,
-          github_client: GithubClientWrapper.new
+          github_client: Clients::Github::GithubClientWrapper.new
         ).execute(request)
       end
 
@@ -30,9 +30,9 @@ module Clients
         next if is_private_message? data[:channel]
 
         Core::ContinueDeployments.new(
-          chat_client: SlackClientWrapper.new(client),
+          chat_client: Clients::Slack::SlackClientWrapper.new(client),
           incidents_repository: Persistence::INCIDENTS_REPOSITORY,
-          github_client: GithubClientWrapper.new
+          github_client: Clients::Github::GithubClientWrapper.new
         ).execute
       end
 
@@ -68,7 +68,7 @@ module Hooks
       )
 
       Core::RecordMessageForIncident.new(
-        chat_client: SlackClientWrapper.new(client),
+        chat_client: Clients::Slack::SlackClientWrapper.new(client),
         incidents_repository: Persistence::INCIDENTS_REPOSITORY,
         messages_repository: Persistence::MESSAGES_REPOSITORY
       ).execute(request)

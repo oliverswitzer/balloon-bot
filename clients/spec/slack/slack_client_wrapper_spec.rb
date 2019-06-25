@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe SlackClientWrapper do
+describe Clients::Slack::SlackClientWrapper do
   let(:slack_web_client_spy) { spy(Slack::Web::Client) }
   let(:slack_bot_client_spy) do
     spy(SlackRubyBot::Client,
@@ -9,7 +9,7 @@ describe SlackClientWrapper do
   end
 
   subject do
-    SlackClientWrapper.new(slack_bot_client_spy)
+    Clients::Slack::SlackClientWrapper.new(slack_bot_client_spy)
   end
 
   describe '#set_channel_topic' do

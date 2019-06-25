@@ -10,14 +10,14 @@ describe Persistence::IncidentsRepository do
 
   describe '#find_last_n_with_messages' do
     it 'return last n incidents with their associated messages' do
-      incident1 = subject.save(EntityFactory.build_incident)
-      messages_repository.save(EntityFactory.build_message(incident: incident1))
-      messages_repository.save(EntityFactory.build_message(incident: incident1))
+      incident1 = subject.save(Core::EntityFactory.build_incident)
+      messages_repository.save(Core::EntityFactory.build_message(incident: incident1))
+      messages_repository.save(Core::EntityFactory.build_message(incident: incident1))
 
-      incident2 = subject.save(EntityFactory.build_incident)
-      messages_repository.save(EntityFactory.build_message(incident: incident2))
-      messages_repository.save(EntityFactory.build_message(incident: incident2))
-      messages_repository.save(EntityFactory.build_message(incident: incident2))
+      incident2 = subject.save(Core::EntityFactory.build_incident)
+      messages_repository.save(Core::EntityFactory.build_message(incident: incident2))
+      messages_repository.save(Core::EntityFactory.build_message(incident: incident2))
+      messages_repository.save(Core::EntityFactory.build_message(incident: incident2))
 
       found_incidents = subject.find_last_n_with_messages(2)
 
