@@ -4,8 +4,8 @@ class IncidentsController < ApplicationController
   end
 
   def index
-    lower_bound = Time.at(safe_params[:created_after].to_i) if safe_params[:created_after]
-    upper_bound = Time.at(safe_params[:created_before].to_i) if safe_params[:created_before]
+    lower_bound = epoch_to_utc(safe_params[:created_after]) if safe_params[:created_after]
+    upper_bound = epoch_to_utc(safe_params[:created_before]) if safe_params[:created_before]
 
     # noinspection RubyScope
     @incidents = Persistence::INCIDENTS_REPOSITORY.find_by_created_at_with_messages(
@@ -17,6 +17,10 @@ class IncidentsController < ApplicationController
       format.json { render json: @incidents }
       format.html { render :index }
     end
+  end
+
+  private def epoch_to_utc(date_param)
+    Time.strptime(date_param, '%Q').utc
   end
 
   private def safe_params
