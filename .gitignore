@@ -7,7 +7,9 @@ web/log/*.log
 !web/log/.keep
 !web/tmp/.keep
 web/tmp/cache
-
+web/tmp/pids
+node_modules
+web/public/scripts/bundle.min.js
 web/.byebug_history
 
 yarn-error.log
