@@ -25,6 +25,15 @@ PATH
       pg
 
 PATH
+  remote: ../test_support
+  specs:
+    test_support (0.0.0)
+      dotenv
+      pry
+      rb-readline
+      rspec
+
+PATH
   remote: .
   specs:
     web (0.0.0)
@@ -262,6 +271,7 @@ DEPENDENCIES
   rb-readline
   rspec
   rspec_junit_formatter
+  test_support!
   web!
 
 RUBY VERSION
