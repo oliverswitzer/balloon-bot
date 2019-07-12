@@ -4,9 +4,11 @@ web/.env.test
 
 web/.bundle
 web/log/*.log
-web/node_modules
-web/.byebug_history
+!web/log/.keep
+!web/tmp/.keep
 web/tmp/cache
-web/public/packs
+
+web/.byebug_history
+
 yarn-error.log
 .DS_Store
