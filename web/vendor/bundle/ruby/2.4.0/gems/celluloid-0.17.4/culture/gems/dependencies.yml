@@ -1,0 +1,85 @@
+bundler:
+  dependency: development
+
+nenv:
+  dependency: development
+
+dotenv:
+  dependency: development
+
+benchmark_suite:
+  dependency: development
+
+rubocop:
+  dependency: development
+
+transpec:
+  dependency: development
+
+pry:
+  dependency: development
+
+rake:
+  dependency: development
+
+rspec:
+  dependency: development
+
+guard-rspec:
+  dependency: development
+
+rspec-retry:
+  dependency: development
+
+coveralls:
+  dependency: development
+  gemfile:
+    require: false
+
+celluloid:
+  dependency: core
+  version: ">= 0.17.2"
+  gemfile:
+    github: celluloid/celluloid
+    branch: master
+    submodules: true
+
+celluloid-essentials:
+  dependency: module
+  gemfile:
+    github: celluloid/celluloid-essentials
+    branch: master
+    submodules: true
+
+celluloid-supervision:
+  dependency: module
+  gemfile:
+    github: celluloid/celluloid-supervision
+    branch: master
+    submodules: true
+
+celluloid-pool:
+  dependency: module
+  gemfile:
+    github: celluloid/celluloid-pool
+    branch: master
+    submodules: true
+
+celluloid-fsm:
+  dependency: module
+  gemfile:
+    github: celluloid/celluloid-fsm
+    branch: master
+    submodules: true
+
+celluloid-extras:
+  dependency: module
+  gemfile:
+    github: celluloid/celluloid-extras
+    branch: master
+    submodules: true
+
+timers:
+  version: ">= 4.1.1"
+  gemfile:
+    github: celluloid/timers

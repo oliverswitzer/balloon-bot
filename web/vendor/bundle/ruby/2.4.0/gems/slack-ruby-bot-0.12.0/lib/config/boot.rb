@@ -1,0 +1,6 @@
+require 'rubygems'
+require 'logger'
+require 'active_support'
+require 'active_support/core_ext'
+require 'hashie'
+require 'slack'

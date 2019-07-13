@@ -1,0 +1,8 @@
+Lint/HandleExceptions:
+  Enabled: false
+
+Lint/LiteralInCondition:
+  Enabled: false
+
+Lint/UnusedBlockArgument:
+  Enabled: false

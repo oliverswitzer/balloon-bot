@@ -1,0 +1,4 @@
+# Celluloid::FSM
+---
+
+* Prerelease gem.

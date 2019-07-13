@@ -1,0 +1,10 @@
+coverage/
+rdoc/
+doc/
+pkg/
+tmp/
+.yardoc
+.bundle
+Gemfile.lock
+log
+.DS_Store
