@@ -234,6 +234,7 @@ DEPENDENCIES
   clients!
   core!
   persistence!
+  rake
   web!
 
 RUBY VERSION
