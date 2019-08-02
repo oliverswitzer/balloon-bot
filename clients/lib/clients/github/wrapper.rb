@@ -11,7 +11,7 @@ module Clients
 
       def open_pull_requests
         github_client.pull_requests(ENV['GITHUB_REPO'], { state: :open }).map do |pr|
-          PullRequest.new(
+          Core::PullRequest.new(
             head_sha: pr[:head][:sha],
             branch: pr[:head][:ref]
           )
