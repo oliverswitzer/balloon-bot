@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useFetch } from '../../hooks/use-fetch';
 import { Incident } from './types';
-import { IncidentComponent } from './incident-component';
+import { useFetch } from '../hooks/use-fetch';
+import { IncidentRow } from './incident-row';
 
 function mapToIncidents(res: any): Incident[] {
   return res;
@@ -25,7 +25,7 @@ export const Main = () => {
 
       {
         incidents.filter(isResolved).map(incident => (
-          <IncidentComponent incident={incident}/>
+          <IncidentRow incident={incident}/>
         ))
       }
     </div>
