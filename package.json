@@ -1,0 +1,32 @@
+{
+  "name": "balloon-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:oliverswitzer/balloon-bot.git",
+  "author": "Oliver Switzer <oliver@kickstarter.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack --watch --progress --mode development --config=web/javascripts/webpack.config.js",
+    "build": "webpack --mode production",
+    "webpack:deploy": "webpack --config=web/javascripts/webpack.config.js -p",
+    "heroku-postbuild": "yarn webpack:deploy"
+  },
+  "dependencies": {
+    "@types/moment": "^2.13.0",
+    "@types/react": "^16.8.23",
+    "@types/react-dom": "^16.8.4",
+    "moment": "^2.24.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.6"
+  }
+}
