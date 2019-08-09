@@ -10,6 +10,8 @@ class FakeMessagesRepository
   end
 
   def save(message)
+    raise RuntimeError.new('Message must have an associated persisted incident') if message.incident.id.nil?
+
     if message.id.nil?
       message.id = @messages.length + 1
 

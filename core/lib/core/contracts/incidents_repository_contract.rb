@@ -37,7 +37,7 @@ def incidents_repository_contract(repo_class)
           )
 
           expect(updated_incident.id).to eq(persisted_incident.id)
-          expect(updated_incident.resolved_at).to eq(resolved_at)
+          expect(updated_incident.resolved_at.to_i).to eq(resolved_at.to_i)
         end
       end
     end
@@ -57,7 +57,7 @@ def incidents_repository_contract(repo_class)
 
         found_incident = subject.find_last_unresolved
 
-        expect(found_incident).to eq(last_unresolved_incident)
+        expect(found_incident.id).to eq(last_unresolved_incident.id)
       end
     end
 
@@ -71,7 +71,7 @@ def incidents_repository_contract(repo_class)
 
         found_incident = subject.find(incident.id)
 
-        expect(found_incident.resolved_at).to eq(resolved_at)
+        expect(found_incident.resolved_at.to_i).to eq(resolved_at.to_i)
       end
     end
   end

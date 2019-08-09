@@ -76,7 +76,7 @@ describe Persistence::IncidentsRepository do
         )
 
         expect(results.length).to eq(2)
-        expect(results).to contain_exactly(in_range_incident1, in_range_incident2)
+        expect(results.map(&:id)).to contain_exactly(in_range_incident1.id, in_range_incident2.id)
       end
     end
 

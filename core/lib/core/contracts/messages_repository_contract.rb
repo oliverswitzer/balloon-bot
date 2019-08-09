@@ -67,9 +67,10 @@ def messages_repository_contract(repo_class:, incident_repo_class:)
         subject.save(message_2_for_incident)
         subject.save(message_for_other_incident)
 
-        expect(subject.find_by_incident_id(incident1.id)).to contain_exactly(
-          message_1_for_incident,
-          message_2_for_incident
+        found_messages = subject.find_by_incident_id(incident1.id)
+        expect(found_messages.map(&:id)).to contain_exactly(
+          message_1_for_incident.id,
+          message_2_for_incident.id
         )
       end
     end
