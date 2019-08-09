@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/oliverswitzer/balloon-bot.svg?style=shield)](https://circleci.com/gh/oliverswitzer/balloon-bot)
+
 # Balloon Bot
 
 This Slack bot is meant to help let engineers in your organization know when master is broken. It also will help gather information for post-mortems.
