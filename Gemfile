@@ -11,6 +11,7 @@ gem 'rake'
 
 group :test do
   gem 'test_support', path: './test_support'
+  gem 'rspec_junit_formatter'
 
   gem 'rspec'
 end
