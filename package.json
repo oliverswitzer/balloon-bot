@@ -6,10 +6,23 @@
   "author": "Oliver Switzer <oliver@kickstarter.com>",
   "license": "MIT",
   "scripts": {
+    "test": "jest",
     "start": "webpack --watch --progress --mode development --config=web/javascripts/webpack.config.js",
     "build": "webpack --mode production",
     "webpack:deploy": "webpack --config=web/javascripts/webpack.config.js -p",
     "heroku-postbuild": "yarn webpack:deploy"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "setupFilesAfterEnv": ["<rootDir>/test-setup.ts"],
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
   },
   "dependencies": {
     "@types/moment": "^2.13.0",
@@ -23,7 +36,14 @@
     "@babel/core": "^7.5.4",
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-react": "^7.0.0",
+    "@types/enzyme": "^3.10.3",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/jest": "^24.0.17",
     "babel-loader": "^8.0.6",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
     "webpack": "^4.35.3",

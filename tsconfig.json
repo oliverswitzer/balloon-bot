@@ -8,10 +8,11 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "target": "es5",
-    "jsx": "react"
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
-    "**/*.spec.ts",
+    "**/*.test.ts",
     "node_modules",
     "vendor",
     "public"
