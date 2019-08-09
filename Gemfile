@@ -8,3 +8,9 @@ gem 'persistence', path: './persistence'
 gem 'web', path: './web'
 
 gem 'rake'
+
+group :test do
+  gem 'test_support', path: './test_support'
+
+  gem 'rspec'
+end

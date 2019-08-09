@@ -8,8 +8,10 @@ def messages_repository_contract(repo_class:, incident_repo_class:)
     describe '#save' do
       context 'when message id has not already been set' do
         it 'should generate unique integer ids for each persisted message' do
-          message1 = Core::EntityFactory.build_message
-          message2 = Core::EntityFactory.build_message
+          incident = incidents_repository.save(Core::EntityFactory.build_incident)
+
+          message1 = Core::EntityFactory.build_message(incident: incident)
+          message2 = Core::EntityFactory.build_message(incident: incident)
 
           persisted_message1 = subject.save(message1)
           persisted_message2 = subject.save(message2)
@@ -22,10 +24,13 @@ def messages_repository_contract(repo_class:, incident_repo_class:)
 
       context 'when id has been set' do
         it 'updates the existing message with the corresponding id' do
-          persisted_message = subject.save(Core::EntityFactory.build_message)
+          incident = incidents_repository.save(Core::EntityFactory.build_incident)
+
+          persisted_message = subject.save(Core::EntityFactory.build_message(incident: incident))
 
           updated_message = subject.save(
             Core::EntityFactory.build_message(
+              incident: incident,
               id: persisted_message.id,
               text: 'some updated message'
             )
@@ -38,7 +43,10 @@ def messages_repository_contract(repo_class:, incident_repo_class:)
 
       context 'when associated incident does not have an id' do
         it 'should raise an error' do
-          # TODO: Implement! Was on a plane and couldn't look up docs on how to assert that a method call raises
+          expect { subject.save(Core::EntityFactory.build_message) }.to raise_error(
+            RuntimeError,
+            'Message must have an associated persisted incident'
+          )
         end
       end
     end
