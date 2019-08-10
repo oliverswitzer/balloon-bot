@@ -94,6 +94,18 @@ describe Persistence::IncidentsRepository do
 
       expect(result.first.messages.count).to eq(2)
     end
+
+    it 'orders by created_at descending' do
+      older_incident = Core::EntityFactory.build_incident(created_at: 3.days.ago)
+      recent_incident = Core::EntityFactory.build_incident(created_at: 1.days.ago)
+      subject.save(older_incident)
+      subject.save(recent_incident)
+
+      result = subject.find_by_created_at_with_messages
+
+      expect(result.first.id).to eq(recent_incident.id)
+      expect(result.last.id).to eq(older_incident.id)
+    end
   end
 end
 

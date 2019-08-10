@@ -34,6 +34,8 @@ module Persistence
       base_query = base_query.where('created_at > ?', lower_bound) if lower_bound
       base_query = base_query.where('created_at < ?', upper_bound) if upper_bound
 
+      base_query = base_query.order(created_at: :desc)
+
       base_query.map do
         |record| record.to_incident_with_messages(messages: record.messages)
       end
