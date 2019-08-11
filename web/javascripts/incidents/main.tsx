@@ -1,17 +1,27 @@
 import 'primereact/resources/themes/nova-dark/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.scss';
 
 import * as React from 'react';
 import { useFetch } from '../hooks/use-fetch';
 import { Incident } from './types';
 import { IncidentRow } from './incident-row';
+import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
+import { Calendar } from 'primereact/calendar';
 import { useEffect, useState } from 'react';
 
 function mapToIncidents(res: any): Incident[] {
   return res;
 }
 
+const incidentTemplate = (incident: Incident, layout: string) => (
+  <div className="p-grid">
+    <div className="p-col-12">
+      <IncidentRow incident={incident} />
+    </div>
+  </div>
+);
 function isResolved(incident: Incident): boolean {
   return incident.resolvedAt !== null;
 }
@@ -64,9 +74,10 @@ export const Main = () => {
         isLoading ?
           <h1>Loading incidents!</h1> :
           (
-            incidents.filter(isResolved).map(incident => (
-              <IncidentRow incident={incident}/>
-            ))
+            <>
+              <DataViewLayoutOptions onChange={() => {}}/>
+              <DataView value={incidents} layout="list" itemTemplate={incidentTemplate} />
+            </>
           )
       }
     </div>

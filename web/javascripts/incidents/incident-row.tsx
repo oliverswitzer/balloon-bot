@@ -8,7 +8,7 @@ export const IncidentRow = ({incident}: { incident: Incident }) => {
   const duration = moment.duration(resolvedAt.diff(createdAt));
 
   return (
-    <div style={{ border: '1px solid black', textAlign: 'center', paddingLeft: '10vw', paddingRight: '10vw', margin: '5vh auto', width: '50vw' }}>
+    <div style={{}}>
       <p><span style={{fontWeight: 'bold'}}>Happened:</span> {createdAt.fromNow()}</p>
       <p><span style={{fontWeight: 'bold'}}>Duration:</span> {duration.humanize()}</p>
       <p><span style={{fontWeight: 'bold'}}>Initial message:</span> {incident.messages[0].text}</p>
