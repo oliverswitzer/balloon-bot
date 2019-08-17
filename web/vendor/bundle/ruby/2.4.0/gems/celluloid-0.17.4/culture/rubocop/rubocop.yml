@@ -1,5 +1,0 @@
-inherit_from:
-    - lint.yml
-    - metrics.yml
-    - style.yml
-    - perf.yml

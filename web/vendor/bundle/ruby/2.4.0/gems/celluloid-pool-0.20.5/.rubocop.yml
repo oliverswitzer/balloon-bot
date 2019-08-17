@@ -1,3 +1,0 @@
-inherit_from:
-  - culture/rubocop/rubocop.yml
-

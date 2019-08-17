@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/oliverswitzer/balloon-bot.svg?style=shield)](https://circleci.com/gh/oliverswitzer/balloon-bot)
+
 # Balloon Bot
 
 This Slack bot is meant to help let engineers in your organization know when master is broken. It also will help gather information for post-mortems.
@@ -121,3 +123,24 @@ To stop the app:
 To start it back up again:
 
 `$ heroku ps:scale web=1`
+
+### Spinning up a new Heroku environment
+
+**Database**
+You'll need to configure a [postgres database on Heroku](https://www.heroku.com/postgres) for this app to use. The database connection
+will be read in through the `DATABASE_URL` ENV var that Heroku sets for you.
+
+**Buildpacks**
+This app uses a node buildpack as well as a ruby buildpack when being deployed. Though the app is in ruby, nodejs
+is necessary because we use webpack for our front-end assets.
+
+You will need to specify which buildpacks for Heroku to use when setting up a new environment. 
+You can do this with:
+
+```bash
+heroku buildpacks:clear
+heroku buildpacks:set heroku/nodejs
+heroku buildpacks:add heroku/ruby --index 2
+```
+
+--index 2 specifies that the ruby buildpack should come after the nodejs buildpack.

@@ -25,7 +25,7 @@ describe Persistence::IncidentsRepository do
         results = subject.find_by_created_at_with_messages(lower_bound: lower_bound)
 
         expect(results.length).to eq(2)
-        expect(results).to contain_exactly(incident1_in_future, incident2_in_future)
+        expect(results.map(&:id)).to contain_exactly(incident1_in_future.id, incident2_in_future.id)
       end
     end
 
@@ -46,7 +46,10 @@ describe Persistence::IncidentsRepository do
         results = subject.find_by_created_at_with_messages(upper_bound: upper_bound)
 
         expect(results.length).to eq(2)
-        expect(results).to contain_exactly(incident1_in_the_past, incident2_in_the_past)
+        expect(results.map(&:id)).to contain_exactly(
+          incident1_in_the_past.id,
+          incident2_in_the_past.id
+        )
       end
     end
 
@@ -73,7 +76,7 @@ describe Persistence::IncidentsRepository do
         )
 
         expect(results.length).to eq(2)
-        expect(results).to contain_exactly(in_range_incident1, in_range_incident2)
+        expect(results.map(&:id)).to contain_exactly(in_range_incident1.id, in_range_incident2.id)
       end
     end
 
@@ -90,6 +93,18 @@ describe Persistence::IncidentsRepository do
       result = subject.find_by_created_at_with_messages
 
       expect(result.first.messages.count).to eq(2)
+    end
+
+    it 'orders by created_at descending' do
+      older_incident = Core::EntityFactory.build_incident(created_at: 3.days.ago)
+      recent_incident = Core::EntityFactory.build_incident(created_at: 1.days.ago)
+      subject.save(older_incident)
+      subject.save(recent_incident)
+
+      result = subject.find_by_created_at_with_messages
+
+      expect(result.first.id).to eq(recent_incident.id)
+      expect(result.last.id).to eq(older_incident.id)
     end
   end
 end

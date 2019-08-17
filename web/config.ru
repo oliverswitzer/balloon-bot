@@ -5,24 +5,6 @@ require 'dotenv'
 require 'bundler'
 
 Bundler.require
-puts "***********************"
-puts "***********************"
-puts "***********************"
-puts "***********************"
-puts "LOAD PATH:"
-puts $LOAD_PATH.inspect
-puts "***********************"
-puts "***********************"
-puts "***********************"
-puts "***********************"
-puts "***********************"
-puts "LOADED_FEATURES:"
-puts $LOADED_FEATURES.inspect
-puts "***********************"
-puts "***********************"
-puts "***********************"
-puts "***********************"
-puts "***********************"
 
 Dotenv.load! if ENV['RAILS_ENV'] == 'development'
 
