@@ -12,13 +12,13 @@ describe('useFetch', function () {
   });
 
   it('isLoading should be true before request completes and false after it completes', async () => {
-    let [objects, isLoading, fetchMore] = useFetchWrapper.run();
+    let { data, isLoading, fetchMore } = useFetchWrapper.run();
 
     expect(isLoading).toBe(true);
 
     await useFetchWrapper.mount();
 
-    [objects, isLoading, fetchMore] = useFetchWrapper.run();
+    ({ data, isLoading, fetchMore } = useFetchWrapper.run());
 
     expect(isLoading).toBe(false);
   });
@@ -34,12 +34,12 @@ describe('useFetch', function () {
       expect(mappingFunctionSpy).toHaveBeenCalledWith(mockFetchResponse);
     });
 
-    it('should set objects state to the result of the mappingFunction call', async () => {
+    it('return data that has been fetched and mapped with the passed in mappingFunction', async () => {
       await useFetchWrapper.mount();
 
-      let [objects, isLoading, fetchMore] = useFetchWrapper.run();
+      let { data, isLoading, fetchMore } = useFetchWrapper.run();
 
-      expect(objects).toEqual({ some: 'mapped data' })
+      expect(data).toEqual({ some: 'mapped data' })
     })
   });
 
@@ -50,28 +50,28 @@ describe('useFetch', function () {
         .mockReturnValueOnce({ some: 'additional mapped data' })
     });
 
-    it('should allow me to make further requests to the same endpoint', async () => {
+    it('calling "fetchMore" should make an additional network request', async () => {
       await useFetchWrapper.mount();
 
-      let [objects, isLoading, fetchMore] = useFetchWrapper.run();
+      let { data, isLoading, fetchMore } = useFetchWrapper.run();
 
-      expect(objects).toEqual({ some: 'mapped data' });
+      expect(data).toEqual({ some: 'mapped data' });
 
       await fetchMore('/url');
 
       expect(window.fetch).toHaveBeenCalled();
     });
 
-    it('should update the objects held in the hooks state with the newly fetched data', async () => {
+    it('calling "fetchMore" should update the objects held in the hooks state', async () => {
       await useFetchWrapper.mount();
 
-      let [objects, isLoading, fetchMore] = useFetchWrapper.run();
+      let { data: objects, isLoading, fetchMore } = useFetchWrapper.run();
 
       expect(objects).toEqual({ some: 'mapped data' });
 
       await fetchMore('/url');
 
-      [objects, isLoading, fetchMore] = useFetchWrapper.run();
+      ({ data: objects, isLoading, fetchMore } = useFetchWrapper.run());
 
       expect(objects).toEqual({ some: 'additional mapped data' })
     });

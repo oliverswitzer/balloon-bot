@@ -19,7 +19,12 @@ interface DateRangeState {
 }
 
 export const Main = () => {
-  const [incidents, isLoading, fetchMoreIncidents] = useFetch<Incident[]>('/incidents.json', mapToIncidents);
+  const {
+    data: incidents,
+    isLoading,
+    fetchMore: fetchMoreIncidents
+  } = useFetch<Incident[]>('/incidents.json', mapToIncidents);
+
   const [dateRange, setDateRange] = useState<DateRangeState>({});
 
   useEffect(() => {
