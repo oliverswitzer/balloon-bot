@@ -28,7 +28,7 @@ export const Main = () => {
   const [dateRange, setDateRange] = useState<DateRangeState>({});
 
   useEffect(() => {
-    fetchMoreIncidents(`/incidents?${formattedDateParams(dateRange)}`)
+    fetchMoreIncidents(formattedDateParams(dateRange))
   }, [dateRange]);
 
   return (
@@ -71,10 +71,8 @@ export const Main = () => {
 };
 
 function formattedDateParams(dateRange: DateRangeState) {
-  const paramsInEpoch = {
+  return {
     created_after: new Date(dateRange.created_after).getTime(),
     created_before: new Date(dateRange.created_before).getTime(),
   };
-
-  return queryString.stringify(paramsInEpoch as queryString.ParsedUrlQueryInput);
 }

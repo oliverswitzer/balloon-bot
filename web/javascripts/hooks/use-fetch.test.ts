@@ -50,16 +50,32 @@ describe('useFetch', function () {
         .mockReturnValueOnce({ some: 'additional mapped data' })
     });
 
-    it('calling "fetchMore" should make an additional network request', async () => {
+    it('calling "fetchMore" should make an additional network request with passed in url', async () => {
       await useFetchWrapper.mount();
 
       let { data, isLoading, fetchMore } = useFetchWrapper.run();
 
       expect(data).toEqual({ some: 'mapped data' });
 
-      await fetchMore('/url');
+      await fetchMore();
 
-      expect(window.fetch).toHaveBeenCalled();
+      expect(window.fetch).toHaveBeenCalledWith('/foo', expect.anything());
+    });
+
+    describe('calling fetchMore with query params', () => {
+      it('should format passed in object as query params', async () => {
+        await useFetchWrapper.mount();
+
+        let { data, isLoading, fetchMore } = useFetchWrapper.run();
+
+        expect(data).toEqual({ some: 'mapped data' });
+
+        await fetchMore({
+          some: 'query-parameter'
+        });
+
+        expect(window.fetch).toHaveBeenCalledWith('/foo?some=query-parameter', expect.anything())
+      });
     });
 
     it('calling "fetchMore" should update the objects held in the hooks state', async () => {
@@ -69,7 +85,7 @@ describe('useFetch', function () {
 
       expect(objects).toEqual({ some: 'mapped data' });
 
-      await fetchMore('/url');
+      await fetchMore();
 
       ({ data: objects, isLoading, fetchMore } = useFetchWrapper.run());
 
