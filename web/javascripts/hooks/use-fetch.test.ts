@@ -2,12 +2,13 @@ import init from 'jooks'
 import { useFetch } from "./use-fetch";
 
 describe('useFetch', function () {
+  const url = '/foo';
   let mappingFunctionSpy: jest.Mock<any> = jest.fn();
-  let useFetchWrapper = init(() => useFetch('/foo', mappingFunctionSpy));
+  let useFetchWrapper = init(() => useFetch(url, mappingFunctionSpy));
   let mockFetchResponse: any;
 
   beforeEach(() => {
-    mockFetchResponse = { foo: 'bar' };
+    mockFetchResponse = { fooData: 'bar' };
     window.fetch = successfulMockFetch(mockFetchResponse)
   });
 
@@ -59,7 +60,7 @@ describe('useFetch', function () {
 
       await fetchMore();
 
-      expect(window.fetch).toHaveBeenCalledWith('/foo', expect.anything());
+      expect(window.fetch).toHaveBeenCalledWith(url, expect.anything());
     });
 
     describe('calling fetchMore with query params', () => {
@@ -74,7 +75,7 @@ describe('useFetch', function () {
           some: 'query-parameter'
         });
 
-        expect(window.fetch).toHaveBeenCalledWith('/foo?some=query-parameter', expect.anything())
+        expect(window.fetch).toHaveBeenCalledWith(`${url}?some=query-parameter`, expect.anything())
       });
     });
 
