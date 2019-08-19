@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -61,8 +61,23 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+  deploy:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git:
+          only-branch: master
+orbs:
+  heroku: circleci/heroku@0.0.8
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
