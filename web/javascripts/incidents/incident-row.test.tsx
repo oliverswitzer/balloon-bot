@@ -1,8 +1,8 @@
 import * as moment from 'moment';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
-import { Incident, Message } from '../incidents/types';
-import { IncidentRow } from '../incidents/incident-row';
+import { Incident, Message } from './types';
+import { IncidentRow } from './incident-row';
 
 function buildMessage(message: Partial<Message> = {}): Message {
   return {
