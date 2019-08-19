@@ -1,4 +1,4 @@
-import init  from 'jooks'
+import init from 'jooks'
 import { useFetch } from "./use-fetch";
 
 describe('useFetch', function () {
@@ -25,7 +25,7 @@ describe('useFetch', function () {
 
   describe('mappingFunction behavior', function () {
     beforeEach(() => {
-      mappingFunctionSpy.mockReturnValue({ some: 'mapped data'})
+      mappingFunctionSpy.mockReturnValue({ some: 'mapped data' })
     });
 
     it('should call the mappingFunction with the API response from fetch', async () => {
@@ -55,7 +55,19 @@ describe('useFetch', function () {
 
       let [objects, isLoading, fetchMore] = useFetchWrapper.run();
 
-      expect(objects).toEqual({some: 'mapped data'});
+      expect(objects).toEqual({ some: 'mapped data' });
+
+      await fetchMore('/url');
+
+      expect(window.fetch).toHaveBeenCalled();
+    });
+
+    it('should update the objects held in the hooks state with the newly fetched data', async () => {
+      await useFetchWrapper.mount();
+
+      let [objects, isLoading, fetchMore] = useFetchWrapper.run();
+
+      expect(objects).toEqual({ some: 'mapped data' });
 
       await fetchMore('/url');
 
