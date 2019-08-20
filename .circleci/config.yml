@@ -25,7 +25,7 @@ jobs:
       - restore_cache:
           name: Restore Bundler Cache
           keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v1-dependencies-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 
       - run:
           name: Install Bundler Dependencies
@@ -36,8 +36,8 @@ jobs:
       - save_cache:
           name: Save Bundler Cache
           paths:
-            - ./web/vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - ~/.bundle
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 
       - run:
           name: Database Setup
@@ -75,7 +75,7 @@ jobs:
 
       - restore_cache:
           name: Restore Yarn Cache
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
       - run:
           name: Install Yarn Dependencies
@@ -86,7 +86,7 @@ jobs:
           name: Save Yarn Cache
           paths:
             - ~/.cache/yarn
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
       - run:
           name: Run Front-end Tests
