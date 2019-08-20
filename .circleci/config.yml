@@ -30,13 +30,13 @@ jobs:
       - run:
           name: Install Bundler Dependencies
           command: |
-            bundle install --jobs=4 --retry=3
+            bundle install --path vendor/bundle --jobs=4 --retry=3
 
 
       - save_cache:
           name: Save Bundler Cache
           paths:
-            - ~/.bundle
+            - web/vendor/bundle
           key: v1-dependencies-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 
       - run:
