@@ -76,6 +76,32 @@ describe Core::HoldDeployments do
             .with(message: "<!channel|channel> #{Core::HoldDeployments::MESSAGE}")
         end
       end
+
+      context 'when an additional failure message has been configured' do
+        before do
+          ENV['ADDITIONAL_FAILURE_MESSAGE'] = 'this message should show in addition to the default one'
+        end
+
+        it 'tells the slack client to say the additional message' do
+          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+
+          expect(slack_client_spy).to have_received(:say)
+                                        .with(message: 'this message should show in addition to the default one')
+                                        .at_least(:once)
+        end
+
+        after do
+          ENV['ADDITIONAL_FAILURE_MESSAGE'] = nil
+        end
+      end
+
+      context 'when an additional failure message has not been configured' do
+        it 'tells the slack client to say the additional message' do
+          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+
+          expect(slack_client_spy).to have_received(:say).exactly(:once)
+        end
+      end
     end
 
     it 'creates an unresolved incident' do

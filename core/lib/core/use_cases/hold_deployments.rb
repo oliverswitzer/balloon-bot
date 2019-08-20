@@ -27,6 +27,8 @@ module Core
       end
 
       chat_client.say(message: "#{slack_handle} #{MESSAGE}")
+      chat_client.say(message: "#{ENV['ADDITIONAL_FAILURE_MESSAGE']}") unless ENV['ADDITIONAL_FAILURE_MESSAGE'].nil?
+
       chat_client.set_channel_topic(message: ENV['FAILURE_CHANNEL_TOPIC'] || DEFAULT_CHANNEL_TOPIC)
 
       incident = incidents_repository.save(Core::Incident.new)
