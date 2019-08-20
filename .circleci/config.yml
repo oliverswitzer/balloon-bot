@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build_and_test_backend:
+  test_backend:
     docker:
       - image: circleci/ruby:2.4.1-node-browsers
         environment:
@@ -65,7 +65,7 @@ jobs:
           path: /tmp/test-results
           destination: test-results
 
-  build_and_test_frontend:
+  test_frontend:
     docker:
       - image: circleci/node:8.15.1
 
@@ -106,12 +106,12 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build_and_test_backend
-      - build_and_test_frontend
+      - test_backend
+      - test_frontend
       - deploy:
           requires:
-            - build_and_test_backend
-            - build_and_test_frontend
+            - test_backend
+            - test_frontend
           filters:
             branches:
               only: master
