@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build:
+  build_and_test:
     docker:
       - image: circleci/ruby:2.4.1-node-browsers
         environment:
@@ -15,11 +15,6 @@ jobs:
     working_directory: ~/balloon-bot
     steps:
       - checkout
-
-      - run:
-          name: print env var GITHUB_REPO
-          command: 'echo $GITHUB_REPO'
-
       - run:
           name: Configure Bundler
           command: |
@@ -27,15 +22,27 @@ jobs:
             source $BASH_ENV
             gem install bundler -v $BUNDLER_VERSION
 
+      - restore_cache:
+          name: Restore Bundler and Yarn Dependency Cache
+          keys:
+            - v1-dependencies-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}
+
       - run:
-          name: install dependencies
+          name: Install Bundler Dependencies
           command: |
             bundle install --jobs=4 --retry=3
 
+      - run:
+          name: Install Yarn Dependencies
+          command: |
+            yarn install --frozen-lockfile
+
       - save_cache:
+          name: Save Bundler and Yarn Dependency Cache
           paths:
             - ./web/vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - ~/.cache/yarn
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}
 
       - run:
           name: Database Setup
@@ -46,7 +53,7 @@ jobs:
 
       # run tests!
       - run:
-          name: run tests
+          name: Run Backend Tests
           command: |
             mkdir /tmp/test-results
 
@@ -55,6 +62,12 @@ jobs:
                             --out /tmp/test-results/rspec.xml \
                             --format progress \
                             core web persistence
+
+      - run:
+          name: Run Front-end Tests
+          command: |
+            yarn test
+
       # collect reports
       - store_test_results:
           path: /tmp/test-results
@@ -74,10 +87,10 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
+      - build_and_test
       - deploy:
           requires:
-            - build
+            - build_and_test
           filters:
             branches:
               only: master
