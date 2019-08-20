@@ -3,7 +3,6 @@ import { useFetch } from '../hooks/use-fetch';
 import { Incident } from './types';
 import { IncidentRow } from './incident-row';
 import { useEffect, useState } from 'react';
-import * as queryString from 'querystring';
 
 function mapToIncidents(res: any): Incident[] {
   return res;
@@ -14,8 +13,8 @@ function isResolved(incident: Incident): boolean {
 }
 
 interface DateRangeState {
-  created_after?: string;
-  created_before?: string;
+  createdAfter?: string;
+  createdBefore?: string;
 }
 
 export const Main = () => {
@@ -37,10 +36,10 @@ export const Main = () => {
         Happened after:
         <input
           type="date"
-          value={dateRange.created_after || ''}
+          value={dateRange.createdAfter || ''}
           onChange={e => { console.log(e.target.value); setDateRange({
-            created_after: e.target.value,
-            created_before: dateRange.created_before
+            createdAfter: e.target.value,
+            createdBefore: dateRange.createdBefore
           })}}
         />
       </label>
@@ -48,10 +47,10 @@ export const Main = () => {
         Happened before:
         <input
           type="date"
-          value={dateRange.created_before || ''}
+          value={dateRange.createdBefore || ''}
           onChange={e => setDateRange({
-            created_after: dateRange.created_after,
-            created_before: e.target.value
+            createdAfter: dateRange.createdAfter,
+            createdBefore: e.target.value
           })}
         />
       </label>
@@ -72,7 +71,7 @@ export const Main = () => {
 
 function formattedDateParams(dateRange: DateRangeState) {
   return {
-    created_after: new Date(dateRange.created_after).getTime(),
-    created_before: new Date(dateRange.created_before).getTime(),
+    created_after: new Date(dateRange.createdAfter).getTime(),
+    created_before: new Date(dateRange.createdBefore).getTime(),
   };
 }
