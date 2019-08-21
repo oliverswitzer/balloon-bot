@@ -8,8 +8,10 @@ import { useFetch } from '../hooks/use-fetch';
 import { Incident } from './types';
 import { IncidentRow } from './incident-row';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
-import { Calendar } from 'primereact/calendar';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
+import { DateRangeFilter } from "../shared-components/date-range-filter/component";
+import { DateRange } from "../shared-components/date-range-filter/types";
 
 function mapToIncidents(res: any): Incident[] {
   return res;
@@ -26,11 +28,6 @@ function isResolved(incident: Incident): boolean {
   return incident.resolvedAt !== null;
 }
 
-interface DateRangeState {
-  createdAfter?: string;
-  createdBefore?: string;
-}
-
 export const Main = () => {
   const {
     data: incidents,
@@ -38,7 +35,7 @@ export const Main = () => {
     fetchMore: fetchMoreIncidents
   } = useFetch<Incident[]>('/incidents.json', mapToIncidents);
 
-  const [dateRange, setDateRange] = useState<DateRangeState>({});
+  const [dateRange, setDateRange] = useState<DateRange>({});
 
   useEffect(() => {
     fetchMoreIncidents(formattedDateParams(dateRange))
@@ -46,33 +43,19 @@ export const Main = () => {
 
   return (
     <div>
-      <label>
-        Happened after:
-        <input
-          type="date"
-          value={dateRange.createdAfter || ''}
-          onChange={e => { console.log(e.target.value); setDateRange({
-            createdAfter: e.target.value,
-            createdBefore: dateRange.createdBefore
-          })}}
-        />
-      </label>
-      <label>
-        Happened before:
-        <input
-          type="date"
-          value={dateRange.createdBefore || ''}
-          onChange={e => setDateRange({
-            createdAfter: dateRange.createdAfter,
-            createdBefore: e.target.value
-          })}
-        />
-      </label>
-
       <h1 style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '5vh' }}>Resolved Incidents</h1>
+      <DateRangeFilter
+        dateRange={dateRange}
+        onSelectDate={dates => setDateRange(dates)}
+        labels={{
+          afterLabel: 'Happened after',
+          beforeLabel: 'Happened before'
+        }}
+      />
+
       {
         isLoading ?
-          <h1>Loading incidents!</h1> :
+          <ProgressSpinner/> :
           (
             <>
               <DataViewLayoutOptions onChange={() => {}}/>
@@ -84,9 +67,9 @@ export const Main = () => {
   )
 };
 
-function formattedDateParams(dateRange: DateRangeState) {
+function formattedDateParams(dateRange: DateRange) {
   return {
-    created_after: new Date(dateRange.createdAfter).getTime(),
-    created_before: new Date(dateRange.createdBefore).getTime(),
+    created_after: dateRange.after ? dateRange.after.getTime() : '',
+    created_before: dateRange.before ? dateRange.before.getTime() : ''
   };
 }
