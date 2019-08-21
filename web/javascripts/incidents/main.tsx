@@ -20,10 +20,11 @@ function mapToIncidents(res: any): Incident[] {
 const incidentTemplate = (incident: Incident, layout: string) => (
   <div className="p-grid">
     <div className="p-col-12">
-      <IncidentRow incident={incident} />
+      <IncidentRow incident={incident}/>
     </div>
   </div>
 );
+
 function isResolved(incident: Incident): boolean {
   return incident.resolvedAt !== null;
 }
@@ -58,8 +59,9 @@ export const Main = () => {
           <ProgressSpinner/> :
           (
             <>
-              <DataViewLayoutOptions onChange={() => {}}/>
-              <DataView value={incidents} layout="list" itemTemplate={incidentTemplate} />
+              <DataViewLayoutOptions onChange={() => {
+              }}/>
+              <DataView value={incidents.filter(isResolved)} layout="list" itemTemplate={incidentTemplate}/>
             </>
           )
       }
