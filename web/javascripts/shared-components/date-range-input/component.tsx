@@ -11,7 +11,7 @@ export type DateRangeFilterProps = {
   };
 }
 
-export const DateRangeFilter = ({ onSelectDate, dateRange, labels }: DateRangeFilterProps) => (
+export const DateRangeInput = ({ onSelectDate, dateRange, labels }: DateRangeFilterProps) => (
   <div className="p-grid p-fluid">
     <div className="p-col-3 p-md-4">
       <h3>

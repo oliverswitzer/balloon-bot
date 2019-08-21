@@ -10,8 +10,8 @@ import { IncidentRow } from './incident-row';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
-import { DateRangeFilter } from "../shared-components/date-range-filter/component";
-import { DateRange } from "../shared-components/date-range-filter/types";
+import { DateRangeInput } from "../shared-components/date-range-input/component";
+import { DateRange } from "../shared-components/date-range-input/types";
 
 function mapToIncidents(res: any): Incident[] {
   return res;
@@ -45,7 +45,7 @@ export const Main = () => {
   return (
     <div>
       <h1 style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '5vh' }}>Resolved Incidents</h1>
-      <DateRangeFilter
+      <DateRangeInput
         dateRange={dateRange}
         onSelectDate={dates => setDateRange(dates)}
         labels={{
