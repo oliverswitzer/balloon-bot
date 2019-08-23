@@ -23,7 +23,7 @@ const incidentTemplate = (incident: Incident, layout: string) => (
   <>
     {
       layout === 'grid' ? (
-        <div className="p-col-12 p-3-md">
+        <div style={{ padding: '.5rem', width: '33.33%' }}>
           <Panel header={incident.id}>
             <IncidentRow incident={incident}/>
           </Panel>
@@ -50,6 +50,7 @@ export const Main = () => {
     fetchMore: fetchMoreIncidents
   } = useFetch<Incident[]>('/incidents.json', mapToIncidents);
 
+  const [layout, setLayout] = useState<string>('grid');
   const [dateRange, setDateRange] = useState<DateRange>({});
 
   useEffect(() => {
@@ -76,8 +77,8 @@ export const Main = () => {
 
               <DataView
                 value={incidents.filter(isResolved)}
-                header={<DataViewLayoutOptions onChange={() => {}}/>}
-                layout="grid"
+                header={<DataViewLayoutOptions onChange={(e) => setLayout(e.value)}/>}
+                layout={layout}
                 itemTemplate={incidentTemplate}
               />
             </>
