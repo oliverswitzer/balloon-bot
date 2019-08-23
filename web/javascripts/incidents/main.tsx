@@ -12,17 +12,31 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
 import { DateRangeInput } from "../shared-components/date-range-input/component";
 import { DateRange } from "../shared-components/date-range-input/types";
+import { Panel } from 'primereact/panel';
+import * as moment from 'moment';
 
 function mapToIncidents(res: any): Incident[] {
   return res;
 }
 
 const incidentTemplate = (incident: Incident, layout: string) => (
-  <div className="p-grid">
-    <div className="p-col-12">
-      <IncidentRow incident={incident}/>
-    </div>
-  </div>
+  <>
+    {
+      layout === 'grid' ? (
+        <div className="p-col-12 p-3-md">
+          <Panel header={incident.id}>
+            <IncidentRow incident={incident}/>
+          </Panel>
+        </div>
+      ) : (
+        <div>
+          Happened at: {moment(incident.createdAt).format('lll')}
+          Resolved at: {moment(incident.resolvedAt).format('lll')}
+          First message: {incident.messages[0].text }
+        </div>
+      )
+    }
+  </>
 );
 
 function isResolved(incident: Incident): boolean {
@@ -59,9 +73,13 @@ export const Main = () => {
           <ProgressSpinner/> :
           (
             <>
-              <DataViewLayoutOptions onChange={() => {
-              }}/>
-              <DataView value={incidents.filter(isResolved)} layout="list" itemTemplate={incidentTemplate}/>
+
+              <DataView
+                value={incidents.filter(isResolved)}
+                header={<DataViewLayoutOptions onChange={() => {}}/>}
+                layout="grid"
+                itemTemplate={incidentTemplate}
+              />
             </>
           )
       }
