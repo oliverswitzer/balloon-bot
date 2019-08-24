@@ -6,6 +6,8 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'dry-struct'
   gem.add_dependency 'dry-types'
+  gem.add_dependency 'tf-idf-similarity'
+  gem.add_dependency 'matrix'
 
   gem.files = Dir['lib/*.rb']
   gem.require_paths = %w(lib spec/public_test_helpers)

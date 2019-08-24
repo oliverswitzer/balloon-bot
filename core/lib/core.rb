@@ -9,6 +9,7 @@ module Core
   require 'core/use_cases/continue_deployments'
   require 'core/use_cases/hold_deployments'
   require 'core/use_cases/record_message_for_incident'
+  require 'core/use_cases/get_top_incident_terms'
   require 'core/use_cases/update_new_pull_request_status'
   require 'core/contracts/messages_repository_contract'
   require 'core/contracts/incidents_repository_contract'

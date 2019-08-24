@@ -29,15 +29,15 @@ module Persistence
     end
 
     def find_by_created_at_with_messages(lower_bound: nil, upper_bound: nil)
-      base_query = Persistence::IncidentRecord.includes(:messages)
+      base_query = Persistence::IncidentRecord.includes(messages: :incident)
 
       base_query = base_query.where('created_at > ?', lower_bound) if lower_bound
       base_query = base_query.where('created_at < ?', upper_bound) if upper_bound
 
       base_query = base_query.order(created_at: :desc)
 
-      base_query.map do
-        |record| record.to_incident_with_messages(messages: record.messages)
+      base_query.map do |incident|
+        incident.to_incident_with_messages(messages: incident.messages)
       end
     end
   end
