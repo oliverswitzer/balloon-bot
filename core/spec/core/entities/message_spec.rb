@@ -47,12 +47,28 @@ describe Core::Message do
         ]
       end
 
-      it 'should return nil' do
+      it 'should return an empty string' do
         invalid_messages.each do |invalid_text|
           message = Core::EntityFactory.build_message(text: invalid_text)
 
-          expect(message.cleaned_message).to be_nil, "Expected #{message.text} to be filtered out"
+          expect(message.cleaned_message).to eq(''), "Expected #{message.text} to be filtered out"
         end
+      end
+    end
+
+    context 'when text is nil' do
+      let(:invalid_messages) do
+        [
+          ':hivequeen: `[hivequeen/foo]`',
+          ':rosie: `[rosie/foo]`'
+        ]
+      end
+
+      it 'should return an empty string' do
+        message = Core::EntityFactory.build_message
+        message.text = nil
+
+        expect(message.cleaned_message).to eq(''), "Expected #{message.text} to be filtered out"
       end
     end
   end
