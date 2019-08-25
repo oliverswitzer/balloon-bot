@@ -37,7 +37,10 @@ describe Core::IncidentAnalysis::MessagePresenter do
       let(:invalid_messages) do
         [
           ':hivequeen: `[hivequeen/foo]`',
-          ':rosie: `[rosie/foo]`'
+          ':rosie: `[rosie/foo]`',
+          ::Core::HoldDeployments::MESSAGE,
+          ::Core::HoldDeployments::DEFAULT_CHANNEL_TOPIC,
+          'set the channel topic'
         ]
       end
 
@@ -47,7 +50,7 @@ describe Core::IncidentAnalysis::MessagePresenter do
 
           message_document = as_message_document(message)
 
-          expect(message_document.cleaned_text).to eq(''), "Expected #{message.text} to be filtered out"
+          expect(message_document.cleaned_text).to eq(''), "Expected \"#{message.text}\" to be filtered out"
         end
       end
     end

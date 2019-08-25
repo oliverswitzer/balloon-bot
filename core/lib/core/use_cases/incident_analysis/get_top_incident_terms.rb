@@ -43,7 +43,7 @@ module Core
           term_hash[term] = model.tfidf(document, term)
         end
 
-        term_hash.sort_by { |_, tfidf| -tfidf }.map(&:first).first(10)
+        term_hash.sort_by { |_, tfidf| -tfidf }.map(&:first).first(15)
       end
     end
   end
