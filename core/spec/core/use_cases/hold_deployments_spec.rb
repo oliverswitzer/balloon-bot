@@ -131,8 +131,8 @@ describe Core::HoldDeployments do
           expect(github_client_spy).to receive(:open_pull_requests)
             .and_return(
               [
-                Core::PullRequest.new(head_sha: '123abc', branch: 'some-branch'),
-                Core::PullRequest.new(head_sha: '456def', branch: 'some-branch')
+                Core::Github::PullRequest.new(head_sha: '123abc', branch: 'some-branch'),
+                Core::Github::PullRequest.new(head_sha: '456def', branch: 'some-branch')
               ]
             )
 

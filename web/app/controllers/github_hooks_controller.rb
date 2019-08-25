@@ -2,9 +2,9 @@ class GithubHooksController < ApplicationController
   def pull_request
     request_body = JSON.parse(request.body.read)
 
-    event = Core::PullRequestEvent.new(
+    event = Core::Github::PullRequestEvent.new(
       type: request_body['action'],
-      pull_request: Core::PullRequest.new(
+      pull_request: Core::Github::PullRequest.new(
         head_sha: request_body['pull_request']['head']['sha'],
         branch: request_body['pull_request']['head']['ref']
       )
