@@ -93,6 +93,17 @@ jobs:
           command: |
             yarn test
 
+
+  restart_apps:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - run:
+          name: Restart staging
+          command: |
+            heroku restart -r staging
+
   deploy:
     executor: heroku/default
     steps:
@@ -115,3 +126,13 @@ workflows:
           filters:
             branches:
               only: master
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - restart_apps
