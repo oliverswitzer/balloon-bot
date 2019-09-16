@@ -129,7 +129,7 @@ workflows:
   nightly:
     triggers:
       - schedule:
-          cron: "*/5 * * * *"
+          cron: "* * * * *"
           filters:
             branches:
               only:
