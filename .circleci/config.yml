@@ -103,6 +103,7 @@ jobs:
           name: Restart staging
           command: |
             heroku restart --app balloonbot-staging
+            heroku restart --app balloonbot-production
 
   deploy:
     executor: heroku/default
