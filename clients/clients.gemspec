@@ -13,6 +13,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'async-websocket', '~>0.8.0'
   gem.add_dependency 'dry-types'
   gem.add_dependency 'octokit'
+  gem.add_dependency 'tf-idf-similarity'
+  gem.add_dependency 'matrix'
 
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'dotenv'

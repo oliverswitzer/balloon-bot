@@ -9,6 +9,7 @@ module Clients
   require 'clients/slack'
   require 'clients/types'
   require 'clients/github/wrapper'
+  require 'clients/data_analysis/tf_idf_terms_analyzer'
 
   Dotenv.load! if ENV['RAILS_ENV'] == 'development'
 

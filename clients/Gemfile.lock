@@ -32,8 +32,10 @@ PATH
       async-websocket (~> 0.8.0)
       dry-struct
       dry-types
+      matrix
       octokit
       slack-ruby-bot
+      tf-idf-similarity
 
 GEM
   remote: https://rubygems.org/
@@ -96,7 +98,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.13.1)
       faraday (>= 0.7.4, < 1.0)
-    gli (2.19.0)
+    gli (2.19.1)
     hashie (3.6.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)

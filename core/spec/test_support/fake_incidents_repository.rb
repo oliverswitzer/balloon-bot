@@ -31,8 +31,10 @@ class FakeIncidentsRepository
   end
 
   def find_by_created_at_with_messages(lower_bound: nil, upper_bound: nil)
-    incidents = @incidents.select { |incident| incident.created_at > lower_bound } if lower_bound
-    incidents = @incidents.select { |incident| incident.created_at < upper_bound } if upper_bound
+    incidents = @incidents
+
+    incidents = incidents.select { |incident| incident.created_at > lower_bound } if lower_bound
+    incidents = incidents.select { |incident| incident.created_at < upper_bound } if upper_bound
 
     incidents
   end

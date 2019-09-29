@@ -5,8 +5,10 @@ PATH
       async-websocket (~> 0.8.0)
       dry-struct
       dry-types
+      matrix
       octokit
       slack-ruby-bot
+      tf-idf-similarity
 
 PATH
   remote: core

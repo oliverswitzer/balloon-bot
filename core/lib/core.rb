@@ -10,8 +10,10 @@ module Core
   require 'core/use_cases/hold_deployments'
   require 'core/use_cases/record_message_for_incident'
   require 'core/use_cases/update_new_pull_request_status'
-  require 'core/use_cases/incident_analysis/get_top_incident_terms'
-  require 'core/use_cases/incident_analysis/message_presenter'
+  require 'core/use_cases/incident_analysis/fetch_incidents'
   require 'core/contracts/messages_repository_contract'
   require 'core/contracts/incidents_repository_contract'
+  require 'core/services/incident_analysis/message_presenter'
+  require 'core/services/incident_analysis/incident_terms_analyzer'
+  require 'core/services/incident_analysis/text_cleaner'
 end
