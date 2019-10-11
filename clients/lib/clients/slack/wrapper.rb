@@ -8,6 +8,10 @@ module Clients
       end
 
       def set_channel_topic(message:)
+        puts "set_channel_topic called with message: #{message}"
+        puts "Clients::Slack::Wrapper instance: #{self.inspect}"
+        puts "injected SlackRubyBot::Client instance: #{slack_bot_client.inspect}"
+
         slack_bot_client.web_client.channels_setTopic(
           channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
           topic: message
@@ -24,6 +28,10 @@ module Clients
       end
 
       def say(message:)
+        puts "say called with message: #{message}"
+        puts "Clients::Slack::Wrapper instance: #{self.inspect}"
+        puts "injected SlackRubyBot::Client instance: #{slack_bot_client.inspect}"
+
         slack_bot_client.say(
           channel: lookup_channel_id(channel_name: ENV['DEPLOYMENTS_CHANNEL']),
           text: message
