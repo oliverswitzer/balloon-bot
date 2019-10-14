@@ -18,22 +18,13 @@ module Clients
 
         request = Core::HoldDeployments::Request.new(parse_message(data))
 
-        Core::HoldDeployments.new(
-          chat_client: Clients::Slack::Wrapper.new(client),
-          incidents_repository: Persistence::INCIDENTS_REPOSITORY,
-          messages_repository: Persistence::MESSAGES_REPOSITORY,
-          github_client: Clients::Github::Wrapper.new
-        ).execute(request)
+        Clients::HOLD_DEPLOYMENTS.execute(request)
       end
 
       command 'continue', 'inflate' do |client, data, match|
         next if is_private_message? data[:channel]
 
-        Core::ContinueDeployments.new(
-          chat_client: Clients::Slack::Wrapper.new(client),
-          incidents_repository: Persistence::INCIDENTS_REPOSITORY,
-          github_client: Clients::Github::Wrapper.new
-        ).execute
+        Clients::CONTINUE_DEPLOYMENTS.execute
       end
 
       def self.is_private_message?(channel)
@@ -67,11 +58,7 @@ module Hooks
         parse_message(data)
       )
 
-      Core::RecordMessageForIncident.new(
-        chat_client: Clients::Slack::Wrapper.new(client),
-        incidents_repository: Persistence::INCIDENTS_REPOSITORY,
-        messages_repository: Persistence::MESSAGES_REPOSITORY
-      ).execute(request)
+      Clients::RECORD_MESSAGE_FOR_INCIDENT.execute(request)
     end
   end
 end

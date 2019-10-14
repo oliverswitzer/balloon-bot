@@ -2,14 +2,9 @@ require_relative '../spec_helper'
 
 describe Clients::Slack::Wrapper do
   let(:slack_web_client_spy) { spy(Slack::Web::Client) }
-  let(:slack_bot_client_spy) do
-    spy(SlackRubyBot::Client,
-      web_client: slack_web_client_spy
-    )
-  end
 
   subject do
-    Clients::Slack::Wrapper.new(slack_bot_client_spy)
+    Clients::Slack::Wrapper.new(slack_web_client_spy)
   end
 
   describe '#set_channel_topic' do
@@ -43,9 +38,11 @@ describe Clients::Slack::Wrapper do
 
   describe '#say' do
     before do
-      expect(slack_web_client_spy).to receive(:channels_list).and_return(
-        mock_channels_list_response
-      )
+      ENV['DEPLOYMENTS_CHANNEL'] = 'some-channel'
+    end
+
+    after do
+      ENV['DEPLOYMENTS_CHANNEL'] = nil
     end
 
     it 'should set the topic for the configured deployments channel' do
@@ -53,9 +50,9 @@ describe Clients::Slack::Wrapper do
         message: 'foo'
       )
 
-      expect(slack_bot_client_spy).to have_received(:say)
+      expect(slack_web_client_spy).to have_received(:chat_postMessage)
         .with(
-          channel: 'some-channel-id',
+          channel: '#some-channel',
           text: 'foo'
         )
     end

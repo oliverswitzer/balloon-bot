@@ -14,7 +14,7 @@ class GithubHooksController < ApplicationController
       github_client: Clients::Github::Wrapper.new,
       incidents_repository: Persistence::INCIDENTS_REPOSITORY,
       messages_repository: Persistence::MESSAGES_REPOSITORY,
-      chat_client: Clients::Slack::Wrapper.new(App.slack_bot_client)
+      chat_client: Clients::SLACK_CLIENT_WRAPPER
     ).execute(github_event: event)
   end
 end
