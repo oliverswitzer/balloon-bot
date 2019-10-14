@@ -88,6 +88,7 @@ foreman automatically chooses port 5000 for now. Output in terminal should look 
 
 `http://cca022c1.ngrok.io/pull-request`
 
+* Select "application/json" for Content type
 * Select "Let me select individual events"
 * Uncheck "Pushes" and check "Pull requests"
 * Click "Add Webhook"

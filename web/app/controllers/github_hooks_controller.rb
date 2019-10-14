@@ -11,7 +11,7 @@ class GithubHooksController < ApplicationController
     )
 
     Core::UpdateNewPullRequestStatus.new(
-      github_client: Clients::Github::Wrapper.new,
+      github_client: Clients::GITHUB_CLIENT_WRAPPER,
       incidents_repository: Persistence::INCIDENTS_REPOSITORY,
       messages_repository: Persistence::MESSAGES_REPOSITORY,
       chat_client: Clients::SLACK_CLIENT_WRAPPER

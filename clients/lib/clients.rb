@@ -16,17 +16,19 @@ module Clients
     ::Slack::Web::Client.new(token: ENV['SLACK_API_TOKEN'])
   )
 
+  GITHUB_CLIENT_WRAPPER = Github::Wrapper.new
+
   HOLD_DEPLOYMENTS = ::Core::HoldDeployments.new(
     chat_client: SLACK_CLIENT_WRAPPER,
     incidents_repository: ::Persistence::INCIDENTS_REPOSITORY,
     messages_repository: ::Persistence::MESSAGES_REPOSITORY,
-    github_client: Github::Wrapper.new
+    github_client: GITHUB_CLIENT_WRAPPER
   )
 
   CONTINUE_DEPLOYMENTS = ::Core::ContinueDeployments.new(
     chat_client: SLACK_CLIENT_WRAPPER,
     incidents_repository: ::Persistence::INCIDENTS_REPOSITORY,
-    github_client: Github::Wrapper.new
+    github_client: GITHUB_CLIENT_WRAPPER
   )
 
   RECORD_MESSAGE_FOR_INCIDENT = ::Core::RecordMessageForIncident.new(
