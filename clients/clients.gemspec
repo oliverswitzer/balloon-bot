@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'slack-ruby-bot'
   gem.add_dependency 'dry-struct'
-  gem.add_dependency 'celluloid-io'
+  gem.add_dependency 'async-websocket', '~>0.8.0'
   gem.add_dependency 'dry-types'
   gem.add_dependency 'octokit'
 

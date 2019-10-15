@@ -5,7 +5,7 @@ Gem::Specification.new do |gem|
   gem.version = '0.0.0'
 
   gem.add_dependency 'rake'
-  gem.add_dependency 'rails', '~> 5.1.6', '>= 5.1.6.1'
+  gem.add_dependency 'rails', '~> 6.0'
   gem.add_dependency 'pg'
   gem.add_dependency 'puma', '~> 3.7'
   gem.add_dependency 'tzinfo-data'
