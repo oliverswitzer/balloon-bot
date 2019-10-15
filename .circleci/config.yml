@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test_backend:
     docker:
-      - image: circleci/ruby:2.4.1-node-browsers
+      - image: circleci/ruby:2.5.0-node-browsers
         environment:
           RAILS_ENV: test
           PGUSER: root
