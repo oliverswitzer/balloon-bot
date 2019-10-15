@@ -8,20 +8,6 @@ module Clients
       end
 
       def set_channel_topic(message:)
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-
-        Rails.logger.info "set_channel_topic called with message: #{message}"
-        Rails.logger.info "Clients::Slack::Wrapper instance object_id: #{self.object_id}"
-        Rails.logger.info "injected Slack::Web::Client instance: #{slack_web_client.object_id}"
-
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-
         slack_web_client.channels_setTopic(
           channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
           topic: message
@@ -38,20 +24,6 @@ module Clients
       end
 
       def say(message:)
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-
-        Rails.logger.info "say called with message: #{message}"
-        Rails.logger.info "Clients::Slack::Wrapper instance object_id: #{self.object_id}"
-        Rails.logger.info "injected Slack::Web::Client instance: #{slack_web_client.object_id}"
-
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-        Rails.logger.info "+-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+ +-+-+-+"
-
         slack_web_client.chat_postMessage(
           channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
           text: message
