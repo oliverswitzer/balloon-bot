@@ -40,7 +40,7 @@ async function fetchJson(url: string, queryParams: QueryParams) {
     url + formatQueryParams(queryParams),
     {
       headers: {
-        'X-Key-Inflection': 'camel'
+        'Key-Inflection': 'camel'
       }
     }
   );
