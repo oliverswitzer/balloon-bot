@@ -14,6 +14,7 @@ import { DateRangeInput } from '../shared-components/date-range-input/component'
 import { DateRange } from '../shared-components/date-range-input/types';
 import { Panel } from 'primereact/panel';
 import * as moment from 'moment';
+import { Bold } from '../shared-components/bold';
 
 function mapToIncidents(res: any): IncidentData[] {
   return res;
@@ -30,9 +31,12 @@ const incidentTemplate = (incidentData: IncidentData, layout: string) => (
         </div>
       ) : (
         <div>
-          Happened at: {moment(incidentData.incident.createdAt).format('lll')}
-          Resolved at: {moment(incidentData.incident.resolvedAt).format('lll')}
-          First message: {incidentData.incident.messages[0].text }
+          🎈 <Bold>Happened at:</Bold> {moment(incidentData.incident.createdAt).format('lll')}
+          &nbsp;&nbsp;🎈 <Bold>Resolved at:</Bold> {moment(incidentData.incident.resolvedAt).format('lll')}
+          &nbsp;&nbsp;🎈 <Bold>First message:</Bold> {incidentData.incident.messages[0].text }
+          { incidentData.terms.length > 0 && (
+            <>&nbsp;&nbsp;🎈 <Bold>Terms:</Bold> {incidentData.terms.join(', ')}</>
+          )}
         </div>
       )
     }
