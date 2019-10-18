@@ -20,7 +20,7 @@ describe Core::IncidentAnalysis::TextCleaner do
 
     result = Core::IncidentAnalysis::TextCleaner.aggregated_text_for_incident(incident)
 
-    expect(result).to eq(' yo sup whats happenin things broke tho')
+    expect(result).to eq('yo sup whats happenin things broke tho')
   end
 
   class FakeMessagePresenter
