@@ -4,43 +4,43 @@ import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.scss';
 
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useFetch } from '../hooks/use-fetch';
-import { Incident } from './types';
+import { IncidentData } from './types';
 import { IncidentRow } from './incident-row';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { useEffect, useState } from 'react';
-import { DateRangeInput } from "../shared-components/date-range-input/component";
-import { DateRange } from "../shared-components/date-range-input/types";
+import { DateRangeInput } from '../shared-components/date-range-input/component';
+import { DateRange } from '../shared-components/date-range-input/types';
 import { Panel } from 'primereact/panel';
 import * as moment from 'moment';
 
-function mapToIncidents(res: any): Incident[] {
+function mapToIncidents(res: any): IncidentData[] {
   return res;
 }
 
-const incidentTemplate = (incident: Incident, layout: string) => (
+const incidentTemplate = (incidentData: IncidentData, layout: string) => (
   <>
     {
       layout === 'grid' ? (
         <div style={{ padding: '.5rem', width: '33.33%' }}>
-          <Panel header={incident.id}>
-            <IncidentRow incident={incident}/>
+          <Panel header={incidentData.incident.id}>
+            <IncidentRow incidentData={incidentData}/>
           </Panel>
         </div>
       ) : (
         <div>
-          Happened at: {moment(incident.createdAt).format('lll')}
-          Resolved at: {moment(incident.resolvedAt).format('lll')}
-          First message: {incident.messages[0].text }
+          Happened at: {moment(incidentData.incident.createdAt).format('lll')}
+          Resolved at: {moment(incidentData.incident.resolvedAt).format('lll')}
+          First message: {incidentData.incident.messages[0].text }
         </div>
       )
     }
   </>
 );
 
-function isResolved(incident: Incident): boolean {
-  return incident.resolvedAt !== null;
+function isResolved(incidentData: IncidentData): boolean {
+  return incidentData.incident.resolvedAt !== null;
 }
 
 export const Main = () => {
@@ -48,7 +48,7 @@ export const Main = () => {
     data: incidents,
     isLoading,
     fetchMore: fetchMoreIncidents
-  } = useFetch<Incident[]>('/incidents.json', mapToIncidents);
+  } = useFetch<IncidentData[]>('/incidents.json', mapToIncidents);
 
   const [layout, setLayout] = useState<string>('grid');
   const [dateRange, setDateRange] = useState<DateRange>({});

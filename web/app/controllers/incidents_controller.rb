@@ -8,9 +8,9 @@ class IncidentsController < ApplicationController
     upper_bound = epoch_to_utc(safe_params[:created_before]) if safe_params[:created_before].present?
 
     # noinspection RubyScope
-    @incidents = Persistence::INCIDENTS_REPOSITORY.find_by_created_at_with_messages(
-      lower_bound: lower_bound,
-      upper_bound: upper_bound
+    @incidents = Web::FETCH_INCIDENTS.execute(
+      happened_after: lower_bound,
+      happened_before: upper_bound
     )
 
     respond_to do |format|

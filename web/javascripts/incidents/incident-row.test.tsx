@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
-import { Incident, Message } from './types';
+import { Incident, IncidentData, Message } from './types';
 import { IncidentRow } from './incident-row';
 
 function buildMessage(message: Partial<Message> = {}): Message {
@@ -27,31 +27,74 @@ function buildIncident(incident: Partial<Incident> = {}): Incident {
   };
 }
 
+function buildIncidentData(incidentData: Partial<IncidentData> = {}): IncidentData {
+  return {
+    incident: incidentData.incident || buildIncident(),
+    terms: incidentData.terms || ['some', 'terms']
+  }
+}
+
 describe('IncidentComponent', () => {
-  let incident: Incident;
+  let incidentData: IncidentData;
   let componentWrapper: ShallowWrapper<Incident>;
 
   beforeEach(() => {
     let resolvedAt = moment();
     let createdAt = moment().add(1, 'day');
 
-    incident = buildIncident({
-      resolvedAt: resolvedAt.format(),
-      createdAt: createdAt.format()
+    incidentData = buildIncidentData({
+      incident: buildIncident({
+        resolvedAt: resolvedAt.format(),
+        createdAt: createdAt.format()
+      })
     });
 
     componentWrapper = shallow(
-      <IncidentRow incident={incident}/>
+      <IncidentRow incidentData={incidentData}/>
     )
   });
 
   describe('showing how long the incident was active', () => {
     it('takes the difference between when it was resolved and and created', () => {
+      expect(componentWrapper.text()).toContain('Duration: a day')
+    });
+  });
+
+  describe('when the incident has terms', () => {
+    beforeEach(() => {
+      incidentData = {
+        ...incidentData,
+        terms: ['these', 'are', 'terms']
+      };
+    });
+
+    it('shows the terms associated with that incident', () => {
       componentWrapper = shallow(
-        <IncidentRow incident={incident}/>
+        <IncidentRow incidentData={incidentData}/>
       );
 
-      expect(componentWrapper.text()).toContain('Duration: a day')
+      expect(componentWrapper.text()).toContain('Top terms for incident');
+      expect(componentWrapper.text()).toContain('these');
+      expect(componentWrapper.text()).toContain('are');
+      expect(componentWrapper.text()).toContain('terms');
+    });
+  });
+
+
+  describe('when the incident does not have terms', () => {
+    beforeEach(() => {
+      incidentData = {
+        ...incidentData,
+        terms: []
+      };
+    });
+
+    it('does not show the terms section', () => {
+      componentWrapper = shallow(
+        <IncidentRow incidentData={incidentData}/>
+      );
+
+      expect(componentWrapper.text()).not.toContain('Top terms for incident');
     });
   });
 });

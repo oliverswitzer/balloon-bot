@@ -2,6 +2,8 @@ module Clients
   require 'dotenv'
   require 'slack-ruby-bot'
   require 'slack-ruby-client'
+  require 'tf-idf-similarity'
+  require 'matrix'
 
   require 'core'
   require 'persistence'

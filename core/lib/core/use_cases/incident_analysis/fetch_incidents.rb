@@ -1,6 +1,3 @@
-require 'matrix'
-require 'tf-idf-similarity'
-
 module Core
   module IncidentAnalysis
     class FetchIncidents
@@ -12,8 +9,11 @@ module Core
         @incidents_analyzer = incidents_analyzer
       end
 
-      def execute
-        incidents = incidents_repository.find_by_created_at_with_messages
+      def execute(happened_after: nil, happened_before: nil)
+        incidents = incidents_repository.find_by_created_at_with_messages(
+          lower_bound: happened_after,
+          upper_bound: happened_before
+        )
         terms_per_incident = incidents_analyzer.compute_top_terms_for(incidents: incidents)
 
         incidents.map.with_index do |incident, i|

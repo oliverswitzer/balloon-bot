@@ -12,3 +12,8 @@ export type Incident = {
   createdAt: string;
   messages: Message[]
 }
+
+export type IncidentData = {
+  incident: Incident;
+  terms: string[];
+}

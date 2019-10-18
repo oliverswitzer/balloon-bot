@@ -16,8 +16,6 @@ PATH
     core (0.0.0)
       dry-struct
       dry-types
-      matrix
-      tf-idf-similarity
 
 PATH
   remote: ../persistence
