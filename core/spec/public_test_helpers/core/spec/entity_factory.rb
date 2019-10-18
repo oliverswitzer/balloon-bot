@@ -16,5 +16,13 @@ module Core
         resolved_at: resolved_at || nil
       )
     end
+
+    def self.build_incident_with_messages(created_at: nil, resolved_at: nil, messages: [])
+      Core::IncidentWithMessages.new(
+        created_at: created_at || Time.now,
+        resolved_at: resolved_at || nil,
+        messages: messages.any? ? messages : (0..2).map { build_message(text: "message ##{rand(1..9999)}" )}
+      )
+    end
   end
 end

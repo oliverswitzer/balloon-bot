@@ -13,7 +13,7 @@ module Persistence
         id: id,
         resolved_at: resolved_at,
         created_at: created_at,
-        messages: messages
+        messages: messages.map(&:to_message)
       )
     end
   end

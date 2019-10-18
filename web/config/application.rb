@@ -18,6 +18,12 @@ require "olive_branch"
 Bundler.require(*Rails.groups)
 
 module Web
+  FETCH_INCIDENTS = ::Core::IncidentAnalysis::FetchIncidents.new(
+    incidents_repository: ::Persistence::INCIDENTS_REPOSITORY,
+    incidents_analyzer: ::Core::IncidentAnalysis::IncidentTermsAnalyzer.new(
+      text_analyzer: ::Clients::DataAnalysis::TfIdfTermsAnalyzer.new
+    )
+  )
   class Application < Rails::Application
     config.load_defaults 5.1
     config.api_only = true

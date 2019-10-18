@@ -2,6 +2,8 @@ module Clients
   require 'dotenv'
   require 'slack-ruby-bot'
   require 'slack-ruby-client'
+  require 'tf-idf-similarity'
+  require 'matrix'
 
   require 'core'
   require 'persistence'
@@ -9,6 +11,7 @@ module Clients
   require 'clients/slack'
   require 'clients/types'
   require 'clients/github/wrapper'
+  require 'clients/data_analysis/tf_idf_terms_analyzer'
 
   Dotenv.load! if ENV['RAILS_ENV'] == 'development'
 

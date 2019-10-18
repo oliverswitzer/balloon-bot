@@ -63,9 +63,9 @@ describe 'Integration Test: Core::HoldDeployments + Core::UpdateNewPullRequestSt
             )
 
           subject.execute(
-            github_event: Core::PullRequestEvent.new(
-              type: Core::PullRequestEvent::OPENED,
-              pull_request: Core::PullRequest.new(
+            github_event: Core::Github::PullRequestEvent.new(
+              type: Core::Github::PullRequestEvent::OPENED,
+              pull_request: Core::Github::PullRequest.new(
                 head_sha: '123abc',
                 branch: 'some-branch'
               )
@@ -84,9 +84,9 @@ describe 'Integration Test: Core::HoldDeployments + Core::UpdateNewPullRequestSt
             )
 
           subject.execute(
-            github_event: Core::PullRequestEvent.new(
-              type: Core::PullRequestEvent::REOPENED,
-              pull_request: Core::PullRequest.new(
+            github_event: Core::Github::PullRequestEvent.new(
+              type: Core::Github::PullRequestEvent::REOPENED,
+              pull_request: Core::Github::PullRequest.new(
                 head_sha: '123abc',
                 branch: 'some-branch'
               )
@@ -105,9 +105,9 @@ describe 'Integration Test: Core::HoldDeployments + Core::UpdateNewPullRequestSt
             )
 
           subject.execute(
-            github_event: Core::PullRequestEvent.new(
-              type: Core::PullRequestEvent::SYNCHRONIZE,
-              pull_request: Core::PullRequest.new(
+            github_event: Core::Github::PullRequestEvent.new(
+              type: Core::Github::PullRequestEvent::SYNCHRONIZE,
+              pull_request: Core::Github::PullRequest.new(
                 head_sha: '123abc',
                 branch: 'some-branch'
               )
@@ -122,9 +122,9 @@ describe 'Integration Test: Core::HoldDeployments + Core::UpdateNewPullRequestSt
         expect(github_client_spy).not_to receive(:set_status_for_commit)
 
         subject.execute(
-          github_event: Core::PullRequestEvent.new(
+          github_event: Core::Github::PullRequestEvent.new(
             type: 'foo event',
-            pull_request: Core::PullRequest.new(
+            pull_request: Core::Github::PullRequest.new(
               head_sha: '123abc',
               branch: 'some-branch'
             )
@@ -142,9 +142,9 @@ describe 'Integration Test: Core::HoldDeployments + Core::UpdateNewPullRequestSt
           )
 
         subject.execute(
-          github_event: Core::PullRequestEvent.new(
-            type: Core::PullRequestEvent::OPENED,
-            pull_request: Core::PullRequest.new(
+          github_event: Core::Github::PullRequestEvent.new(
+            type: Core::Github::PullRequestEvent::OPENED,
+            pull_request: Core::Github::PullRequest.new(
               head_sha: '123abc',
               branch: 'some-branch'
             )

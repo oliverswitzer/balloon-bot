@@ -41,9 +41,9 @@ module Core
 
     private def valid_event?(github_event)
       valid_events = [
-        Core::PullRequestEvent::OPENED,
-        Core::PullRequestEvent::REOPENED,
-        Core::PullRequestEvent::SYNCHRONIZE
+        Core::Github::PullRequestEvent::OPENED,
+        Core::Github::PullRequestEvent::REOPENED,
+        Core::Github::PullRequestEvent::SYNCHRONIZE
       ]
 
       valid_events.include? github_event.type
