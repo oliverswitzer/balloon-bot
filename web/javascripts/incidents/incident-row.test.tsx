@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 import { Incident, IncidentData, Message } from './types';
 import { IncidentRow } from './incident-row';
@@ -36,7 +36,7 @@ function buildIncidentData(incidentData: Partial<IncidentData> = {}): IncidentDa
 
 describe('IncidentComponent', () => {
   let incidentData: IncidentData;
-  let componentWrapper: ShallowWrapper<Incident>;
+  let componentWrapper: ReactWrapper<any>;
 
   beforeEach(() => {
     let resolvedAt = moment();
@@ -49,7 +49,7 @@ describe('IncidentComponent', () => {
       })
     });
 
-    componentWrapper = shallow(
+    componentWrapper = mount(
       <IncidentRow incidentData={incidentData}/>
     )
   });
@@ -69,7 +69,7 @@ describe('IncidentComponent', () => {
     });
 
     it('shows the terms associated with that incident', () => {
-      componentWrapper = shallow(
+      componentWrapper = mount(
         <IncidentRow incidentData={incidentData}/>
       );
 
@@ -90,7 +90,7 @@ describe('IncidentComponent', () => {
     });
 
     it('does not show the terms section', () => {
-      componentWrapper = shallow(
+      componentWrapper = mount(
         <IncidentRow incidentData={incidentData}/>
       );
 
