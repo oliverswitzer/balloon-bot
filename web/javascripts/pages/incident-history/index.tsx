@@ -1,8 +1,3 @@
-import 'primereact/resources/themes/nova-dark/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
-import 'primeflex/primeflex.scss';
-
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
