@@ -1,5 +1,5 @@
 import { Incident, IncidentData } from './types';
-import { Bold } from '../shared-components/bold';
+import { Bold } from '../../shared-components/bold';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as React from 'react';

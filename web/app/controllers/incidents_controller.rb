@@ -15,7 +15,6 @@ class IncidentsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @incidents }
-      format.html { render :index, layout: 'incidents' }
     end
   end
 
