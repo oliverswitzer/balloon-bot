@@ -1,11 +1,11 @@
-require_relative '../../spec_helper'
+require_relative '../../../spec_helper'
 require 'active_support/all'
 
-describe Core::CalculateTotalIncidentDuration do
+describe Core::IncidentAnalysis::CalculateTotalIncidentDuration do
   let(:incidents_repository) { FakeIncidentsRepository.new }
 
   subject do
-    Core::CalculateTotalIncidentDuration.new(
+    Core::IncidentAnalysis::CalculateTotalIncidentDuration.new(
       incidents_repository: incidents_repository
     )
   end
