@@ -3,7 +3,7 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.scss';
 
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Link, Route, Switch } from 'react-router-dom';
 import { IncidentHistoryPage } from './pages/incident-history';
 import React from 'react';
 import { DashboardPage } from './pages/dashboard';
@@ -37,7 +37,7 @@ const Navigation = () => (
 );
 
 export const App = () => (
-  <BrowserRouter>
+  <HashRouter>
     <Navigation/>
 
     <div style={{ padding: '2em', marginTop: '2em' }}>
@@ -46,5 +46,5 @@ export const App = () => (
         <Route path={Routes.IncidentHistory} component={IncidentHistoryPage}/>
       </Switch>
     </div>
-  </BrowserRouter>
+  </HashRouter>
 );
