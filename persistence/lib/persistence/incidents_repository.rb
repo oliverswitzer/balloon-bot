@@ -28,6 +28,10 @@ module Persistence
       Persistence::IncidentRecord.where(resolved_at: nil).last&.to_incident
     end
 
+    def find_all_resolved
+      Persistence::IncidentRecord.where.not(resolved_at: nil).map(&:to_incident)
+    end
+
     def find_by_created_at_with_messages(lower_bound: nil, upper_bound: nil)
       base_query = Persistence::IncidentRecord.includes(messages: :incident)
 

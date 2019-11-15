@@ -18,6 +18,12 @@ class IncidentsController < ApplicationController
     end
   end
 
+  def all_time_duration
+    respond_to do |format|
+      format.json { render json: { all_time_duration: Web::CALCULATE_TOTAL_INCIDENT_DURATION.execute } }
+    end
+  end
+
   private def epoch_to_utc(date_param)
     Time.strptime(date_param, '%Q').utc
   end

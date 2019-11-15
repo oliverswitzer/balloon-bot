@@ -24,6 +24,9 @@ module Web
       text_analyzer: ::Clients::DataAnalysis::TfIdfTermsAnalyzer.new
     )
   )
+  CALCULATE_TOTAL_INCIDENT_DURATION = ::Core::CalculateTotalIncidentDuration.new(
+    incidents_repository: ::Persistence::INCIDENTS_REPOSITORY,
+  )
   class Application < Rails::Application
     config.load_defaults 5.1
     config.api_only = true

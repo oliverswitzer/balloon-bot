@@ -26,6 +26,11 @@ class FakeIncidentsRepository
       .detect { |incident| incident.resolved_at.nil? }
   end
 
+  def find_all_resolved
+    @incidents
+      .select { |incident| !incident.resolved_at.nil? }
+  end
+
   def find(id)
     @incidents.find { |incident| incident.id == id }
   end
