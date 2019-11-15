@@ -6,51 +6,12 @@ import 'primeflex/primeflex.scss';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import { IncidentHistoryPage } from './pages/incident-history';
 import React from 'react';
-import { Card } from 'primereact/card';
+import { DashboardPage } from './pages/dashboard';
 
 enum Routes {
   IncidentHistory = '/incident-history',
   Dashboard = '/'
 }
-
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'First Dataset',
-      data: [65, 59, 80, 81, 56, 55, 40],
-      fill: false,
-      borderColor: '#4bc0c0'
-    },
-    {
-      label: 'Second Dataset',
-      data: [28, 48, 40, 19, 86, 27, 90],
-      fill: false,
-      borderColor: '#565656'
-    }
-  ]
-};
-
-const DashboardPage = () => (
-  <>
-    <div style={{ display: 'flex' }}>
-      <div className='p-col-4'>
-        <Card subTitle="Total time holding deployments">
-          <h1 style={{ fontSize: '3em' }}>
-            340 minutes
-          </h1>
-        </Card>
-      </div>
-      <div className='p-col-8'>
-        <Card subTitle="Held deployments over time">
-          <h1 style={{ fontSize: '3em' }}>
-            A cool graph will go here
-          </h1>
-        </Card>
-      </div>
-    </div>
-  </>
-);
 
 let navListItemStyle = { display: 'inline-block' };
 let navItemStyle = {
