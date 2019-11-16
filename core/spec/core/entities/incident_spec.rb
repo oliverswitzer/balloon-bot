@@ -5,8 +5,8 @@ describe Core::Incident do
   describe '#duration_in_milliseconds' do
     it 'returns the duration between created_at and resolved_at in milliseconds' do
       incident = Core::EntityFactory.build_incident(
-        created_at: 1.hour.ago,
-        resolved_at: Time.now
+        created_at: 1.hour.ago.to_datetime,
+        resolved_at: DateTime.now
       )
 
       ONE_HOUR_IN_MILLISECONDS = 60 * 60 * 1000

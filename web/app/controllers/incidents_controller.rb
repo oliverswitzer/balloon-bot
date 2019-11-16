@@ -28,10 +28,7 @@ class IncidentsController < ApplicationController
     respond_to do |format|
       format.json do
         render json: {
-          duration_over_time: {
-            months: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            total_duration_per_month: [5e5, 6e5, 10e6, 1e5, 1e7, 11e5, 1e5]
-          }
+          duration_over_time: Web::CALCULATE_INCIDENT_DURATION_OVER_TIME.execute
         }
       end
     end
