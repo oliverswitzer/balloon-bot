@@ -32,6 +32,26 @@ module Persistence
       Persistence::IncidentRecord.where.not(resolved_at: nil).map(&:to_incident)
     end
 
+    def find_all_resolved_grouped_by_duration
+      rows = ActiveRecord::Base.connection.execute(
+        <<~SQL
+          SELECT date_trunc('month', created_at) as month_of_year,
+                 SUM(EXTRACT(EPOCH FROM (resolved_at - created_at))) as total_duration_in_seconds
+          FROM incidents
+          WHERE created_at > now() - interval '1 year'
+          GROUP BY date_trunc('month', created_at)
+          ORDER BY month_of_year ASC
+        SQL
+      )
+
+      rows.map do |row|
+        {
+          month: DateTime.parse(row["month_of_year"]),
+          total_duration_in_milliseconds: row["total_duration_in_seconds"]*1000
+        }
+      end
+    end
+
     def find_by_created_at_with_messages(lower_bound: nil, upper_bound: nil)
       base_query = Persistence::IncidentRecord.includes(messages: :incident)
 

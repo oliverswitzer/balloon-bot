@@ -107,5 +107,63 @@ describe Persistence::IncidentsRepository do
       expect(result.last.id).to eq(older_incident.id)
     end
   end
+
+  describe "#find_all_resolved_grouped_by_duration" do
+    let(:one_hour_incident_in_march) do
+      created_at = DateTime.new(2019, 3, 19)
+      Core::EntityFactory.build_incident(
+        created_at: created_at,
+        resolved_at: created_at + 1.hour
+      )
+    end
+    let(:one_hour_incident_in_may) do
+      created_at = DateTime.new(2019, 5, 19)
+
+      Core::EntityFactory.build_incident(
+        created_at: created_at,
+        resolved_at: created_at + 1.hour
+      )
+    end
+    let(:two_hour_incident_in_may) do
+      created_at = DateTime.new(2019, 5, 19)
+
+      Core::EntityFactory.build_incident(
+        created_at: created_at,
+        resolved_at: created_at + 2.hour
+      )
+    end
+
+    before do
+      subject.save(one_hour_incident_in_march)
+      subject.save(one_hour_incident_in_may)
+      subject.save(two_hour_incident_in_may)
+    end
+
+    it 'returns the sum of incident durations for every month that an incident exists' do
+      results = subject.find_all_resolved_grouped_by_duration
+
+      dates = results.map { |result| result[:month].month }
+
+      MARCH = 3
+      MAY = 5
+
+      expect(dates).to eq([MARCH, MAY])
+    end
+
+    it 'returns the durations for each month' do
+      results = subject.find_all_resolved_grouped_by_duration
+
+      durations = results.map { |row| row[:total_duration_in_milliseconds] }
+
+      expect(durations).to eq([
+        to_milliseconds(1.hour),
+        to_milliseconds(3.hours)
+      ])
+    end
+
+    def to_milliseconds(hours)
+      hours.to_i*1000
+    end
+  end
 end
 
