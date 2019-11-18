@@ -3,6 +3,9 @@ import { useFetch } from '../../hooks/use-fetch';
 import * as moment from 'moment';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { StatsCard } from '../../shared-components/stats-card';
+import momentDurationFormatSetup from 'moment-duration-format';
+
+momentDurationFormatSetup(moment);
 
 export const LifetimeIncidentDuration = () => {
   const {
@@ -18,7 +21,7 @@ export const LifetimeIncidentDuration = () => {
             <ProgressSpinner />
           ):
           <h3 style={{fontSize: '2em'}}>
-            {moment.duration(durationInMilliseconds).humanize()}
+            {moment.duration(durationInMilliseconds).format("h [hour], m [minute]")}
           </h3>
       }
     </StatsCard>
