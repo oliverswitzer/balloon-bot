@@ -1,40 +1,15 @@
-import 'primereact/resources/themes/nova-dark/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
-import 'primeflex/primeflex.scss';
-
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { useFetch } from '../hooks/use-fetch';
-import { IncidentData } from './types';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { DateRangeInput } from '../shared-components/date-range-input/component';
-import { DateRange } from '../shared-components/date-range-input/types';
-import { ListViewTemplate, GridViewTemplate } from './table-templates';
 
-function mapToIncidents(res: any): IncidentData[] {
-  return res;
-}
+import { useFetch } from '../../hooks/use-fetch';
+import { IncidentData } from './types';
+import { DateRangeInput } from '../../shared-components/date-range-input/component';
+import { DateRange } from '../../shared-components/date-range-input/types';
+import { GridViewTemplate, ListViewTemplate } from './table-templates';
 
-
-const incidentTemplate = (incidentData: IncidentData, layout: string) => (
-  <>
-    {
-      layout === 'grid' ? (
-        <GridViewTemplate incidentData={incidentData}/>
-      ) : (
-        <ListViewTemplate incidentData={incidentData}/>
-      )
-    }
-  </>
-);
-
-function isResolved(incidentData: IncidentData): boolean {
-  return incidentData.incident.resolvedAt !== null;
-}
-
-export const Main = () => {
+export const IncidentHistoryPage = () => {
   const {
     data: incidents,
     isLoading,
@@ -84,4 +59,25 @@ function formattedDateParams(dateRange: DateRange) {
     created_after: dateRange.after ? dateRange.after.getTime() : '',
     created_before: dateRange.before ? dateRange.before.getTime() : ''
   };
+}
+
+function mapToIncidents(res: any): IncidentData[] {
+  return res;
+}
+
+
+const incidentTemplate = (incidentData: IncidentData, layout: string) => (
+  <>
+    {
+      layout === 'grid' ? (
+        <GridViewTemplate incidentData={incidentData}/>
+      ) : (
+        <ListViewTemplate incidentData={incidentData}/>
+      )
+    }
+  </>
+);
+
+function isResolved(incidentData: IncidentData): boolean {
+  return incidentData.incident.resolvedAt !== null;
 }

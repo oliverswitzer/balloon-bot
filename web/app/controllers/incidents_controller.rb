@@ -15,7 +15,22 @@ class IncidentsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @incidents }
-      format.html { render :index, layout: 'incidents' }
+    end
+  end
+
+  def all_time_duration
+    respond_to do |format|
+      format.json { render json: { all_time_duration: Web::CALCULATE_TOTAL_INCIDENT_DURATION.execute } }
+    end
+  end
+
+  def duration_over_time
+    respond_to do |format|
+      format.json do
+        render json: {
+          duration_over_time: Web::CALCULATE_INCIDENT_DURATION_OVER_TIME.execute
+        }
+      end
     end
   end
 

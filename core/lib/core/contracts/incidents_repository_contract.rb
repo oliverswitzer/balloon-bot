@@ -74,5 +74,17 @@ def incidents_repository_contract(repo_class)
         expect(found_incident.resolved_at.to_i).to eq(resolved_at.to_i)
       end
     end
+
+    describe '#find_all_resolved' do
+      it 'returns all resolved incidents' do
+        subject.save(Core::EntityFactory.build_incident(resolved_at: Time.now))
+        subject.save(Core::EntityFactory.build_incident(resolved_at: Time.now))
+        subject.save(Core::EntityFactory.build_incident)
+
+        found_incidents = subject.find_all_resolved
+
+        expect(found_incidents.size).to eq(2)
+      end
+    end
   end
 end
