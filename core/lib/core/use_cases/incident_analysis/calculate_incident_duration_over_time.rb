@@ -8,12 +8,10 @@ module Core
       end
 
       def execute
-        binding.pry
         incidents = incidents_repository.find_by_created_at_with_messages(
           lower_bound: 1.year.ago,
           upper_bound: Time.now
         ).select(&:is_resolved?)
-        binding.pry
 
         {
           months: months,
