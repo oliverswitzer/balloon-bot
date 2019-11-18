@@ -4,8 +4,8 @@ import { StatsCard } from '../../shared-components/stats-card';
 import { useFetch } from '../../hooks/use-fetch';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-function millisecondsToMinutes(milliseconds: number): number {
-  return Math.floor(milliseconds / 1000 / 60);
+function millisecondsToHours(milliseconds: number): number {
+  return parseFloat((milliseconds / 1000 / 60 / 60).toFixed(2));
 }
 
 const mapResponseToChartData = response => {
@@ -15,8 +15,8 @@ const mapResponseToChartData = response => {
     labels: months,
     datasets: [
       {
-        label: 'Total Incident Duration (in minutes)',
-        data: totalDurationPerMonth.map(durations => millisecondsToMinutes(durations)),
+        label: 'Total Incident Duration (in hours)',
+        data: totalDurationPerMonth.map(durations => millisecondsToHours(durations)),
         fill: false,
         borderColor: 'green'
       }
