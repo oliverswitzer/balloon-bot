@@ -27,6 +27,10 @@ module Web
   CALCULATE_TOTAL_INCIDENT_DURATION = ::Core::IncidentAnalysis::CalculateTotalIncidentDuration.new(
     incidents_repository: ::Persistence::INCIDENTS_REPOSITORY,
   )
+  CALCULATE_INCIDENT_DURATION_OVER_TIME = ::Core::IncidentAnalysis::CalculateIncidentDurationOverTime.new(
+    incidents_repository: ::Persistence::INCIDENTS_REPOSITORY,
+  )
+
   class Application < Rails::Application
     config.load_defaults 5.1
     config.api_only = true
