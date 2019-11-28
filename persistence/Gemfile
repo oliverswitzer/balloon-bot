@@ -1,9 +1,10 @@
 source 'https://rubygems.org'
 
+gemspec
+
 gem 'core', path: '../core'
 
 group :test do
   gem 'test_support', path: '../test_support'
 end
 
-gemspec
