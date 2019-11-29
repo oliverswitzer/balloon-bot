@@ -27,14 +27,36 @@ describe Core::RecordMessageForIncident do
         incidents_repository.save(Core::Incident.new(resolved_at: nil))
       end
 
-
       context 'when message is sent in configured deployments channel' do
         before do
-          allow(ENV).to receive(:[]).with('DEPLOYMENTS_CHANNEL').and_return('some channel')
+          ENV['DEPLOYMENTS_CHANNEL'] = 'some channel'
 
           expect(slack_client_wrapper_spy).to receive(:channel_name)
             .with('123abc')
             .and_return('some channel')
+        end
+
+        it 'persists the message with the unresolved incident id' do
+          request = Core::RecordMessageForIncident::Request.new(message: message)
+
+          subject.execute(request)
+
+          expect(messages_repository_spy).to have_received(:save) do |message|
+            expect(message.text).to eq('some message')
+            expect(message.timestamp).to eq('456')
+            expect(message.channel_id).to eq('123abc')
+            expect(message.incident).to eq(persisted_incident)
+          end
+        end
+      end
+
+      context 'when message is sent in configured incident response channel' do
+        before do
+          ENV['INCIDENT_RESPONSE_CHANNEL'] = 'some incident channel'
+
+          expect(slack_client_wrapper_spy).to receive(:channel_name)
+            .with('123abc')
+            .and_return('some incident channel')
         end
 
         it 'persists the message with the unresolved incident id' do
