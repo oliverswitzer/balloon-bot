@@ -8,7 +8,7 @@ import { DateRangeInput } from '../../shared-components/date-range-input/compone
 import { DateRange } from '../../shared-components/date-range-input/types';
 import { GridViewTemplate, ListViewTemplate } from './table-templates';
 import { useQuery } from 'react-query';
-import { DateParams, fetchIncidentData, formattedDateParams } from './helpers/fetch-incidents';
+import { DateParams, fetchIncidentData, formattedDateParams } from './api/fetch-incidents';
 
 export const IncidentHistoryPage = () => {
   const [layout, setLayout] = useState<string>('grid');

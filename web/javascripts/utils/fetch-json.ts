@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as queryString from "querystring";
 
 type QueryParams = { [key: string]: string | number }
-export async function fetchJson(url: string, queryParams: QueryParams) {
+export async function fetchJson(url: string, queryParams: QueryParams = {}) {
   const response = await fetch(
     url + formatQueryParams(queryParams),
     {
