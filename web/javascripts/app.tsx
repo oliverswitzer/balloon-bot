@@ -3,7 +3,7 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.scss';
 
-import { BrowserRouter, HashRouter, Link, Route, Switch } from 'react-router-dom';
+import { HashRouter, Link, Route, Switch } from 'react-router-dom';
 import { IncidentHistoryPage } from './pages/incident-history';
 import React from 'react';
 import { DashboardPage } from './pages/dashboard';

@@ -45,6 +45,7 @@
     "query-string": "^6.8.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-query": "^0.3.17",
     "react-router-dom": "^5.1.2",
     "react-transition-group": "^4.2.2"
   },
