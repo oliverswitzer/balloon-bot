@@ -33,14 +33,17 @@ module Clients
       def channel_name(channel_id)
         channel = all_channels.detect { |c| c[:id] == channel_id }
 
-        channel[:name]
+        channel[:name] if channel
       end
 
-      private def lookup_channel_id(channel_name:)
-        found_channel = all_channels[:channels]
-          .detect { |channel| channel[:name] == channel_name }
+      def handle_name(user_id)
+        user = all_users.detect { |u| u[:id] == user_id }
 
-        found_channel[:id] if found_channel
+        user[:name] if user
+      end
+
+      private def all_users
+        @all_users ||= slack_web_client.users_list[:members]
       end
 
       private def all_channels

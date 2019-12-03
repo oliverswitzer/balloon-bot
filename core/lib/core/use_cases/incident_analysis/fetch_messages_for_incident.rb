@@ -12,14 +12,16 @@ module Core
         messages = messages_repository.find_by_incident_id(incident_id)
 
         messages.map do |message|
-          MessageResponse.new(**message.to_h,
-            channel_name: chat_client.channel_name(message.channel_id)
+          MessageResponse.new(
+            text: message.text,
+            channel_name: chat_client.channel_name(message.channel_id),
+            slack_handle: chat_client.handle_name(message.author_id),
+            created_at: message.created_at,
           )
         end
       end
 
-
-      MessageResponse = Core::KeywordStruct.new(*Core::MESSAGE_FIELDS.concat([:channel_name]))
+      MessageResponse = Core::KeywordStruct.new(:text, :created_at, :channel_name, :slack_handle)
     end
   end
 end

@@ -9,10 +9,17 @@ module Persistence
 
         message.id = record.id
       else
-        Persistence::MessageRecord.find(message.id).update(**Persistence::MessageRecord.to_record_attributes(message))
+        Persistence::MessageRecord.find(message.id)
+          .update(
+            **Persistence::MessageRecord.to_record_attributes(message)
+          )
       end
 
       message
+    end
+
+    def find(id)
+      Persistence::MessageRecord.find(id).to_message
     end
 
     def find_by_incident_id(incident_id)

@@ -19,19 +19,26 @@ describe Core::IncidentAnalysis::FetchMessagesForIncident do
       end
 
       before do
-        messages_repository.save(Core::EntityFactory.build_message(channel_id: '123', incident: incident))
-        messages_repository.save(Core::EntityFactory.build_message(channel_id: '456', incident: incident))
-        messages_repository.save(Core::EntityFactory.build_message(channel_id: '789', incident: incident))
+        messages = [
+          messages_repository.save(Core::EntityFactory.build_message(incident: incident)),
+          messages_repository.save(Core::EntityFactory.build_message(incident: incident)),
+          messages_repository.save(Core::EntityFactory.build_message(incident: incident))
+        ]
 
-        allow(slack_client_spy).to receive(:channel_name).with('123').and_return('channel 1')
-        allow(slack_client_spy).to receive(:channel_name).with('456').and_return('channel 2')
-        allow(slack_client_spy).to receive(:channel_name).with('789').and_return('channel 3')
+        messages.each.with_index do |message, i|
+          allow(slack_client_spy).to receive(:channel_name).with(message.channel_id).and_return("channel #{i + 1}")
+        end
+
+        messages.each.with_index do |message, i|
+          allow(slack_client_spy).to receive(:handle_name).with(message.author_id).and_return("some handle #{i + 1}")
+        end
       end
 
-      it 'should return all three messages with their channel name fetched from slack' do
+      it 'should return all three messages with their channel name and author handle fetched from slack' do
         messages = subject.execute(incident_id: incident.id)
 
         expect(messages.map(&:channel_name)).to contain_exactly('channel 1', 'channel 2', 'channel 3')
+        expect(messages.map(&:slack_handle)).to contain_exactly('some handle 1', 'some handle 2', 'some handle 3')
       end
     end
   end

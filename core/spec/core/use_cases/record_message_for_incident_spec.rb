@@ -18,7 +18,8 @@ describe Core::RecordMessageForIncident do
       Core::EntityFactory.build_incoming_slack_message(
         text: 'some message',
         timestamp: '456',
-        channel_id: '123abc'
+        channel_id: '123abc',
+        author_id: '456def'
       )
     end
 
@@ -43,6 +44,7 @@ describe Core::RecordMessageForIncident do
             expect(message.text).to eq('some message')
             expect(message.timestamp).to eq('456')
             expect(message.channel_id).to eq('123abc')
+            expect(message.author_id).to eq('456def')
             expect(message.incident).to eq(persisted_incident)
           end
         end

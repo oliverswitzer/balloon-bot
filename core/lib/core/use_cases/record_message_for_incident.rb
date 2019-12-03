@@ -21,7 +21,8 @@ module Core
             text: incoming_message.text,
             incident: unresolved_incident,
             timestamp: incoming_message.timestamp,
-            channel_id: incoming_message.channel_id
+            channel_id: incoming_message.channel_id,
+            author_id: incoming_message.author_id
           )
         )
       end
