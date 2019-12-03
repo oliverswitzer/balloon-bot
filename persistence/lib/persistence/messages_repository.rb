@@ -16,7 +16,9 @@ module Persistence
     end
 
     def find_by_incident_id(incident_id)
-      Persistence::MessageRecord.where(incident_id: incident_id).map(&:to_message)
+      Persistence::MessageRecord.where(incident_id: incident_id)
+        .order(created_at: :asc)
+        .map(&:to_message)
     end
   end
 end
