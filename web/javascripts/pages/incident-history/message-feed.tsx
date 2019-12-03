@@ -4,13 +4,19 @@ import { useQuery } from 'react-query';
 import { fetchJson } from '../../utils/fetch-json';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import * as moment from 'moment';
 
 type MessageFeedProps = {
   incident: Incident;
 }
 
 async function fetchMessagesForIncident({ incidentId }: { incidentId: number }): Promise<Message[]> {
-  return await fetchJson(`/incidents/${incidentId}/messages.json`);
+  const messages = await fetchJson(`/incidents/${incidentId}/messages.json`);
+  return messages.map(message => {
+    return {
+      ...message, createdAt: moment(message.createdAt).format('llll')
+    }
+  });
 }
 
 export const MessageFeed = ({ incident }: MessageFeedProps) => {
@@ -20,6 +26,7 @@ export const MessageFeed = ({ incident }: MessageFeedProps) => {
     <>
       <DataTable value={messages} style={{ maxHeight: '80vh', overflowY: 'scroll'}}>
         <Column field="channelName" header="Channel" />
+        <Column field="createdAt" header="Time" />
         <Column field="text" header="Text" />
       </DataTable>
     </>

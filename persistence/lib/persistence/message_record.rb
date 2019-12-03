@@ -27,6 +27,7 @@ module Persistence
         text: text,
         channel_id: channel_id,
         timestamp: timestamp,
+        created_at: created_at,
         incident: Core::Incident.new(
           id: incident.id,
           resolved_at: incident.resolved_at,
