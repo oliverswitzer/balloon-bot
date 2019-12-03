@@ -1,9 +1,9 @@
 
 def message_from_request(request)
   {
-    text: request[:data],
+    text: request[:text],
     channel_id: request[:channel],
-    author_id: request[:name],
+    author_id: request[:user] || request[:bot_id],
     timestamp: request[:ts]
   }
 end
@@ -46,11 +46,6 @@ module Clients
           desc 'will change the channel topic of the configured deployments channel back to a passing icon and allow merges into master again'
           long_desc('Usage: "@balloonbot inflate; @balloonbot continue"')
         end
-      end
-      private
-
-      def self.is_private_message?(channel)
-        channel =~ PRIVATE_MESSAGE_ID_REGEX
       end
     end
   end
