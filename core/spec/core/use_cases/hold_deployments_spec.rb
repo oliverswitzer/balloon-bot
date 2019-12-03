@@ -6,12 +6,12 @@ describe Core::HoldDeployments do
   let(:incidents_repository) { FakeIncidentsRepository.new }
   let(:messages_repository) { FakeMessagesRepository.new }
 
-  let(:fake_message) do
-    {
+  let(:incoming_message) do
+    Core::EntityFactory.build_incoming_slack_message(
       text: 'some message',
       timestamp: '123',
       channel_id: 'abc'
-    }
+    )
   end
 
   subject do
@@ -31,7 +31,7 @@ describe Core::HoldDeployments do
         end
 
         it 'tells slack client to set the channel topic to the configured topic' do
-          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+          subject.execute(incoming_message)
 
           expect(slack_client_spy).to have_received(:set_channel_topic)
             .with(message: 'something bad happened')
@@ -44,7 +44,7 @@ describe Core::HoldDeployments do
 
       context 'when a failure channel topic has not been configured' do
         it 'tells slack client to set the default channel topic for failure' do
-          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+          subject.execute(incoming_message)
 
           expect(slack_client_spy).to have_received(:set_channel_topic)
             .with(message: Core::HoldDeployments::DEFAULT_CHANNEL_TOPIC)
@@ -57,7 +57,7 @@ describe Core::HoldDeployments do
         end
 
         it 'uses that handle when notifying the configured deployments channel' do
-          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+          subject.execute(incoming_message)
 
           expect(slack_client_spy).to have_received(:say)
             .with(message: "<!here|here> #{Core::HoldDeployments::MESSAGE}")
@@ -70,7 +70,7 @@ describe Core::HoldDeployments do
 
       context 'when a slack handle has not been configured' do
         it 'uses @channel handle when notifying the configured deployments channel' do
-          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+          subject.execute(incoming_message)
 
           expect(slack_client_spy).to have_received(:say)
             .with(message: "<!channel|channel> #{Core::HoldDeployments::MESSAGE}")
@@ -83,7 +83,7 @@ describe Core::HoldDeployments do
         end
 
         it 'tells the slack client to say the additional message' do
-          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+          subject.execute(incoming_message)
 
           expect(slack_client_spy).to have_received(:say)
                                         .with(message: 'this message should show in addition to the default one')
@@ -97,7 +97,7 @@ describe Core::HoldDeployments do
 
       context 'when an additional failure message has not been configured' do
         it 'tells the slack client to say the additional message' do
-          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+          subject.execute(incoming_message)
 
           expect(slack_client_spy).to have_received(:say).exactly(:once)
         end
@@ -105,7 +105,7 @@ describe Core::HoldDeployments do
     end
 
     it 'creates an unresolved incident' do
-      subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+      subject.execute(incoming_message)
 
       saved_incident = incidents_repository.find_last_unresolved
 
@@ -114,15 +114,15 @@ describe Core::HoldDeployments do
     end
 
     it 'saves the message that triggered the incident' do
-      subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+      subject.execute(incoming_message)
 
       incident = incidents_repository.find_last_unresolved
 
       message = messages_repository.find_by_incident_id(incident.id).first
 
-      expect(message.text).to eq(fake_message[:text])
-      expect(message.channel_id).to eq(fake_message[:channel_id])
-      expect(message.timestamp).to eq(fake_message[:timestamp])
+      expect(message.text).to eq(incoming_message.text)
+      expect(message.channel_id).to eq(incoming_message.channel_id)
+      expect(message.timestamp).to eq(incoming_message.timestamp)
     end
 
     describe 'github status behavior' do
@@ -138,8 +138,8 @@ describe Core::HoldDeployments do
 
           expect(slack_client_spy).to receive(:url_for_message)
             .with(
-              timestamp: fake_message[:timestamp],
-              channel_id: fake_message[:channel_id]
+              timestamp: incoming_message.timestamp,
+              channel_id: incoming_message.channel_id
             )
             .and_return('http://www.example.com')
             .twice
@@ -159,7 +159,7 @@ describe Core::HoldDeployments do
               status: instance_of(Core::Github::FailureStatus)
             )
 
-          subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+          subject.execute(incoming_message)
         end
       end
     end
@@ -170,7 +170,7 @@ describe Core::HoldDeployments do
       end
 
       it 'warns that deployments are already being held' do
-        subject.execute(Core::HoldDeployments::Request.new(message: fake_message))
+        subject.execute(incoming_message)
 
         expect(slack_client_spy).to have_received(:say)
           .with(message: Core::HoldDeployments::ERROR_MESSAGES[:already_holding])

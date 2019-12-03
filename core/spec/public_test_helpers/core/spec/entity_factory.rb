@@ -24,5 +24,15 @@ module Core
         messages: messages.any? ? messages : (0..2).map { build_message(text: "message ##{rand(1..9999)}" )}
       )
     end
+
+    def self.build_incoming_slack_message(id: nil, text: nil, channel_id: nil, author_id: nil, timestamp: nil)
+      Core::Slack::IncomingMessage.new(
+        id: id || 'CGYTDT125',
+        text: text || 'some message text',
+        channel_id: channel_id || 'CH7HZFWBE',
+        author_id: author_id || 'UGYTDT125',
+        timestamp: timestamp || '1575404102.026400'
+      )
+    end
   end
 end

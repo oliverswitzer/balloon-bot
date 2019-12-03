@@ -1,36 +1,36 @@
-def parse_message(data)
+
+def message_from_request(request)
   {
-    message: {
-      text: data[:text],
-      channel_id: data[:channel],
-      timestamp: data[:ts]
-    }
+    text: request[:data],
+    channel_id: request[:channel],
+    author_id: request[:name],
+    timestamp: request[:ts]
   }
 end
 
 module Clients
   module Slack
     class BalloonBot < SlackRubyBot::Bot
-      PRIVATE_MESSAGE_ID_REGEX = /(D[A-Z0-9]{8}|G[A-Z0-9]{8})/
-
       command 'hold', 'pop' do |client, data, match|
-        next unless is_from_deployments_channel? data[:channel]
+        incoming_message = Core::Slack::IncomingMessage.new(message_from_request(data))
 
-        request = Core::HoldDeployments::Request.new(parse_message(data))
+        next unless is_from_deployments_channel? incoming_message
 
-        Clients::HOLD_DEPLOYMENTS.execute(request)
+        Clients::HOLD_DEPLOYMENTS.execute(incoming_message)
       end
 
       command 'continue', 'inflate' do |client, data, match|
-        next unless is_from_deployments_channel? data[:channel]
+        incoming_message = Core::Slack::IncomingMessage.new(message_from_request(data))
+
+        next unless is_from_deployments_channel? incoming_message
 
         Clients::CONTINUE_DEPLOYMENTS.execute
       end
 
-      def self.is_from_deployments_channel?(channel)
-        return false if is_private_message?(channel)
+      def self.is_from_deployments_channel?(message)
+        return false if message.is_private?
 
-        Clients::SLACK_CLIENT_WRAPPER.channel_name(channel) == ENV['DEPLOYMENTS_CHANNEL']
+        Clients::SLACK_CLIENT_WRAPPER.channel_name(message.channel_id) == ENV['DEPLOYMENTS_CHANNEL']
       end
 
       help do
@@ -61,11 +61,11 @@ end
 module Hooks
   class Message
     def call(client, data)
-      return if Clients::Slack::BalloonBot.is_private_message? data[:channel]
+      incoming_message = Core::Slack::IncomingMessage.new(message_from_request(data))
 
-      request = Core::RecordMessageForIncident::Request.new(parse_message(data))
+      return if incoming_message.is_private?
 
-      Clients::RECORD_MESSAGE_FOR_INCIDENT.execute(request)
+      Clients::RECORD_MESSAGE_FOR_INCIDENT.execute(incoming_message)
     end
   end
 end

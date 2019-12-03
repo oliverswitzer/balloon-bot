@@ -20,7 +20,7 @@ module Core
       @github_client = github_client
     end
 
-    def execute(request)
+    def execute(incoming_message)
       if incidents_repository.find_last_unresolved
         chat_client.say(message: ERROR_MESSAGES[:already_holding])
         return
@@ -28,16 +28,15 @@ module Core
 
       chat_client.say(message: "#{slack_handle} #{MESSAGE}")
       chat_client.say(message: "#{ENV['ADDITIONAL_FAILURE_MESSAGE']}") unless ENV['ADDITIONAL_FAILURE_MESSAGE'].nil?
-
       chat_client.set_channel_topic(message: ENV['FAILURE_CHANNEL_TOPIC'] || DEFAULT_CHANNEL_TOPIC)
 
       incident = incidents_repository.save(Core::Incident.new)
       messages_repository.save(
         Core::Message.new(
           incident: incident,
-          text: request.message[:text],
-          timestamp: request.message[:timestamp],
-          channel_id: request.message[:channel_id]
+          text: incoming_message.text,
+          timestamp: incoming_message.timestamp,
+          channel_id: incoming_message.channel_id
         )
       )
 
@@ -46,20 +45,11 @@ module Core
           commit_sha: pull_request.head_sha,
           status: Core::Github::Status.failure,
           more_info_url: chat_client.url_for_message(
-            timestamp: request.message[:timestamp],
-            channel_id: request.message[:channel_id]
+            timestamp: incoming_message.timestamp,
+            channel_id: incoming_message.channel_id
           )
         )
       end
-    end
-
-
-    class Request < Dry::Struct
-      attribute :message, Types::Hash.schema(
-        text: Types::Strict::String,
-        timestamp: Types::Strict::String,
-        channel_id: Types::Strict::String
-      )
     end
 
     private def slack_handle

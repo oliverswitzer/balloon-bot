@@ -12,31 +12,23 @@ module Core
       @incidents_repository = incidents_repository
     end
 
-    def execute(request)
+    def execute(incoming_message)
       unresolved_incident = incidents_repository.find_last_unresolved
 
-      if unresolved_incident && is_in_configured_channel?(request)
+      if unresolved_incident && is_in_configured_channel?(incoming_message)
         messages_repository.save(
           Core::Message.new(
-            text: request.message[:text],
+            text: incoming_message.text,
             incident: unresolved_incident,
-            timestamp: request.message[:timestamp],
-            channel_id: request.message[:channel_id]
+            timestamp: incoming_message.timestamp,
+            channel_id: incoming_message.channel_id
           )
         )
       end
     end
 
-    class Request < Dry::Struct
-      attribute :message, Types::Hash.schema(
-        text: Types::Strict::String.optional,
-        timestamp: Types::Strict::String,
-        channel_id: Types::Strict::String
-      )
-    end
-
-    private def is_in_configured_channel?(request)
-      channel_name = chat_client.channel_name(request.message[:channel_id])
+    private def is_in_configured_channel?(message)
+      channel_name = chat_client.channel_name(message.channel_id)
 
       configured_channels.include? channel_name
     end

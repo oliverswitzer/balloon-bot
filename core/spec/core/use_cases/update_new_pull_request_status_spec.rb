@@ -28,13 +28,12 @@ describe 'Integration Test: Core::HoldDeployments + Core::UpdateNewPullRequestSt
     context 'when deployments have been previously held' do
       before do
         # Trigger Core::HoldDeployments
-        fake_slack_message = {
+        incoming_message = Core::EntityFactory.build_incoming_slack_message(
           text: 'some message',
           timestamp: 'some time',
           channel_id: 'some channel'
-        }
-        hold_deployments_request = Core::HoldDeployments::Request.new(message: fake_slack_message)
-        hold_deployments.execute(hold_deployments_request)
+        )
+        hold_deployments.execute(incoming_message)
 
         # Stub first slack message for that hold deployments call since
         # it is used to generate the more_info_url that folks can click on

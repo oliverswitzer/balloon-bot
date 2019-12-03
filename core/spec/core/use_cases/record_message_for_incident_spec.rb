@@ -14,12 +14,12 @@ describe Core::RecordMessageForIncident do
   end
 
   describe '#execute' do
-    let(:message) do
-      {
+    let(:incoming_message) do
+      Core::EntityFactory.build_incoming_slack_message(
         text: 'some message',
-        channel_id: '123abc',
-        timestamp: '456'
-      }
+        timestamp: '456',
+        channel_id: '123abc'
+      )
     end
 
     context 'when there is an unresolved incident' do
@@ -37,9 +37,7 @@ describe Core::RecordMessageForIncident do
         end
 
         it 'persists the message with the unresolved incident id' do
-          request = Core::RecordMessageForIncident::Request.new(message: message)
-
-          subject.execute(request)
+          subject.execute(incoming_message)
 
           expect(messages_repository_spy).to have_received(:save) do |message|
             expect(message.text).to eq('some message')
@@ -60,9 +58,7 @@ describe Core::RecordMessageForIncident do
         end
 
         it 'persists the message with the unresolved incident id' do
-          request = Core::RecordMessageForIncident::Request.new(message: message)
-
-          subject.execute(request)
+          subject.execute(incoming_message)
 
           expect(messages_repository_spy).to have_received(:save) do |message|
             expect(message.text).to eq('some message')
@@ -81,9 +77,7 @@ describe Core::RecordMessageForIncident do
         end
 
         it 'does not persist the message' do
-          request = Core::RecordMessageForIncident::Request.new(message: message)
-
-          subject.execute(request)
+          subject.execute(incoming_message)
 
           expect(messages_repository_spy).not_to have_received(:save)
         end
@@ -92,9 +86,7 @@ describe Core::RecordMessageForIncident do
 
     context 'when there is NOT an unresolved incident' do
       it 'does not persist the message' do
-        request = Core::RecordMessageForIncident::Request.new(message: message)
-
-        subject.execute(request)
+        subject.execute(incoming_message)
 
         expect(messages_repository_spy).not_to have_received(:save)
       end

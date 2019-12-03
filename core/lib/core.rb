@@ -6,6 +6,7 @@ module Core
   require 'core/entities/github/pull_request'
   require 'core/entities/github/pull_request_event'
   require 'core/entities/github/status'
+  require 'core/entities/slack/incoming_message'
 
   require 'core/use_cases/continue_deployments'
   require 'core/use_cases/hold_deployments'
