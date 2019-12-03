@@ -1,9 +1,10 @@
 import React from 'react';
-import { useFetch } from '../../hooks/use-fetch';
 import * as moment from 'moment';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { StatsCard } from '../../shared-components/stats-card';
 import momentDurationFormatSetup from 'moment-duration-format';
+import { useQuery } from 'react-query';
+import { fetchLifeTimeIncidentDuration } from './api/fetch-life-time-incident-duration';
 
 momentDurationFormatSetup(moment);
 
@@ -11,7 +12,7 @@ export const LifetimeIncidentDuration = () => {
   const {
     data: durationInMilliseconds,
     isLoading
-  } = useFetch<number>('/incidents/all_time_duration.json', (response) => response.allTimeDuration);
+  } = useQuery<number, {}>('/incidents/all_time_duration.json', fetchLifeTimeIncidentDuration);
 
   return (
     <StatsCard title="Lifetime incident duration">

@@ -14,3 +14,4 @@ web/.byebug_history
 
 yarn-error.log
 .DS_Store
+web/.generators

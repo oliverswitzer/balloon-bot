@@ -1,27 +1,26 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-import { useFetch } from '../../hooks/use-fetch';
 import { IncidentData } from './types';
 import { DateRangeInput } from '../../shared-components/date-range-input/component';
 import { DateRange } from '../../shared-components/date-range-input/types';
 import { GridViewTemplate, ListViewTemplate } from './table-templates';
+import { useQuery } from 'react-query';
+import { DateParams, fetchIncidentData, formattedDateParams } from './api/fetch-incidents';
 
 export const IncidentHistoryPage = () => {
-  const {
-    data: incidents,
-    isLoading,
-    fetchMore: fetchMoreIncidents
-  } = useFetch<IncidentData[]>('/incidents.json', mapToIncidents);
-
   const [layout, setLayout] = useState<string>('grid');
   const [dateRange, setDateRange] = useState<DateRange>({});
 
-  useEffect(() => {
-    fetchMoreIncidents(formattedDateParams(dateRange))
-  }, [dateRange]);
+  const {
+    data: incidents,
+    isLoading
+  } = useQuery<IncidentData[], DateParams>(
+    ['/incidents.json', formattedDateParams(dateRange)],
+    fetchIncidentData
+  );
 
   return (
     <div>
@@ -36,7 +35,7 @@ export const IncidentHistoryPage = () => {
       />
 
       {
-        isLoading ?
+        isLoading || !incidents ?
           <ProgressSpinner/> :
           (
             <>
@@ -53,18 +52,6 @@ export const IncidentHistoryPage = () => {
     </div>
   )
 };
-
-function formattedDateParams(dateRange: DateRange) {
-  return {
-    created_after: dateRange.after ? dateRange.after.getTime() : '',
-    created_before: dateRange.before ? dateRange.before.getTime() : ''
-  };
-}
-
-function mapToIncidents(res: any): IncidentData[] {
-  return res;
-}
-
 
 const incidentTemplate = (incidentData: IncidentData, layout: string) => (
   <>

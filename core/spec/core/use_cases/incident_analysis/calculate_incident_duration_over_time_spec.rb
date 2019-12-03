@@ -52,14 +52,14 @@ describe Core::IncidentAnalysis::CalculateIncidentDurationOverTime do
     end
 
     it 'return a list of months and the total incident duration for each month for the prior year' do
-      AN_HOUR_AND_THIRTY_IN_MILLISECONDS = (1.hour + 30.minutes).to_i * 1000
-      ONE_HOUR_IN_MILLISECONDS = 1.hour.to_i * 1000
+      an_hour_and_thirty_in_milliseconds = (1.hour + 30.minutes).to_i * 1000
+      one_hour_in_milliseconds = 1.hour.to_i * 1000
 
       result = subject.execute
 
       expect(result[:months]).to eq(%w(January February March April May June July August September October November December))
       expect(result[:total_duration_per_month]).to eq([
-        0, 0, AN_HOUR_AND_THIRTY_IN_MILLISECONDS, 0, ONE_HOUR_IN_MILLISECONDS, 0, ONE_HOUR_IN_MILLISECONDS, 0, 0, 0, 0, 0
+        0, 0, an_hour_and_thirty_in_milliseconds, 0, one_hour_in_milliseconds, 0, one_hour_in_milliseconds, 0, 0, 0, 0, 0
       ])
     end
   end

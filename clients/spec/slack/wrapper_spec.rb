@@ -60,29 +60,24 @@ describe Clients::Slack::Wrapper do
 
   describe '#channel_name' do
     before do
-      expect(slack_web_client_spy).to receive(:channels_info)
-        .with(channel: 'some-channel-id')
-        .and_return(
-          channel: { name: 'This is a channel' }
-        )
+      allow(slack_web_client_spy).to receive(:channels_list).and_return(
+        {
+          channels: [
+            {
+              id: 'some-channel-id',
+              name: 'This is a channel'
+            },
+            {
+              id: 'some-other-channel-id',
+              name: 'Some other channel'
+            }
+          ]
+        }
+      )
     end
 
     it 'returns the name for the given channel' do
       expect(subject.channel_name('some-channel-id')).to eq('This is a channel')
     end
   end
-
-  private
-
-  def mock_channels_list_response
-    {
-      channels: [
-        {
-          id: 'some-channel-id',
-          name: ENV['DEPLOYMENTS_CHANNEL']
-        }
-      ]
-    }
-  end
-
 end

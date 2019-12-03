@@ -24,6 +24,10 @@ module Web
       text_analyzer: ::Clients::DataAnalysis::TfIdfTermsAnalyzer.new
     )
   )
+  FETCH_MESSAGES_FOR_INCIDENT = ::Core::IncidentAnalysis::FetchMessagesForIncident.new(
+    messages_repository: ::Persistence::MESSAGES_REPOSITORY,
+    chat_client: ::Clients::SLACK_CLIENT_WRAPPER
+  )
   CALCULATE_TOTAL_INCIDENT_DURATION = ::Core::IncidentAnalysis::CalculateTotalIncidentDuration.new(
     incidents_repository: ::Persistence::INCIDENTS_REPOSITORY,
   )

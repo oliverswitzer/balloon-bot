@@ -1,8 +1,4 @@
 class IncidentsController < ApplicationController
-  if %w[staging production].include? Rails.env
-    http_basic_authenticate_with name: ENV['HTTP_AUTH_USER'], password: ENV['HTTP_AUTH_PASSWORD']
-  end
-
   def index
     lower_bound = epoch_to_utc(safe_params[:created_after]) if safe_params[:created_after].present?
     upper_bound = epoch_to_utc(safe_params[:created_before]) if safe_params[:created_before].present?

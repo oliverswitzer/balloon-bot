@@ -9,8 +9,8 @@ describe Core::Incident do
         resolved_at: Time.now.in_time_zone
       )
 
-      ONE_HOUR_IN_MILLISECONDS = 60 * 60 * 1000
-      expect(incident.duration_in_milliseconds).to eq(ONE_HOUR_IN_MILLISECONDS)
+      one_hour_in_milliseconds = 60 * 60 * 1000
+      expect(incident.duration_in_milliseconds).to eq(one_hour_in_milliseconds)
     end
   end
 end

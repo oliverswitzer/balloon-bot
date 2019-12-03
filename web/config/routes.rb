@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root 'application#index'
 
   resources :incidents, only: [:index] do
+    resources :messages, only: [:index]
     collection do
       get 'all_time_duration'
       get 'duration_over_time'

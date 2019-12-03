@@ -31,7 +31,7 @@ module Clients
       end
 
       def channel_name(channel_id)
-        channel = slack_web_client.channels_info(channel: channel_id)[:channel]
+        channel = all_channels.detect { |c| c[:id] == channel_id }
 
         channel[:name]
       end
@@ -44,7 +44,7 @@ module Clients
       end
 
       private def all_channels
-        @all_channels ||= slack_web_client.channels_list
+        @all_channels ||= slack_web_client.channels_list[:channels]
       end
     end
   end

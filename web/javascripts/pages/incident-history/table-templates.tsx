@@ -5,12 +5,16 @@ import * as _ from 'lodash';
 import * as React from 'react';
 import { computeDuration } from './helpers/time-helpers';
 import { Panel } from 'primereact/panel';
+import { useState } from 'react';
+import { Dialog } from 'primereact/dialog';
+import { MessageFeed } from './message-feed';
 
 enum TimeSeverity {
   SHORT = 'SHORT',
   MEDIUM = 'MEDIUM',
   LONG = 'LONG'
 }
+
 function calculateSeverity(incident: Incident): TimeSeverity {
   let incidentDuration = computeDuration(incident.createdAt, incident.resolvedAt);
 
@@ -48,12 +52,13 @@ export const ListViewTemplate = ({ incidentData }: { incidentData: IncidentData;
       }}>
         <img src={balloonIconMapping[incidentSeverity]}/>
         <div style={{ paddingLeft: '2em' }} className="p-grid">
-          <div className="p-col-12"><Bold><>Incident # {incident.id} — {severityText[incidentSeverity]}</></Bold></div>
+          <div className="p-col-12"><Bold><>Incident # {incident.id} — {severityText[incidentSeverity]}</>
+          </Bold></div>
           <div className="p-col-12"><Bold>Happened at:</Bold> {moment(incident.createdAt).format('lll')}</div>
           <div className="p-col-12"><Bold>Resolved at:</Bold> {moment(incident.resolvedAt).format('lll')}</div>
           <div className="p-col-12"><Bold>First message:</Bold> {incident.messages[0].text}</div>
           {terms.length > 0 &&
-            <div className="p-col-12"><Bold>Terms:</Bold> {terms.join(', ')}</div>
+          <div className="p-col-12"><Bold>Terms:</Bold> {terms.join(', ')}</div>
           }
         </div>
       </div>
@@ -65,6 +70,8 @@ export const GridViewTemplate = ({ incidentData }: { incidentData: IncidentData 
   const { incident, terms } = incidentData;
   const incidentSeverity = calculateSeverity(incident);
 
+  const [showDialog, setShowDialog] = useState(false);
+
   return (
     <div className="p-col-12 p-sm-6 p-md-4">
       <Panel header={`Incident # ${incidentData.incident.id} — ${severityText[incidentSeverity]}`}>
@@ -75,7 +82,11 @@ export const GridViewTemplate = ({ incidentData }: { incidentData: IncidentData 
           alignItems: 'center',
           padding: '2em'
         }}>
-          <img style={{ width: '35%' }} src={balloonIconMapping[incidentSeverity]}/>
+          <img
+            onClick={() => setShowDialog(true)}
+            style={{ width: '35%', cursor: 'pointer' }}
+            src={balloonIconMapping[incidentSeverity]}
+          />
           <div style={{ minHeight: '10rem' }}>
             <p><Bold>Happened:</Bold> {moment(incident.createdAt).fromNow()}</p>
             <p><Bold>Duration:</Bold> {computeDuration(incident.createdAt, incident.resolvedAt).humanize()}</p>
@@ -87,6 +98,10 @@ export const GridViewTemplate = ({ incidentData }: { incidentData: IncidentData 
           </div>
         </div>
       </Panel>
+
+      <Dialog header="Message history" visible={showDialog} onHide={() => setShowDialog(false)}>
+        {showDialog && <MessageFeed incident={incident}/>}
+      </Dialog>
     </div>
   )
 };
