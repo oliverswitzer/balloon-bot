@@ -37,9 +37,10 @@ module Clients
       end
 
       def handle_name(user_id)
-        user = all_users.detect { |u| u[:id] == user_id }
+        handle = all_users.detect { |u| u[:id] == user_id }.try(:[], :name)
+        handle = lookup_bot_handle(user_id) if handle.nil?
 
-        user[:name] if user
+        handle
       end
 
       private def all_users
@@ -48,6 +49,22 @@ module Clients
 
       private def all_channels
         @all_channels ||= slack_web_client.channels_list[:channels]
+      end
+
+      private def lookup_bot_handle(user_id)
+        @bot_handle_mapping ||= {}
+
+        begin
+          return @bot_handle_mapping[user_id] if @bot_handle_mapping[user_id]
+
+          handle = slack_web_client.bots_info(bot: user_id)
+            .try(:[], :bot)
+            .try(:[], :name)
+          @bot_handle_mapping[user_id] = handle
+          handle
+        rescue Slack::Web::Api::Errors::SlackError
+          nil
+        end
       end
     end
   end

@@ -15,6 +15,8 @@ module Core
     def execute(incoming_message)
       unresolved_incident = incidents_repository.find_last_unresolved
 
+      return if !!messages_repository.find_by_timestamp(incoming_message.timestamp)
+
       if unresolved_incident && is_in_configured_channel?(incoming_message)
         messages_repository.save(
           Core::Message.new(

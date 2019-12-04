@@ -1,5 +1,4 @@
 require 'core'
-
 require 'test_support'
 
 # Load entity factory

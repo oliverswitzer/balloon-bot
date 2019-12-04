@@ -14,7 +14,9 @@ async function fetchMessagesForIncident({ incidentId }: { incidentId: number }):
   const messages = await fetchJson(`/incidents/${incidentId}/messages.json`);
   return messages.map(message => {
     return {
-      ...message, createdAt: moment(message.createdAt).format('llll')
+      ...message,
+      createdAt: moment(message.createdAt).format('llll'),
+      slackHandle: message.slackHandle || '??'
     }
   });
 }
@@ -27,7 +29,8 @@ export const MessageFeed = ({ incident }: MessageFeedProps) => {
       <DataTable value={messages} style={{ maxHeight: '80vh', overflowY: 'scroll'}}>
         <Column field="channelName" header="Channel" />
         <Column field="createdAt" header="Time" />
-        <Column field="text" header="Text" />
+        <Column field="slackHandle" header="Handle" />
+        <Column field="text" header="Text" style={{ width: '50%' }}/>
       </DataTable>
     </>
   )

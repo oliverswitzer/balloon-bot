@@ -29,4 +29,8 @@ class FakeMessagesRepository
   def find_by_incident_id(incident_id)
     @messages.select { |message| message.incident.id == incident_id }
   end
+
+  def find_by_timestamp(timestamp)
+    @messages.detect { |message| message.timestamp == timestamp }
+  end
 end

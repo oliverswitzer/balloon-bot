@@ -100,5 +100,21 @@ def messages_repository_contract(repo_class:, incident_repo_class:)
         )
       end
     end
+
+    describe '#find_by_timestamp' do
+      it 'returns the message that matches the given timestamp' do
+        incident = incidents_repository.save(Core::EntityFactory.build_incident)
+
+        message1 = Core::EntityFactory.build_message(incident: incident, timestamp: '123')
+        message2 = Core::EntityFactory.build_message(incident: incident, timestamp: '456')
+
+        subject.save(message1)
+        subject.save(message2)
+
+        found_message = subject.find_by_timestamp('123')
+
+        expect(found_message.id).to eq(message1.id)
+      end
+    end
   end
 end

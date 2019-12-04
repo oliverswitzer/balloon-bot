@@ -22,6 +22,10 @@ module Persistence
       Persistence::MessageRecord.find(id).to_message
     end
 
+    def find_by_timestamp(timestamp)
+      Persistence::MessageRecord.find_by(timestamp: timestamp).to_message
+    end
+
     def find_by_incident_id(incident_id)
       Persistence::MessageRecord.where(incident_id: incident_id)
         .order(created_at: :asc)

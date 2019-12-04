@@ -21,7 +21,7 @@ def incidents_repository_contract(repo_class)
         it 'generates a created_at timestamp for the incident' do
           persisted_incident = subject.save(Core::Incident.new(resolved_at: nil))
 
-          expect(persisted_incident.created_at).to be_a(Time)
+          expect(persisted_incident.created_at).not_to be_nil
         end
       end
 
