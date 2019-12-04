@@ -2,13 +2,13 @@ require_relative '../../spec_helper'
 
 describe Core::RecordMessageForIncident do
   let(:slack_client_wrapper_spy) { spy('Clients::Slack::Wrapper') }
-  let(:messages_repository_spy) { spy(FakeMessagesRepository) }
+  let(:messages_repository) { FakeMessagesRepository.new }
   let(:incidents_repository) { FakeIncidentsRepository.new }
 
   subject do
     Core::RecordMessageForIncident.new(
       chat_client: slack_client_wrapper_spy,
-      messages_repository: messages_repository_spy,
+      messages_repository: messages_repository,
       incidents_repository: incidents_repository
     )
   end
@@ -18,13 +18,36 @@ describe Core::RecordMessageForIncident do
       Core::EntityFactory.build_incoming_slack_message(
         text: 'some message',
         timestamp: '456',
-        channel_id: '123abc'
+        channel_id: '123abc',
+        author_id: '456def'
       )
     end
 
     context 'when there is an unresolved incident' do
       let!(:persisted_incident) do
         incidents_repository.save(Core::Incident.new(resolved_at: nil))
+      end
+
+      context "when a message has already been persisted with the incoming message's timestamp" do
+        let(:message_with_duplicate_timestamp) do
+          Core::EntityFactory.build_message(
+            timestamp: '456',
+            text: 'message that already existed',
+            incident: persisted_incident
+          )
+        end
+
+        before do
+          messages_repository.save(message_with_duplicate_timestamp)
+        end
+
+        it 'does not save that incoming message message' do
+          subject.execute(incoming_message)
+
+          message = messages_repository.find_by_timestamp('456')
+
+          expect(message.text).to eq('message that already existed')
+        end
       end
 
       context 'when message is sent in configured deployments channel' do
@@ -39,12 +62,12 @@ describe Core::RecordMessageForIncident do
         it 'persists the message with the unresolved incident id' do
           subject.execute(incoming_message)
 
-          expect(messages_repository_spy).to have_received(:save) do |message|
-            expect(message.text).to eq('some message')
-            expect(message.timestamp).to eq('456')
-            expect(message.channel_id).to eq('123abc')
-            expect(message.incident).to eq(persisted_incident)
-          end
+          message = messages_repository.find_by_timestamp('456')
+
+          expect(message.text).to eq('some message')
+          expect(message.channel_id).to eq('123abc')
+          expect(message.author_id).to eq('456def')
+          expect(message.incident).to eq(persisted_incident)
         end
       end
 
@@ -60,12 +83,12 @@ describe Core::RecordMessageForIncident do
         it 'persists the message with the unresolved incident id' do
           subject.execute(incoming_message)
 
-          expect(messages_repository_spy).to have_received(:save) do |message|
-            expect(message.text).to eq('some message')
-            expect(message.timestamp).to eq('456')
-            expect(message.channel_id).to eq('123abc')
-            expect(message.incident).to eq(persisted_incident)
-          end
+          message = messages_repository.find_by_timestamp('456')
+
+          expect(message.text).to eq('some message')
+          expect(message.channel_id).to eq('123abc')
+          expect(message.author_id).to eq('456def')
+          expect(message.incident).to eq(persisted_incident)
         end
       end
 
@@ -79,7 +102,9 @@ describe Core::RecordMessageForIncident do
         it 'does not persist the message' do
           subject.execute(incoming_message)
 
-          expect(messages_repository_spy).not_to have_received(:save)
+          message = messages_repository.find_by_timestamp('456')
+
+          expect(message).to be_nil
         end
       end
     end
@@ -88,7 +113,9 @@ describe Core::RecordMessageForIncident do
       it 'does not persist the message' do
         subject.execute(incoming_message)
 
-        expect(messages_repository_spy).not_to have_received(:save)
+        message = messages_repository.find_by_timestamp('456')
+
+        expect(message).to be_nil
       end
     end
   end

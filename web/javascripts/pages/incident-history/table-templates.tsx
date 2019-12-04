@@ -99,7 +99,7 @@ export const GridViewTemplate = ({ incidentData }: { incidentData: IncidentData 
         </div>
       </Panel>
 
-      <Dialog header="Message history" visible={showDialog} onHide={() => setShowDialog(false)}>
+      <Dialog maximizable header="Message history" visible={showDialog} onHide={() => setShowDialog(false)}>
         {showDialog && <MessageFeed incident={incident}/>}
       </Dialog>
     </div>

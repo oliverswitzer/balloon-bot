@@ -8,6 +8,7 @@ module Persistence
       {
         text: message_entity.text,
         channel_id: message_entity.channel_id,
+        author_id: message_entity.author_id,
         timestamp: message_entity.timestamp,
         incident: find_or_create_incident_record(message_entity)
       }
@@ -26,6 +27,7 @@ module Persistence
         id: id,
         text: text,
         channel_id: channel_id,
+        author_id: author_id,
         timestamp: timestamp,
         created_at: created_at,
         incident: Core::Incident.new(

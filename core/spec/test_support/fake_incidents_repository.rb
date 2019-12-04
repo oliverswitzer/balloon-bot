@@ -8,7 +8,7 @@ class FakeIncidentsRepository
   def save(incident)
     if incident.id.nil?
       incident.id = @incidents.length + 1
-      incident.created_at = incident.created_at || Time.now
+      incident.created_at = incident.created_at || DateTime.now
 
       @incidents << incident
 

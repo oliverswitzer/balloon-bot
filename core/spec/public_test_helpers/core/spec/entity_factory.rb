@@ -1,10 +1,11 @@
 module Core
   class EntityFactory
-    def self.build_message(id: nil, text: nil, channel_id: nil, timestamp: nil, incident: nil)
+    def self.build_message(id: nil, text: nil, channel_id: nil, timestamp: nil, incident: nil, author_id: nil)
       Core::Message.new(
         id: id,
         text: text || 'this is a message',
         channel_id: channel_id || Random.rand(10000).to_s,
+        author_id: author_id || Random.rand(10000).to_s,
         timestamp: timestamp || Time.now.utc.to_i.to_s,
         incident: incident || build_incident
       )

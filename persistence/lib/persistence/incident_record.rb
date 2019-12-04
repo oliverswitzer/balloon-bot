@@ -2,7 +2,7 @@ module Persistence
   class IncidentRecord < ActiveRecord::Base
     self.table_name = 'incidents'
 
-    has_many :messages, class_name: 'Persistence::MessageRecord', foreign_key: 'incident_id'
+    has_many :messages, class_name: 'Persistence::MessageRecord', foreign_key: 'incident_id', dependent: :destroy
 
     def to_incident
       Core::Incident.new(id: id, resolved_at: resolved_at, created_at: created_at)

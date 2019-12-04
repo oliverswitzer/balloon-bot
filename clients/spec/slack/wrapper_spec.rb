@@ -80,4 +80,27 @@ describe Clients::Slack::Wrapper do
       expect(subject.channel_name('some-channel-id')).to eq('This is a channel')
     end
   end
+
+  describe '#handle_name' do
+    before do
+      allow(slack_web_client_spy).to receive(:users_list).and_return(
+        {
+          members: [
+            {
+              id: 'some-user-id',
+              name: 'userhandle'
+            },
+            {
+              id: 'some-other-user-id',
+              name: 'otheruserhandle'
+            }
+          ]
+        }
+      )
+    end
+
+    it 'returns the handle name for the given user id' do
+      expect(subject.handle_name('some-user-id')).to eq('userhandle')
+    end
+  end
 end

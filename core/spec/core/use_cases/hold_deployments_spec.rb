@@ -113,18 +113,6 @@ describe Core::HoldDeployments do
       expect(saved_incident.resolved_at).to be_nil
     end
 
-    it 'saves the message that triggered the incident' do
-      subject.execute(incoming_message)
-
-      incident = incidents_repository.find_last_unresolved
-
-      message = messages_repository.find_by_incident_id(incident.id).first
-
-      expect(message.text).to eq(incoming_message.text)
-      expect(message.channel_id).to eq(incoming_message.channel_id)
-      expect(message.timestamp).to eq(incoming_message.timestamp)
-    end
-
     describe 'github status behavior' do
       context 'for each open PR on the configured github repo' do
         before do
