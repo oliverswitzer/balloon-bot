@@ -34,9 +34,7 @@ module Core
       messages_repository.save(
         Core::Message.new(
           incident: incident,
-          text: incoming_message.text,
-          timestamp: incoming_message.timestamp,
-          channel_id: incoming_message.channel_id
+          **incoming_message.attributes
         )
       )
 

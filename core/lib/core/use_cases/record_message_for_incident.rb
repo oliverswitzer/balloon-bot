@@ -20,11 +20,8 @@ module Core
       if unresolved_incident && is_in_configured_channel?(incoming_message)
         messages_repository.save(
           Core::Message.new(
-            text: incoming_message.text,
             incident: unresolved_incident,
-            timestamp: incoming_message.timestamp,
-            channel_id: incoming_message.channel_id,
-            author_id: incoming_message.author_id
+            **incoming_message.attributes
           )
         )
       end
