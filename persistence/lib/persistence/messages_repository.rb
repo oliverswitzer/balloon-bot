@@ -23,7 +23,7 @@ module Persistence
     end
 
     def find_by_timestamp(timestamp)
-      Persistence::MessageRecord.find_by(timestamp: timestamp).to_message
+      message = Persistence::MessageRecord.find_by(timestamp: timestamp)&.to_message
     end
 
     def find_by_incident_id(incident_id)

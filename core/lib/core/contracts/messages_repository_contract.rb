@@ -115,6 +115,12 @@ def messages_repository_contract(repo_class:, incident_repo_class:)
 
         expect(found_message.id).to eq(message1.id)
       end
+
+      it 'returns nil if the message is not found' do
+        found_message = subject.find_by_timestamp('123')
+
+        expect(found_message).to be_nil
+      end
     end
   end
 end
