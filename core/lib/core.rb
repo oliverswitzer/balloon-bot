@@ -12,7 +12,7 @@ module Core
   require 'core/use_cases/hold_deployments'
   require 'core/use_cases/record_message_for_incident'
   require 'core/use_cases/incident_analysis/calculate_total_incident_duration'
-  require 'core/use_cases/incident_analysis/calculate_incident_duration_over_time'
+  require 'core/use_cases/incident_analysis/calculate_incident_stats_over_time'
   require 'core/use_cases/update_new_pull_request_status'
   require 'core/use_cases/incident_analysis/fetch_incidents'
   require 'core/use_cases/incident_analysis/fetch_messages_for_incident'

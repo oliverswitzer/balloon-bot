@@ -31,7 +31,7 @@ module Web
   CALCULATE_TOTAL_INCIDENT_DURATION = ::Core::IncidentAnalysis::CalculateTotalIncidentDuration.new(
     incidents_repository: ::Persistence::INCIDENTS_REPOSITORY,
   )
-  CALCULATE_INCIDENT_DURATION_OVER_TIME = ::Core::IncidentAnalysis::CalculateIncidentDurationOverTime.new(
+  CALCULATE_INCIDENT_STATS_OVER_TIME = ::Core::IncidentAnalysis::CalculateIncidentStatsOverTime.new(
     incidents_repository: ::Persistence::INCIDENTS_REPOSITORY,
   )
 

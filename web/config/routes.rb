@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resources :messages, only: [:index]
     collection do
       get 'all_time_duration'
-      get 'duration_over_time'
+      get 'stats_over_time'
     end
   end
 end

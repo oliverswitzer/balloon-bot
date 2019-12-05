@@ -1,11 +1,11 @@
 require_relative '../../../spec_helper'
 require 'active_support/all'
 
-describe Core::IncidentAnalysis::CalculateIncidentDurationOverTime do
+describe Core::IncidentAnalysis::CalculateIncidentStatsOverTime do
   let(:fake_incidents_repository) { FakeIncidentsRepository.new }
 
   subject do
-    Core::IncidentAnalysis::CalculateIncidentDurationOverTime.new(
+    Core::IncidentAnalysis::CalculateIncidentStatsOverTime.new(
       incidents_repository: fake_incidents_repository
     )
   end
@@ -44,6 +44,8 @@ describe Core::IncidentAnalysis::CalculateIncidentDurationOverTime do
       )
     end
 
+    let(:current_time) { Time.new(2019, 12, 19) }
+
     before do
       fake_incidents_repository.save(thirty_minute_incident_in_march)
       fake_incidents_repository.save(one_hour_incident_in_march)
@@ -51,13 +53,18 @@ describe Core::IncidentAnalysis::CalculateIncidentDurationOverTime do
       fake_incidents_repository.save(one_hour_incident_in_july)
     end
 
-    it 'return a list of months and the total incident duration for each month for the prior year' do
+    it 'returns months for the year prior to passed in time' do
+      result = subject.execute(current_time: current_time)
+
+      expect(result[:months]).to eq(%w(January February March April May June July August September October November December))
+    end
+
+    it 'return the total incident duration for each month for the year' do
       an_hour_and_thirty_in_milliseconds = (1.hour + 30.minutes).to_i * 1000
       one_hour_in_milliseconds = 1.hour.to_i * 1000
 
-      result = subject.execute
+      result = subject.execute(current_time: current_time)
 
-      expect(result[:months]).to eq(%w(January February March April May June July August September October November December))
       expect(result[:total_duration_per_month]).to eq([
         0, 0, an_hour_and_thirty_in_milliseconds, 0, one_hour_in_milliseconds, 0, one_hour_in_milliseconds, 0, 0, 0, 0, 0
       ])

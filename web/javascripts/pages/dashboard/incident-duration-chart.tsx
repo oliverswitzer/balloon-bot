@@ -10,7 +10,7 @@ export const IncidentDurationChart = () => {
   const {
     data,
     isLoading
-  } = useQuery<object, {}>('/incidents/duration_over_time.json', fetchIncidentDurationChartData);
+  } = useQuery<object, {}>('/incidents/stats_over_time.json', fetchIncidentDurationChartData);
 
   return (
     <StatsCard title="Held deployments over time">

@@ -1,16 +1,16 @@
 module Core
   module IncidentAnalysis
-    class CalculateIncidentDurationOverTime
+    class CalculateIncidentStatsOverTime
       attr_reader :incidents_repository
 
       def initialize(incidents_repository:)
         @incidents_repository = incidents_repository
       end
 
-      def execute
+      def execute(current_time: Time.now)
         incidents = incidents_repository.find_by_created_at_with_messages(
-          lower_bound: 1.year.ago,
-          upper_bound: Time.now
+          lower_bound: current_time - 1.year,
+          upper_bound: current_time
         ).select(&:is_resolved?)
 
         {

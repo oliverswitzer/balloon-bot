@@ -1,9 +1,9 @@
 import { fetchJson } from '../../../utils/fetch-json';
 
 export const fetchIncidentDurationChartData = async () => {
-  const response = await fetchJson('/incidents/duration_over_time.json');
+  const response = await fetchJson('/incidents/stats_over_time.json');
 
-  const { durationOverTime: { months, totalDurationPerMonth } } = response;
+  const { statsOverTime: { months, totalDurationPerMonth } } = response;
 
   return ({
     labels: months,

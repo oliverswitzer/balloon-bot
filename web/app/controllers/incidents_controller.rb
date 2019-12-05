@@ -20,11 +20,11 @@ class IncidentsController < ApplicationController
     end
   end
 
-  def duration_over_time
+  def stats_over_time
     respond_to do |format|
       format.json do
         render json: {
-          duration_over_time: Web::CALCULATE_INCIDENT_DURATION_OVER_TIME.execute
+          stats_over_time: Web::CALCULATE_INCIDENT_STATS_OVER_TIME.execute
         }
       end
     end
