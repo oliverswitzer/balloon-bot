@@ -69,5 +69,13 @@ describe Core::IncidentAnalysis::CalculateIncidentStatsOverTime do
         0, 0, an_hour_and_thirty_in_milliseconds, 0, one_hour_in_milliseconds, 0, one_hour_in_milliseconds, 0, 0, 0, 0, 0
       ])
     end
+
+    it 'returns the total incident count for each month for the year' do
+      result = subject.execute(current_time: current_time)
+
+      expect(result[:total_count_per_month]).to eq([
+        0, 0, 2, 0, 1, 0, 1, 0, 0, 0, 0, 0
+      ])
+    end
   end
 end

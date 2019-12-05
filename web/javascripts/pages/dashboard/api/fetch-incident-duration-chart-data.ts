@@ -3,7 +3,7 @@ import { fetchJson } from '../../../utils/fetch-json';
 export const fetchIncidentDurationChartData = async () => {
   const response = await fetchJson('/incidents/stats_over_time.json');
 
-  const { statsOverTime: { months, totalDurationPerMonth } } = response;
+  const { statsOverTime: { months, totalDurationPerMonth, totalCountPerMonth } } = response;
 
   return ({
     labels: months,
@@ -13,6 +13,12 @@ export const fetchIncidentDurationChartData = async () => {
         data: totalDurationPerMonth.map(durations => millisecondsToHours(durations)),
         fill: false,
         borderColor: 'green'
+      },
+      {
+        label: 'Total Incident Count',
+        data: totalCountPerMonth,
+        fill: false,
+        borderColor: 'red'
       }
     ]
   })

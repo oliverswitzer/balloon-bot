@@ -15,7 +15,10 @@ module Core
 
         {
           months: months,
-          total_duration_per_month: durations_per_month(incidents)
+          total_duration_per_month: calculate_stats_per_month(incidents)
+            .map { |monthly_stat| monthly_stat[:duration] },
+          total_count_per_month: calculate_stats_per_month(incidents)
+            .map { |monthly_stat| monthly_stat[:count] },
         }
       end
 
@@ -23,24 +26,30 @@ module Core
         Date::MONTHNAMES.compact
       end
 
-      private def durations_per_month(incidents)
+      private def calculate_stats_per_month(incidents)
         months.map.with_index do |month, i|
           sum_incidents_for_month(i, incidents)
         end
       end
 
-      private def sum_incidents_for_month(i, incidents)
-        incidents.inject(0) do |total_duration, incident|
-          if incident_occurred_in_month(i, incident)
-            total_duration + incident.duration_in_milliseconds
-          else
-            total_duration
+      private def sum_incidents_for_month(month_index, incidents)
+        monthly_stats = {
+          duration: 0,
+          count: 0
+        }
+
+        incidents.each do |incident|
+          if incident_occurred_in_month(month_index, incident)
+            monthly_stats[:duration] += incident.duration_in_milliseconds
+            monthly_stats[:count] += 1
           end
         end
+
+        monthly_stats
       end
 
-      private def incident_occurred_in_month(i, incident)
-        incident.created_at.month == i + 1
+      private def incident_occurred_in_month(month_index, incident)
+        incident.created_at.month == month_index + 1
       end
     end
   end
