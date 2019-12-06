@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :incidents, only: [:index] do
     resources :messages, only: [:index]
     collection do
-      get 'all_time_duration'
+      get 'lifetime_stats'
       get 'stats_over_time'
     end
   end

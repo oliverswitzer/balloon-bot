@@ -1,6 +1,6 @@
 module Core
   module IncidentAnalysis
-    class CalculateTotalIncidentDuration
+    class CalculateLifetimeIncidentStats
       attr_reader :incidents_repository
 
       def initialize(incidents_repository:)
@@ -10,9 +10,14 @@ module Core
       def execute
         incidents = incidents_repository.find_all_resolved
 
-        incidents.reduce(0) do |acc, incident|
+        total_duration = incidents.reduce(0) do |acc, incident|
           acc += incident.duration_in_milliseconds
         end
+
+        {
+          total_duration: total_duration,
+          average_duration: total_duration / incidents.size
+        }
       end
     end
   end

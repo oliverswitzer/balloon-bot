@@ -14,9 +14,9 @@ class IncidentsController < ApplicationController
     end
   end
 
-  def all_time_duration
+  def lifetime_stats
     respond_to do |format|
-      format.json { render json: { all_time_duration: Web::CALCULATE_TOTAL_INCIDENT_DURATION.execute } }
+      format.json { render json: { lifetime_stats: Web::CALCULATE_LIFETIME_INCIDENT_STATS.execute } }
     end
   end
 
