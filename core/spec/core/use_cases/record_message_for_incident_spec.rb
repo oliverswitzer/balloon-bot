@@ -28,6 +28,14 @@ describe Core::RecordMessageForIncident do
         incidents_repository.save(Core::Incident.new(resolved_at: nil))
       end
 
+      before do
+        ENV['DEPLOYMENTS_CHANNEL'] = 'some channel'
+
+        allow(slack_client_wrapper_spy).to receive(:channel_name)
+          .with('123abc')
+          .and_return('some channel')
+      end
+
       context "when a message has already been persisted with the incoming message's timestamp" do
         let(:message_with_duplicate_timestamp) do
           Core::EntityFactory.build_message(
@@ -50,15 +58,26 @@ describe Core::RecordMessageForIncident do
         end
       end
 
-      context 'when message is sent in configured deployments channel' do
-        before do
-          ENV['DEPLOYMENTS_CHANNEL'] = 'some channel'
-
-          expect(slack_client_wrapper_spy).to receive(:channel_name)
-            .with('123abc')
-            .and_return('some channel')
+      context 'when the message is a blank string' do
+        let(:incoming_message) do
+          Core::EntityFactory.build_incoming_slack_message(
+            text: '',
+            timestamp: '456',
+            channel_id: '123abc',
+            author_id: '456def'
+          )
         end
 
+        it 'does not save the message' do
+          subject.execute(incoming_message)
+
+          message = messages_repository.find_by_timestamp('456')
+
+          expect(message).to be_nil
+        end
+      end
+
+      context 'when message is sent in configured deployments channel' do
         it 'persists the message with the unresolved incident id' do
           subject.execute(incoming_message)
 

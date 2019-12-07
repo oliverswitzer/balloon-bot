@@ -13,18 +13,17 @@ module Core
     end
 
     def execute(incoming_message)
-      unresolved_incident = incidents_repository.find_last_unresolved
+      return unless !!ongoing_incident
+      return if message_already_exists?(incoming_message)
+      return if incoming_message.text.blank?
+      return unless is_in_configured_channel?(incoming_message)
 
-      return if !!messages_repository.find_by_timestamp(incoming_message.timestamp)
-
-      if unresolved_incident && is_in_configured_channel?(incoming_message)
-        messages_repository.save(
-          Core::Message.new(
-            incident: unresolved_incident,
-            **incoming_message.attributes
-          )
+      messages_repository.save(
+        Core::Message.new(
+          incident: ongoing_incident,
+          **incoming_message.attributes
         )
-      end
+      )
     end
 
     private def is_in_configured_channel?(message)
@@ -38,6 +37,14 @@ module Core
         ENV['DEPLOYMENTS_CHANNEL'],
         ENV['INCIDENT_RESPONSE_CHANNEL']
       ]
+    end
+
+    private def message_already_exists?(incoming_message)
+      !!messages_repository.find_by_timestamp(incoming_message.timestamp)
+    end
+
+    private def ongoing_incident
+      incidents_repository.find_last_unresolved
     end
   end
 end
