@@ -8,7 +8,7 @@ module Clients
       end
 
       def set_channel_topic(message:)
-        slack_web_client.channels_setTopic(
+        slack_web_client.conversations_setTopic(
           channel: "##{ENV['DEPLOYMENTS_CHANNEL']}",
           topic: message
         )
@@ -31,9 +31,9 @@ module Clients
       end
 
       def channel_name(channel_id)
-        channel = all_channels.detect { |c| c[:id] == channel_id }
+        channel = slack_web_client.conversations_info(channel: channel_id)
 
-        channel[:name] if channel
+        channel.channel.name if channel
       end
 
       def handle_name(user_id)
@@ -45,10 +45,6 @@ module Clients
 
       private def all_users
         @all_users ||= slack_web_client.users_list[:members]
-      end
-
-      private def all_channels
-        @all_channels ||= slack_web_client.channels_list[:channels]
       end
 
       private def lookup_bot_handle(user_id)
