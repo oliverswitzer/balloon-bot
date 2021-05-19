@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rake'
   gem.add_dependency 'rails', '~> 6.0'
   gem.add_dependency 'pg'
-  gem.add_dependency 'puma', '~> 3.7'
+  gem.add_dependency 'puma', '>= 3.7', '< 6.0'
   gem.add_dependency 'tzinfo-data'
   gem.add_dependency 'dotenv'
   gem.add_dependency 'olive_branch'
