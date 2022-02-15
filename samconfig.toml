@@ -1,0 +1,12 @@
+version = 0.1
+
+[default.global.parameters]
+  region = "us-east-1"
+  stack_name = "balloonbot"
+
+[default.deploy.parameters]
+  capabilities = "CAPABILITY_IAM"
+  confirm_changeset = true
+  fail_on_empty_changeset = false
+  s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-sip6dfv8p08a"
+  s3_prefix = "balloonbot"

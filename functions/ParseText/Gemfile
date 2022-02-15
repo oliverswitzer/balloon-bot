@@ -1,0 +1,9 @@
+source 'https://rubygems.org'
+
+ruby '~> 2.7.0'
+
+group :development do
+  gem 'datadog-lambda', '~> 1.14'
+  gem 'ddtrace',        '~> 0.53'
+  gem 'yake',           '~> 0.4'
+end

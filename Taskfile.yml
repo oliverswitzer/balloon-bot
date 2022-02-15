@@ -1,0 +1,102 @@
+# https://taskfile.dev
+
+version: "3"
+
+dotenv:
+  - .env
+
+includes:
+  brew: ~/.ksr/tasks/brew.yml
+  ruby: ~/.ksr/tasks/ruby.yml
+  tilt: ~/.ksr/tasks/tilt.yml
+
+tasks:
+  init:
+    desc: Initialize project
+    cmds:
+      - task: brew:update
+      - task: brew:bundle
+      - task: ruby:rbenv:install
+      - task: ruby:bundler:setup
+      - task: ruby:bundle
+      - task: ruby:bundle
+        vars: { DIR: functions/ParseText }
+      - task: ruby:bundle
+        vars: { DIR: functions/PopInflate }
+
+  build:
+    desc: Build project
+    deps:
+      - task: validate
+    cmds:
+      - sam build
+
+  clean:
+    desc: Clean project
+    cmds:
+      - rm -rf .aws-sam
+
+  deploy:
+    desc: Deploy project
+    deps:
+      - task: build
+    cmds:
+      - sam deploy
+
+  deploy:auto:
+    desc: Deploy project (auto-approve)
+    deps:
+      - task: build
+    cmds:
+      - sam deploy --no-confirm-changeset
+
+  events:@Kickbot:
+    desc: Generate a Slack event for @Kickbot pop
+    cmds:
+      - silent: true
+        cmd: |-
+          echo '<@U021ARVQM4G> {{.CLI_ARGS}}' | jq -R '{ text: . } + {
+            type: "app_mention",
+            user: "U0123456789",
+            team: "T024BHJ4H",
+            channel: "C030WBQRU"
+          } | {
+            team_id: "T024BHJ4H",
+            api_app_id: "A02068WULKH",
+            type: "event_callback",
+            event: .
+          }'
+
+  events:/balloonbot:
+    desc: Generate a Slack event for /balloonbot
+    cmds:
+      - silent: true
+        cmd: |-
+          echo '{{.CLI_ARGS}}' | jq -R '{ text: . } + {
+            team_id: "T024BHJ4H",
+            team_domain: "kickstarter",
+            channel_id: "C030WBQRU",
+            channel_name: "deployments",
+            user_id: "U0123456789",
+            user_name: "ruby",
+            command: "/balloonbot"
+          }'
+
+  invoke:ParseText:
+    desc: Invoke ParseText locally (requires event sent over STDIN)
+    cmds:
+      - sam local invoke ParseText --event - | jq
+
+  logs:PopInflate:
+    desc: Show recent CloudWatch logs for PopInflate function
+    cmds:
+      - >-
+        sam logs --name PopInflate
+        --start-time '{{default "15m" .SINCE}}'
+        --end-time '{{.TO}}'
+        --tail
+
+  validate:
+    desc: Validate SAM template
+    cmds:
+      - sam validate

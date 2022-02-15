@@ -1,0 +1,536 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Kickbot
+
+Parameters:
+  DeploymentsChannelId:
+    Type: String
+    Default: C030WBQRU # #deployments
+  DeploymentsChannelInflateText:
+    Type: String
+    Default: >-
+      :green_balloon: Master is green, feel free to merge and deploy.
+  DeploymentsChannelPopText:
+    Type: String
+    Default: >-
+      :warning: Hold deploys :warning:
+  KickbotUserId:
+    Type: String
+    Default: U021ARVQM4G # @Kickbot
+
+Globals:
+  Function:
+    Layers:
+      - !Sub arn:aws:lambda:${AWS::Region}:116278940861:layer:datadog:7
+    Runtime: ruby2.7
+    Tags:
+      Name: Balloonbot
+      git.repo: kickstarter/balloon-bot
+      datadog: monitored
+      env: production
+      service: balloonbot
+      version: 0.1.0
+
+Resources:
+  ########################
+  #   LAMBDA FUCNTIONS   #
+  ########################
+
+  ParseText:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/ParseText
+      Description: Parse /balloonbot text
+      Handler: index.parse_text
+      # Environment:
+      #   Variables:
+      #     SECRET_ID: github/omni
+      # Policies:
+      #   - AWSSecretsManagerGetSecretValuePolicy:
+      #       SecretArn: !ImportValue secrets-github-omni-arn
+  ParseTextLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${ParseText}
+      RetentionInDays: 14
+
+  PopInflate:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/PopInflate
+      Description: Freeze/Unfreeze deployments
+      Environment:
+        Variables:
+          SECRET_ID: !ImportValue secrets-github-balloonbot-arn
+      Handler: index.pop_inflate
+      MemorySize: 512
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !ImportValue secrets-github-balloonbot-arn
+      Timeout: 30
+  PopInflateLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${PopInflate}
+      RetentionInDays: 14
+
+  ######################
+  #   STATE MACHINES   #
+  ######################
+
+  BalloonbotInitialize:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Definition:
+        StartAt: ParseText
+        States:
+          ParseText:
+            Type: Task
+            Resource: !GetAtt ParseText.Arn
+            Next: Send Reply
+          Send Reply:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            End: true
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method: chat.postEphemeral
+              params.$: $
+      Events:
+        AppMention:
+          Type: EventBridgeRule
+          Properties:
+            EventBusName: !ImportValue slack-kickbot-event-bus-name
+            InputPath: $.detail
+            Pattern:
+              source:
+                - kickbot
+              detail-type:
+                - event
+              detail:
+                event:
+                  channel:
+                    - !Ref DeploymentsChannelId
+                  type:
+                    - app_mention
+                  text:
+                    - prefix: !Sub <@${KickbotUserId}> pop
+                    - prefix: !Sub <@${KickbotUserId}> inflate
+        SlashCommand:
+          Type: EventBridgeRule
+          Properties:
+            EventBusName: !ImportValue slack-kickbot-event-bus-name
+            InputPath: $.detail
+            Pattern:
+              source:
+                - kickbot
+              detail-type:
+                - slash
+              detail:
+                channel_id:
+                  - !Ref DeploymentsChannelId
+                command:
+                  - /balloonbot
+      Name: !Sub ${AWS::StackName}-initialize
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref ParseText
+        - LambdaInvokePolicy:
+            FunctionName: !ImportValue slack-kickbot-post-function-name
+      Tags:
+        Name: Balloonbot
+        git.repo: kickstarter/balloon-bot
+      Type: STANDARD
+
+  BalloonbotPop:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Definition:
+        StartAt: Delete Ephemeral Message
+        States:
+          Delete Ephemeral Message:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            Next: Set Channel Topic
+            ResultPath: $.delete_ephemeral_message_response
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method.$: $.response_url
+              params:
+                delete_original: true
+          Set Channel Topic:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            Next: Reason Given?
+            ResultPath: $.set_channel_topic_response
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method: conversations.setTopic
+              params:
+                channel: !Ref DeploymentsChannelId
+                topic: !Ref DeploymentsChannelPopText
+          Reason Given?:
+            Type: Choice
+            Default: Send Notice
+            Choices:
+              - Next: Send Notice with Reason
+                Variable: $.state.values.balloonbot_why.balloonbot_why.value
+                IsNull: false
+          Send Notice:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            Next: Freeze Pull Requests
+            ResultPath: $.send_notice_response
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method: chat.postMessage
+              params:
+                username: Balloonbot
+                icon_emoji: balloon
+                channel: !Ref DeploymentsChannelId
+                user.$: $.user.id
+                text: Please hold deploys and merges!
+                blocks:
+                  - type: section
+                    text:
+                      type: mrkdwn
+                      text.$: States.Format('@channel <@{}> has requested a hold on deploys and merges!', $.user.id)
+                  - type: context
+                    elements:
+                      - type: mrkdwn
+                        text: _[no reason given]_
+                  - type: context
+                    elements:
+                      - type: mrkdwn
+                        text: >-
+                          :octocat: <https://github.com/kickstarter/balloon-bot|kickstarter/balloon-bot>
+          Send Notice with Reason:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            Next: Freeze Pull Requests
+            ResultPath: $.send_notice_response
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method: chat.postMessage
+              params:
+                username: Balloonbot
+                icon_emoji: balloon
+                channel: !Ref DeploymentsChannelId
+                user.$: $.user.id
+                text: Please hold deploys and merges!
+                blocks:
+                  - type: section
+                    text:
+                      type: mrkdwn
+                      text.$: States.Format('@channel <@{}> has requested a hold on deploys and merges!', $.user.id)
+                  - type: context
+                    elements:
+                      - type: mrkdwn
+                        text.$: States.Format('_{}_', $.state.values.balloonbot_why.balloonbot_why.value)
+                  - type: context
+                    elements:
+                      - type: mrkdwn
+                        text: >-
+                          :octocat: <https://github.com/kickstarter/balloon-bot|kickstarter/balloon-bot>
+          Freeze Pull Requests:
+            Type: Task
+            Resource: !GetAtt PopInflate.Arn
+            End: true
+            Parameters:
+              action: pop
+              context: Balloonbot
+              description.$: $.state.values.balloonbot_why.balloonbot_why.value
+              repo.$: $.state.values.balloonbot_actions.balloonbot_repo.selected_option.value
+              target_url: !Sub https://kickstarter.slack.com/archives/${DeploymentsChannelId}
+      Events:
+        Callback:
+          Type: EventBridgeRule
+          Properties:
+            EventBusName: !ImportValue slack-kickbot-event-bus-name
+            InputPath: $.detail.source
+            Pattern:
+              source:
+                - kickbot
+              detail-type:
+                - block_actions
+              detail:
+                action:
+                  action_id:
+                    - balloonbot_pop
+      Name: !Sub ${AWS::StackName}-pop
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref PopInflate
+        - LambdaInvokePolicy:
+            FunctionName: !ImportValue slack-kickbot-post-function-name
+      Tags:
+        Name: Balloonbot
+        git.repo: kickstarter/balloon-bot
+      Type: STANDARD
+
+  BalloonbotInflate:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Definition:
+        StartAt: Delete Ephemeral Message
+        States:
+          Delete Ephemeral Message:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            Next: Set Channel Topic
+            ResultPath: $.delete_ephemeral_message_response
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method.$: $.response_url
+              params:
+                delete_original: true
+          Set Channel Topic:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            Next: Send Notice
+            ResultPath: $.set_channel_topic_response
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method: conversations.setTopic
+              params:
+                channel: !Ref DeploymentsChannelId
+                topic: !Ref DeploymentsChannelInflateText
+          Send Notice:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            Next: Unfreeze Pull Requests
+            ResultPath: $.send_notice_response
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method: chat.postMessage
+              params:
+                username: Balloonbot
+                icon_emoji: green_balloon
+                channel: !Ref DeploymentsChannelId
+                user.$: $.user.id
+                text: All clear!
+                blocks:
+                  - type: section
+                    text:
+                      type: mrkdwn
+                      text.$: States.Format('@channel <@{}> has lifted the hold on deploys and merges!', $.user.id)
+                  - type: context
+                    elements:
+                      - type: mrkdwn
+                        text: >-
+                          :octocat: <https://github.com/kickstarter/balloon-bot|kickstarter/balloon-bot>
+          Unfreeze Pull Requests:
+            Type: Task
+            Resource: !GetAtt PopInflate.Arn
+            End: true
+            Parameters:
+              action: inflate
+              context: Balloonbot
+              description: All good; no notes.
+              repo.$: $.state.values.balloonbot_actions.balloonbot_repo.selected_option.value
+              target_url: !Sub https://kickstarter.slack.com/archives/${DeploymentsChannelId}
+      Events:
+        Callback:
+          Type: EventBridgeRule
+          Properties:
+            EventBusName: !ImportValue slack-kickbot-event-bus-name
+            InputPath: $.detail.source
+            Pattern:
+              source:
+                - kickbot
+              detail-type:
+                - block_actions
+              detail:
+                action:
+                  action_id:
+                    - balloonbot_inflate
+      Name: !Sub ${AWS::StackName}-inflate
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref PopInflate
+        - LambdaInvokePolicy:
+            FunctionName: !ImportValue slack-kickbot-post-function-name
+      Tags:
+        Name: Balloonbot
+        git.repo: kickstarter/balloon-bot
+      Type: STANDARD
+
+  BalloonbotUsageError:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Definition:
+        StartAt: App Mention or Slash Command?
+        States:
+          App Mention or Slash Command?:
+            Type: Choice
+            Default: Unknown
+            Choices:
+              - Next: App Mention Error
+                Variable: $.event.type
+                IsPresent: true
+              - Next: Slash Command Error
+                Variable: $.command
+                IsPresent: true
+          Unknown:
+            Type: Fail
+          App Mention Error:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            End: true
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method: chat.postMessage
+              params:
+                username: Balloonbot
+                icon_emoji: balloon
+                channel.$: $.event.channel
+                text: !Sub Sorry, you can only do that from <#${DeploymentsChannelId}>
+                blocks:
+                  - type: section
+                    text:
+                      type: mrkdwn
+                      text: !Sub Sorry, you can only do that from <#${DeploymentsChannelId}>
+                  - type: context
+                    elements:
+                      - type: mrkdwn
+                        text: !Sub >-
+                          *Usage:* _<@${KickbotUserId}> [ pop | inflate ]_
+          Slash Command Error:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            End: true
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method: chat.postEphemeral
+              params:
+                username: Balloonbot
+                icon_emoji: balloon
+                channel.$: $.channel_id
+                user.$: $.user_id
+                text: !Sub Sorry, you can only do that from <#${DeploymentsChannelId}>
+                blocks:
+                  - type: section
+                    text:
+                      type: mrkdwn
+                      text: !Sub Sorry, you can only do that from <#${DeploymentsChannelId}>
+                  - type: context
+                    elements:
+                      - type: mrkdwn
+                        text: !Sub >-
+                          *Usage:* _/balloonbot [ pop | inflate ]_
+      Events:
+        AppMention:
+          Type: EventBridgeRule
+          Properties:
+            EventBusName: !ImportValue slack-kickbot-event-bus-name
+            InputPath: $.detail
+            Pattern:
+              source:
+                - kickbot
+              detail-type:
+                - event
+              detail:
+                event:
+                  channel:
+                    - anything-but: !Ref DeploymentsChannelId
+                  type:
+                    - app_mention
+                  text:
+                    - prefix: !Sub <@${KickbotUserId}> pop
+                    - prefix: !Sub <@${KickbotUserId}> inflate
+        SlashCommand:
+          Type: EventBridgeRule
+          Properties:
+            EventBusName: !ImportValue slack-kickbot-event-bus-name
+            InputPath: $.detail
+            Pattern:
+              source:
+                - kickbot
+              detail-type:
+                - slash
+              detail:
+                channel_id:
+                  - anything-but: !Ref DeploymentsChannelId
+                command:
+                  - /balloonbot
+      Name: !Sub ${AWS::StackName}-usage-error
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !ImportValue slack-kickbot-post-function-name
+      Tags:
+        Name: Balloonbot
+        git.repo: kickstarter/balloon-bot
+      Type: STANDARD
+
+  BalloonbotPullRequest:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Definition:
+        StartAt: Get Channel Topic
+        States:
+          Get Channel Topic:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            Next: Hold Deploys?
+            ResultPath: $.channel
+            ResultSelector:
+              topic.$: $.channel.topic
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method: conversations.info
+              params:
+                channel: !Ref DeploymentsChannelId
+          Hold Deploys?:
+            Type: Choice
+            Default: All Good
+            Choices:
+              - Next: Hold Deploys
+                Variable: $.channel.topic.value
+                StringEquals: !Ref DeploymentsChannelPopText
+          All Good:
+            Type: Task
+            Resource: !GetAtt PopInflate.Arn
+            End: true
+            Parameters:
+              action: inflate
+              context: Balloonbot
+              description: All good; no notes
+              pull_requests.$: States.Array($.number)
+              repo.$: $.repository.name
+              target_url: !Sub https://kickstarter.slack.com/archives/${DeploymentsChannelId}
+          Hold Deploys:
+            Type: Task
+            Resource: !GetAtt PopInflate.Arn
+            End: true
+            Parameters:
+              action: pop
+              context: Balloonbot
+              description: Please hold merges until Balloonbot is inflated
+              pull_requests.$: States.Array($.number)
+              repo.$: $.repository.name
+              target_url: !Sub https://kickstarter.slack.com/archives/${DeploymentsChannelId}
+      Events:
+        GitHubWebhook:
+          Type: EventBridgeRule
+          Properties:
+            InputPath: $.detail
+            Pattern:
+              source:
+                - github
+              detail-type:
+                - pulls
+              detail:
+                action:
+                  - opened
+                  - reopened
+                repository:
+                  full_name:
+                    - kickstarter/kickstarter
+                    - kickstarter/rosie
+      Name: balloonbot-pull-request
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref PopInflate
+        - LambdaInvokePolicy:
+            FunctionName: !ImportValue slack-kickbot-post-function-name
