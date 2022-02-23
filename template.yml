@@ -43,12 +43,6 @@ Resources:
       CodeUri: functions/ParseText
       Description: Parse /balloonbot text
       Handler: index.parse_text
-      # Environment:
-      #   Variables:
-      #     SECRET_ID: github/omni
-      # Policies:
-      #   - AWSSecretsManagerGetSecretValuePolicy:
-      #       SecretArn: !ImportValue secrets-github-omni-arn
   ParseTextLogs:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -74,6 +68,44 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/lambda/${PopInflate}
       RetentionInDays: 14
+
+  ######################
+  #   DYNAMODB TABLE   #
+  ######################
+
+  BalloonbotTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: HASH
+          AttributeType: S
+        - AttributeName: REPO
+          AttributeType: S
+      BillingMode: PROVISIONED
+      GlobalSecondaryIndexes:
+        - IndexName: REPO
+          KeySchema:
+            - AttributeName: REPO
+              KeyType: HASH
+            - AttributeName: HASH
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+      KeySchema:
+        - AttributeName: HASH
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: balloonbot
+      Tags:
+        - Key: Name
+          Value: Balloonbot
+        - Key: git.repo
+          Value: kickstarter/balloon-bot
 
   ######################
   #   STATE MACHINES   #
@@ -132,6 +164,9 @@ Resources:
                   - !Ref DeploymentsChannelId
                 command:
                   - /balloonbot
+                text:
+                  - prefix: inflate
+                  - prefix: pop
       Name: !Sub ${AWS::StackName}-initialize
       Policies:
         - LambdaInvokePolicy:
@@ -147,8 +182,46 @@ Resources:
     Type: AWS::Serverless::StateMachine
     Properties:
       Definition:
-        StartAt: Delete Ephemeral Message
+        StartAt: Update Table
         States:
+          Update Table:
+            Type: Parallel
+            Next: Delete Ephemeral Message
+            ResultPath: $.dynamodb_result
+            ResultSelector:
+              repo.$: $[0]
+              event.$: $[1]
+            Branches:
+              - StartAt: Update Repo
+                States:
+                  Update Repo:
+                    Type: Task
+                    Resource: arn:aws:states:::dynamodb:putItem
+                    End: true
+                    Parameters:
+                      TableName: !Ref BalloonbotTable
+                      Item:
+                        HASH:
+                          S.$: $.state.values.balloonbot_actions.balloonbot_repo.selected_option.value
+                        REPO:
+                          S.$: $.state.values.balloonbot_actions.balloonbot_repo.selected_option.value
+                        ACTION:
+                          S: POP
+              - StartAt: Add Event
+                States:
+                  Add Event:
+                    Type: Task
+                    Resource: arn:aws:states:::dynamodb:putItem
+                    End: true
+                    Parameters:
+                      TableName: !Ref BalloonbotTable
+                      Item:
+                        HASH:
+                          S.$: $.actions[0].action_ts
+                        REPO:
+                          S.$: $.state.values.balloonbot_actions.balloonbot_repo.selected_option.value
+                        ACTION:
+                          S: POP
           Delete Ephemeral Message:
             Type: Task
             Resource: !ImportValue slack-kickbot-post-function-arn
@@ -260,6 +333,8 @@ Resources:
                     - balloonbot_pop
       Name: !Sub ${AWS::StackName}-pop
       Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref BalloonbotTable
         - LambdaInvokePolicy:
             FunctionName: !Ref PopInflate
         - LambdaInvokePolicy:
@@ -273,8 +348,46 @@ Resources:
     Type: AWS::Serverless::StateMachine
     Properties:
       Definition:
-        StartAt: Delete Ephemeral Message
+        StartAt: Update Table
         States:
+          Update Table:
+            Type: Parallel
+            Next: Delete Ephemeral Message
+            ResultPath: $.dynamodb_result
+            ResultSelector:
+              repo.$: $[0]
+              event.$: $[1]
+            Branches:
+              - StartAt: Update Repo
+                States:
+                  Update Repo:
+                    Type: Task
+                    Resource: arn:aws:states:::dynamodb:putItem
+                    End: true
+                    Parameters:
+                      TableName: !Ref BalloonbotTable
+                      Item:
+                        HASH:
+                          S.$: $.state.values.balloonbot_actions.balloonbot_repo.selected_option.value
+                        REPO:
+                          S.$: $.state.values.balloonbot_actions.balloonbot_repo.selected_option.value
+                        ACTION:
+                          S: INFLATE
+              - StartAt: Add Event
+                States:
+                  Add Event:
+                    Type: Task
+                    Resource: arn:aws:states:::dynamodb:putItem
+                    End: true
+                    Parameters:
+                      TableName: !Ref BalloonbotTable
+                      Item:
+                        HASH:
+                          S.$: $.actions[0].action_ts
+                        REPO:
+                          S.$: $.state.values.balloonbot_actions.balloonbot_repo.selected_option.value
+                        ACTION:
+                          S: INFLATE
           Delete Ephemeral Message:
             Type: Task
             Resource: !ImportValue slack-kickbot-post-function-arn
@@ -347,6 +460,8 @@ Resources:
                     - balloonbot_inflate
       Name: !Sub ${AWS::StackName}-inflate
       Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref BalloonbotTable
         - LambdaInvokePolicy:
             FunctionName: !Ref PopInflate
         - LambdaInvokePolicy:
@@ -369,7 +484,7 @@ Resources:
               - Next: App Mention Error
                 Variable: $.event.type
                 IsPresent: true
-              - Next: Slash Command Error
+              - Next: Right Channel?
                 Variable: $.command
                 IsPresent: true
           Unknown:
@@ -396,7 +511,37 @@ Resources:
                       - type: mrkdwn
                         text: !Sub >-
                           *Usage:* _<@${KickbotUserId}> [ pop | inflate ]_
-          Slash Command Error:
+          Right Channel?:
+            Type: Choice
+            Default: Slash Command Wrong Channel
+            Choices:
+              - Next: Slash Command Usage
+                Variable: $.channel_id
+                StringEquals: !Ref DeploymentsChannelId
+          Slash Command Usage:
+            Type: Task
+            Resource: !ImportValue slack-kickbot-post-function-arn
+            End: true
+            Parameters:
+              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
+              method: chat.postEphemeral
+              params:
+                username: Balloonbot
+                icon_emoji: balloon
+                channel.$: $.channel_id
+                user.$: $.user_id
+                text: You need to supply an action
+                blocks:
+                  - type: section
+                    text:
+                      type: mrkdwn
+                      text: You need to provide an action
+                  - type: context
+                    elements:
+                      - type: mrkdwn
+                        text: >-
+                          *Usage:* _/balloonbot (pop | inflate) [repo] [reason...]_
+          Slash Command Wrong Channel:
             Type: Task
             Resource: !ImportValue slack-kickbot-post-function-arn
             End: true
@@ -418,7 +563,7 @@ Resources:
                     elements:
                       - type: mrkdwn
                         text: !Sub >-
-                          *Usage:* _/balloonbot [ pop | inflate ]_
+                          *Usage:* _/balloonbot (pop | inflate)_
       Events:
         AppMention:
           Type: EventBridgeRule
@@ -439,7 +584,7 @@ Resources:
                   text:
                     - prefix: !Sub <@${KickbotUserId}> pop
                     - prefix: !Sub <@${KickbotUserId}> inflate
-        SlashCommand:
+        SlashCommandWrongChannel:
           Type: EventBridgeRule
           Properties:
             EventBusName: !ImportValue slack-kickbot-event-bus-name
@@ -454,6 +599,23 @@ Resources:
                   - anything-but: !Ref DeploymentsChannelId
                 command:
                   - /balloonbot
+        SlashCommandNoAction:
+          Type: EventBridgeRule
+          Properties:
+            EventBusName: !ImportValue slack-kickbot-event-bus-name
+            InputPath: $.detail
+            Pattern:
+              source:
+                - kickbot
+              detail-type:
+                - slash
+              detail:
+                channel_id:
+                  - !Ref DeploymentsChannelId
+                command:
+                  - /balloonbot
+                text:
+                  - ""
       Name: !Sub ${AWS::StackName}-usage-error
       Policies:
         - LambdaInvokePolicy:
@@ -467,27 +629,28 @@ Resources:
     Type: AWS::Serverless::StateMachine
     Properties:
       Definition:
-        StartAt: Get Channel Topic
+        StartAt: Get State
         States:
-          Get Channel Topic:
+          Get State:
             Type: Task
-            Resource: !ImportValue slack-kickbot-post-function-arn
+            Resource: arn:aws:states:::dynamodb:getItem
             Next: Hold Deploys?
-            ResultPath: $.channel
+            ResultPath: $.state
             ResultSelector:
-              topic.$: $.channel.topic
+              REPO.$: $.Item.REPO.S
+              ACTION.$: $.Item.ACTION.S
             Parameters:
-              link.$: States.Format('https://console.aws.amazon.com/states/home#/executions/details/{}', $$.Execution.Id)
-              method: conversations.info
-              params:
-                channel: !Ref DeploymentsChannelId
+              TableName: !Ref BalloonbotTable
+              Key:
+                HASH:
+                  S.$: $.repository.name
           Hold Deploys?:
             Type: Choice
             Default: All Good
             Choices:
               - Next: Hold Deploys
-                Variable: $.channel.topic.value
-                StringEquals: !Ref DeploymentsChannelPopText
+                Variable: $.state.ACTION
+                StringEquals: POP
           All Good:
             Type: Task
             Resource: !GetAtt PopInflate.Arn
@@ -530,7 +693,7 @@ Resources:
                     - kickstarter/rosie
       Name: balloonbot-pull-request
       Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref BalloonbotTable
         - LambdaInvokePolicy:
             FunctionName: !Ref PopInflate
-        - LambdaInvokePolicy:
-            FunctionName: !ImportValue slack-kickbot-post-function-name

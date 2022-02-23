@@ -41,10 +41,11 @@ class SlackEvent
   end
 
   def block_instructions
+    action_text = action == 'pop' ? 'Pop!' : 'Inflate'
     {
       block_id: 'balloonbot_instructions',
       type:     'section',
-      text:     mrkdwn('*Freeze deploys with _Pop!_, or unfreeze them with _Inflate_*')
+      text:     mrkdwn("*Choose a project then _#{action_text}_*")
     }
   end
 
