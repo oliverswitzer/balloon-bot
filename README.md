@@ -2,7 +2,7 @@
 
 # Balloon Bot
 
-This Slack bot is meant to help let engineers in your organization know when master is broken. It also will help gather information for post-mortems.
+This Slack bot is meant to help let engineers in your organization know when main is broken. It also will help gather information for post-mortems.
 
 # How it works
 
